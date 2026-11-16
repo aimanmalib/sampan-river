@@ -23,6 +23,7 @@
     "key_file_env": "VE_KEY_FILE",
     "poll_s": 10,
     "wait_max_s": 1800,
+    "idempotency_prefix": "sr-gen",
     "submit_attempts": 3,
     "submit_timeout_s": 120,
     "min_download_bytes": 1000000,

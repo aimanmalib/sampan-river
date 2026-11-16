@@ -13,7 +13,7 @@ CFG = {
            "models": {"landscape": "land-model", "portrait": "port-model"},
            "resolution": {"landscape": "1280x720", "portrait": "720x1280"}, "clip_s": 30, "duration_tolerance_s": 0.2,
            "key_env": "TEST_VE_KEY", "key_file_env": "TEST_VE_KEY_FILE", "poll_s": 0, "wait_max_s": 5,
-           "submit_attempts": 3, "submit_timeout_s": 1, "min_download_bytes": 10, "download_timeout_s": 1},
+           "idempotency_prefix": "t-gen", "submit_attempts": 3, "submit_timeout_s": 1, "min_download_bytes": 10, "download_timeout_s": 1},
 }
 
 
@@ -78,6 +78,12 @@ class ClientTest(unittest.TestCase):
         self.assertEqual([r["idempotency_key"] for r in post[3]], [key])
         self.assertEqual(post[3][0]["me_before"], 700.0)
         self.assertEqual(post[2]["X-Idempotency-Key"], key)
+
+    def test_new_key_is_sequential_not_random(self):
+        ledger.record_me(700, self.log)
+        http = FakeHTTP([700], [ok_post()], self.log)
+        key, _ = self.client(http).submit("toll-bridge", "landscape", "p")
+        self.assertEqual(key, "t-gen-0002")
 
     def test_retry_uses_same_key(self):
         busy = (409, {"Idempotent-Status": "in_progress", "Retry-After": "0"}, b"{}")

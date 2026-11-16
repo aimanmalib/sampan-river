@@ -123,7 +123,7 @@ class Client:
         """GET /v1/me -> guard + ledger row -> POST. Return (key, submit response)."""
         model = self.cfg["models"][orientation]
         cost = float(self.config["credits"]["cost_per_generation"])
-        key = key or f"{shot}-{orientation[0]}-{uuid.uuid4().hex[:16]}"
+        key = key or ledger.next_key(self.cfg["idempotency_prefix"], ledger.read(self.log))
         balance = self.me()
         ledger.record_before_submit({"shot": shot, "model": model, "route": self.cfg["route"], "idempotency_key": key,
                                      "credits": cost, "prompt": prompt}, balance, self.log, self.config)

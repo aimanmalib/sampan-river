@@ -1,6 +1,7 @@
 """Credit guard and ledger rules (decision 0001). Fixture config, not the live one, so limits here are frozen."""
 import json
 import os
+import re
 import tempfile
 import unittest
 
@@ -78,6 +79,20 @@ class LedgerFileTest(unittest.TestCase):
         r = ledger.record_me(691, self.log)
         self.assertEqual((r["status"], r["credits"], r["me_before"]), ("me_only", 0.0, 691.0))
         self.assertEqual(ledger.spent(ledger.read(self.log)), 0)
+
+
+class KeyShapeTest(unittest.TestCase):
+    def test_next_key_counts_rows_and_skips_used(self):
+        rows = [row("k-gen-0002"), row("other")]
+        self.assertEqual(ledger.next_key("k-gen", rows), "k-gen-0003")
+        self.assertEqual(ledger.next_key("k-gen", [row("k-gen-0001")]), "k-gen-0002")
+
+    def test_tracked_ledger_has_no_random_hex_keys(self):
+        """Secret scanners flag long random suffixes next to the word key; the tracked ledger must not carry them."""
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "log", "generations.jsonl")
+        for r in ledger.read(path):
+            k = r.get("idempotency_key") or ""
+            self.assertIsNone(re.search(r"[0-9a-f]{8,}", k), k[:12])
 
 
 if __name__ == "__main__":

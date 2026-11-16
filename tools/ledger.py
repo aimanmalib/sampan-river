@@ -67,6 +67,19 @@ def read(path=LOG):
         return [json.loads(line) for line in f if line.strip()]
 
 
+def next_key(prefix, rows):
+    """Sequential idempotency key `<prefix>-NNNN`, unique within the ledger.
+
+    A sequence is enough: one generation runs at a time and the ledger refuses duplicate keys. Random hex suffixes
+    were dropped because secret scanners read them as API keys (the value is not a secret, but it must not look like one).
+    """
+    used = {r.get("idempotency_key") for r in rows}
+    n = len(rows) + 1
+    while f"{prefix}-{n:04d}" in used:
+        n += 1
+    return f"{prefix}-{n:04d}"
+
+
 def spent(rows):
     """Media credits charged so far: every row except balance checks and refunded failures."""
     return sum(float(r.get("credits") or 0) for r in rows if r.get("status") != "me_only" and not r.get("refunded"))

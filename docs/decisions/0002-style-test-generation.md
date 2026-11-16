@@ -4,7 +4,7 @@ Date: 2026-11-16. Status: accepted.
 
 ## Test
 One landscape generation of the opening shot `toll-bridge` with the prompt built from `config/shots.json`
-(shot action + `style` + `exclude`). Ledger row: `toll-bridge-l-45721e195c36482d`, 9 credits, status `done`,
+(shot action + `style` + `exclude`). Ledger row: `toll-bridge-l-4572` (shortened, see decision 0003), 9 credits, status `done`,
 sha256 `90a69f757bba7bc953352ded3a7ad5fd1dce1583d8a17f8ad3981db76b1e846e`.
 
 Measured on the raw clip: 1280x720, 24 fps, H.264, AAC stereo 32 kHz, 30 s. Integrated loudness -33.9 LUFS
