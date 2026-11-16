@@ -112,3 +112,11 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | gap 10 | 53.5 | 0.22 | yes |
 | gap 11 | 59.75 | 0.03 | yes |
 <!-- /detail:9x16 -->
+
+## Thumbnail
+
+`python3 tools/thumb.py` (2026-11-16): `crossing-L1.mp4` at 10.0 s (inside its edit window, so the still is a frame of the
+film), 1280 x 720 lanczos, JPEG 95,358 bytes, sha256 f97ba088f9bea2cbc2875917a50a8e4731868ffd445d8ffa96f8881c17e4768a.
+Copy: `docs/frames/thumbnail.jpg`. Read in the image (2026-11-16): the paper rower in a conical hat at the stern of a
+folded paper boat, the gold coin with a raised "1" in the bow; "The River Fare" in large cream letters with a dark
+outline at the top right, "A dollar crosses to Bitcoin Cash" below it; neither line touches the rower, the oar or the coin.

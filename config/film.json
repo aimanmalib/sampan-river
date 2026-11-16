@@ -181,5 +181,32 @@
     "frame_width": 640,
     "frame_quality": 5,
     "frame_max_bytes": 150000
+  },
+  "thumbnail": {
+    "_note": "tools/thumb.py. One frame of an accepted clip (inside the shot's edit window, so the still is in the film), scaled with lanczos, text drawn by code at the top right where the frame is open paper sky. The coin sits below the text.",
+    "shot": "crossing",
+    "orientation": "landscape",
+    "clip_s": 10.0,
+    "width": 1280,
+    "height": 720,
+    "scale": "lanczos",
+    "lines": [
+      "The River Fare",
+      "A dollar crosses to Bitcoin Cash"
+    ],
+    "font": "DejaVu Sans",
+    "size": [
+      92,
+      40
+    ],
+    "line_gap_px": 14,
+    "colour": "#FFF8E7",
+    "outline_colour": "#1B1A17",
+    "outline_px": 5,
+    "margin_right_px": 56,
+    "margin_top_px": 44,
+    "jpeg_qscale": 2,
+    "max_bytes": 2000000,
+    "out": "media/edit/sampan-river-thumb.jpg"
   }
 }

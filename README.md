@@ -1,34 +1,59 @@
 # The River Fare
 
-A short wordless animated film for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from every traveller. A
-small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare of one grain of rice.
+A 60 second animated film with no dialogue, made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
+every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
+of one grain of rice. English captions are burned into the picture, so it works with the sound off.
 
-Status: in production. Story, captions, sources and the generation tools are in this repository; the finished videos are
-added when they are measured.
+![Thumbnail: the paper rower and the dollar coin in a folded paper boat](docs/frames/thumbnail.jpg)
 
 ## What the film says
 
-Every caption that states a fact is tied to a source in [docs/FACTS.md](docs/FACTS.md):
+Every caption that states a fact is tied to a source in [the fact list](docs/FACTS.md):
 
 - A real Bitcoin Cash transfer on 15 Nov 2026 paid 219 satoshis, less than a tenth of a US cent at that day's price.
 - PUSD is a dollar stablecoin token on Bitcoin Cash, designed to hold one dollar.
 
-Storyboard: [docs/STORYBOARD.md](docs/STORYBOARD.md). Decisions: [docs/decisions/](docs/decisions/).
+[Storyboard](docs/STORYBOARD.md). [Accepted clips and the seconds used](docs/SHOTS.md).
+[Decisions](docs/decisions/).
 
 ## Prize address
 
 bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q
 
+## The two files
+
+Measured by `tools/measure.py` on the final files (per-cue detail in [the measurement notes](docs/MEASURED.md)):
+
+| version | size | seconds | loudness | true peak | words heard | captions burned in | sha256 |
+|---|---|---|---|---|---|---|---|
+| 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `50ca1e09...` |
+| 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `85f0dc02...` |
+
+Both are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio; zero
+means no voice and no stray speech from the video model. The captions are also exported as an SRT file for closed
+captions.
+
+## Credits spent
+
+Every request to the video service is written to [log/generations.jsonl](log/generations.jsonl) before it is sent,
+with the balance before and after and the file hash. The film used three generations of 9 credits each, 27 credits in
+total. One more request failed at the provider and was refunded (0 credits). Portrait clips were not generated: the
+credit rule in decision 0001 keeps a reserve for other work, and a portrait request would have gone below it. The 9:16
+version is therefore cut from the same landscape clips (decision 0006).
+
 ## How it is made
 
 | Step | Tool | Config |
 |---|---|---|
-| Clips (30 s, 1280x720 and 720x1280) | `tools/ve.py`, VE Studio text-to-video API | `config/shots.json`, `config/film.json` |
+| Clips (30 s, 1280x720) | `tools/ve.py`, VE Studio text-to-video API | `config/shots.json`, `config/film.json` |
 | Credit ledger | `tools/ledger.py` writes `log/generations.jsonl` before every request | `config/film.json` `credits` |
 | Captions | burned in from one source file; SRT for closed captions | `config/captions.en.json` |
 | Music | `tools/music.py`, original theme synthesised in code (numpy, seeded, byte-identical on every run) | `config/music.json` |
 | Audio mix | `tools/mix.py`, music over the clips' own river sound inside the edit windows | `config/music.json` `mix`, `config/shots.json` |
-| Speech check | `tools/transcribe.py`, local faster-whisper; the audio must contain zero words | `config/film.json` `audio.speech_check` |
+| Speech check | `tools/transcribe.py`, local faster-whisper with voice activity detection; zero words allowed | `config/film.json` `audio.speech_check` |
+| Edit | `tools/edit.py`, ffmpeg: clips scaled with lanczos, end card, burned captions, two-pass loudness | `config/film.json` `edit`, `end_card` |
+| Measurement | `tools/measure.py`, ffprobe, ebur128, silence and caption pixel checks | `config/film.json` `measure` |
+| Thumbnail | `tools/thumb.py`, one film frame with the title drawn by code | `config/film.json` `thumbnail` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
 
@@ -38,21 +63,16 @@ python3 tools/ve.py generate --shot toll-bridge --orientation landscape --out me
 python3 tools/transcribe.py media/clips/toll-bridge-1.mp4
 ```
 
-The music and the mix need no key, only the accepted clips in `media/clips/` and ffmpeg:
+Everything after the clips needs no key, only the accepted clips in `media/clips/` and ffmpeg:
 
 ```
 python3 tools/mix.py --orientation landscape
-python3 tools/transcribe.py media/audio/mix-landscape.wav
-```
-
-The edit and its measurement (captions, end card, loudness to -14 LUFS, caption pixel check):
-
-```
 python3 tools/edit.py 16x9
 python3 tools/measure.py 16x9 --write
+python3 tools/edit.py 9x16
+python3 tools/measure.py 9x16 --write
+python3 tools/thumb.py
 ```
-
-Measured results: [docs/MEASURED.md](docs/MEASURED.md).
 
 Tests run offline: `python3 -m unittest discover -s tests`.
 
@@ -60,9 +80,10 @@ Tests run offline: `python3 -m unittest discover -s tests`.
 
 - The video clips are generated by an AI video model through the VE Studio API, from the text prompts in
   `config/shots.json`. Every request, its cost and the file hash are in `log/generations.jsonl`.
-- The 1920x1080 and 1080x1920 files are upscaled from 1280x720 and 720x1280 clips with ffmpeg (lanczos). No AI upscaler.
+- The 1920x1080 file is upscaled from 1280x720 clips with ffmpeg (lanczos). The 1080x1920 file places the same clips
+  at full width over a blurred copy of the same frame, also with ffmpeg. No AI upscaler.
 - The music is synthesised by code written with an AI coding agent. No samples, no AI music service. No voice.
-- Captions and the end card are drawn by code from `config/captions.en.json`.
+- Captions, the end card and the thumbnail text are drawn by code from `config/captions.en.json` and `config/film.json`.
 - Direction and review: Muhammad Aiman. Tools: Claude Code.
 
 ## License
