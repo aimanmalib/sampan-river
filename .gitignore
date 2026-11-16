@@ -1,0 +1,18 @@
+# Internal notes and state (not part of the public repo)
+/dalaman/
+/state/
+/NEXT.md
+/CLAUDE.md
+/docs/hantar/
+# Generated media (large; final files are measured in docs/MEASURED.md)
+/media/
+*.mp4
+*.wav
+*.mov
+# Secrets and tooling
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+node_modules/
