@@ -21,7 +21,27 @@ class SpeechCheckConfig(unittest.TestCase):
     def test_film_requires_zero_words(self):
         cfg = ledger.load_json(ledger.FILM)["audio"]["speech_check"]
         self.assertEqual(cfg["max_words"], 0)
-        self.assertTrue({"model", "language", "beam_size"} <= set(cfg))
+        self.assertTrue({"model", "language", "beam_size", "vad_filter"} <= set(cfg))
+
+    def test_vad_setting_reaches_the_model(self):
+        calls = []
+
+        class Model:
+            def __init__(self, *a, **k):
+                pass
+
+            def transcribe(self, audio, **kw):
+                calls.append(kw)
+                return [], None
+
+        fake = mock.MagicMock(WhisperModel=Model)
+        cfg = {"model": "fake-test", "language": "en", "beam_size": 1}
+        with mock.patch.dict("sys.modules", {"faster_whisper": fake}), \
+                mock.patch.object(transcribe, "pcm16k", return_value=[]):
+            for vad in (True, False):
+                transcribe._MODEL.pop("fake-test", None)
+                self.assertEqual(transcribe.transcribe("x.wav", dict(cfg, vad_filter=vad)), "")
+        self.assertEqual([c["vad_filter"] for c in calls], [True, False])
 
 
 class ExitCode(unittest.TestCase):

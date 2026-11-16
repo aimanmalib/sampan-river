@@ -26,7 +26,8 @@ bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q
 | Clips (30 s, 1280x720 and 720x1280) | `tools/ve.py`, VE Studio text-to-video API | `config/shots.json`, `config/film.json` |
 | Credit ledger | `tools/ledger.py` writes `log/generations.jsonl` before every request | `config/film.json` `credits` |
 | Captions | burned in from one source file; SRT for closed captions | `config/captions.en.json` |
-| Music | original theme synthesised in code | `config/music.json` |
+| Music | `tools/music.py`, original theme synthesised in code (numpy, seeded, byte-identical on every run) | `config/music.json` |
+| Audio mix | `tools/mix.py`, music over the clips' own river sound inside the edit windows | `config/music.json` `mix`, `config/shots.json` |
 | Speech check | `tools/transcribe.py`, local faster-whisper; the audio must contain zero words | `config/film.json` `audio.speech_check` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
@@ -36,6 +37,15 @@ python3 tools/ve.py me
 python3 tools/ve.py generate --shot toll-bridge --orientation landscape --out media/clips/toll-bridge-1.mp4
 python3 tools/transcribe.py media/clips/toll-bridge-1.mp4
 ```
+
+The music and the mix need no key, only the accepted clips in `media/clips/` and ffmpeg:
+
+```
+python3 tools/mix.py --orientation landscape
+python3 tools/transcribe.py media/audio/mix-landscape.wav
+```
+
+Measured results: [docs/MEASURED.md](docs/MEASURED.md).
 
 Tests run offline: `python3 -m unittest discover -s tests`.
 

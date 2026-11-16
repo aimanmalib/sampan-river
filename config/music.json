@@ -1,19 +1,128 @@
 {
-  "_note": "Original theme synthesised by code (numpy, deterministic, no samples). Read by tools/music.py (M3).",
+  "_note": "Original theme synthesised by code (numpy, deterministic, no samples). Read by tools/music.py; `mix` is read by tools/mix.py. Mix levels are RMS dBFS of each stem before summing; final loudness is set later in the edit (loudnorm).",
   "seed": 20261116,
   "sample_rate": 48000,
   "duration_s": 60,
   "tempo_bpm": 84,
   "key": "D major",
   "instrument": "kalimba (Karplus-Strong plucked string)",
-  "progression": ["D", "Bm", "G", "A"],
-  "sections": [
-    {"name": "toll", "start_s": 0.0, "end_s": 11.0, "density": 0.35, "register": "low"},
-    {"name": "departure", "start_s": 11.0, "end_s": 22.0, "density": 0.5, "register": "mid"},
-    {"name": "crossing", "start_s": 22.0, "end_s": 40.0, "density": 0.7, "register": "mid"},
-    {"name": "arrival", "start_s": 40.0, "end_s": 54.0, "density": 0.6, "register": "high"},
-    {"name": "end_card", "start_s": 54.0, "end_s": 60.0, "density": 0.3, "register": "mid"}
+  "progression": [
+    "D",
+    "Bm",
+    "G",
+    "A"
   ],
-  "motif": {"at_s": 44.0, "notes": ["A5", "F#5", "D6"], "note_s": 0.28, "label": "fare paid"},
-  "mix": {"music_db": -18, "ambience_db": -24, "fade_in_s": 0.3, "fade_out_s": 2.0}
+  "sections": [
+    {
+      "name": "toll",
+      "start_s": 0.0,
+      "end_s": 11.0,
+      "density": 0.35,
+      "register": "low"
+    },
+    {
+      "name": "departure",
+      "start_s": 11.0,
+      "end_s": 22.0,
+      "density": 0.5,
+      "register": "mid"
+    },
+    {
+      "name": "crossing",
+      "start_s": 22.0,
+      "end_s": 40.0,
+      "density": 0.7,
+      "register": "mid"
+    },
+    {
+      "name": "arrival",
+      "start_s": 40.0,
+      "end_s": 54.0,
+      "density": 0.6,
+      "register": "high"
+    },
+    {
+      "name": "end_card",
+      "start_s": 54.0,
+      "end_s": 60.0,
+      "density": 0.3,
+      "register": "mid"
+    }
+  ],
+  "motif": {
+    "at_s": 44.0,
+    "notes": [
+      "A5",
+      "F#5",
+      "D6"
+    ],
+    "note_s": 0.28,
+    "label": "fare paid"
+  },
+  "mix": {
+    "music_db": -18,
+    "ambience_db": -24,
+    "fade_in_s": 0.3,
+    "fade_out_s": 2.0,
+    "edge_fade_s": 0.25,
+    "clips_dir": "media/clips",
+    "out_dir": "media/audio",
+    "ambience_ceiling_db": -12,
+    "limiter_block_s": 0.01
+  },
+  "synth": {
+    "beats_per_chord": 4,
+    "steps_per_beat": 2,
+    "register_octave": {
+      "low": 3,
+      "mid": 4,
+      "high": 5
+    },
+    "kalimba": {
+      "partials": [
+        [
+          1.0,
+          1.0
+        ],
+        [
+          2.76,
+          0.22
+        ],
+        [
+          5.4,
+          0.07
+        ]
+      ],
+      "decay_s": 1.4,
+      "attack_ms": 4,
+      "amp": 0.5,
+      "upper_octave_chance": 0.2
+    },
+    "pluck": {
+      "octave": 2,
+      "decay": 0.996,
+      "brightness": 0.5,
+      "amp": 0.5,
+      "length_s": 2.4,
+      "min_density": 0.5
+    },
+    "pad": {
+      "octave": 3,
+      "detune_cents": 6,
+      "attack_s": 1.2,
+      "release_s": 1.2,
+      "amp": 0.1
+    },
+    "motif": {
+      "amp": 1.6,
+      "clear_s": 0.6
+    },
+    "reverb": {
+      "length_s": 2.4,
+      "decay_s": 0.7,
+      "predelay_ms": 18,
+      "wet": 0.25
+    },
+    "peak_db": -1.0
+  }
 }

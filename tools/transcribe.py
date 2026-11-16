@@ -1,6 +1,8 @@
 """Local speech check with faster-whisper (decision 0001: the film audio must contain zero words).
 
 Settings come from config/film.json `audio.speech_check`. CPU, int8; the model loads once per process.
+`vad_filter` (decision 0004): Silero voice activity detection runs first, because without it the model invents stock
+outro phrases on music and river sound.
 Usage: python3 tools/transcribe.py <media file> [<media file> ...]
 Prints one JSON object per file: {"file", "words", "text"}. Exit 1 when any file has more than `max_words` words.
 """
@@ -37,7 +39,7 @@ def transcribe(path, cfg):
     if name not in _MODEL:
         _MODEL[name] = WhisperModel(name, device="cpu", compute_type="int8")
     segments, _ = _MODEL[name].transcribe(pcm16k(path), language=cfg["language"], beam_size=cfg["beam_size"],
-                                          vad_filter=False)
+                                          vad_filter=cfg["vad_filter"])
     return " ".join(s.text.strip() for s in segments).strip()
 
 
