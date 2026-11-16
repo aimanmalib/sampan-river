@@ -128,7 +128,7 @@
     "fps": 24,
     "orientation": {
       "16x9": "landscape",
-      "9x16": "portrait"
+      "9x16": "landscape"
     },
     "mix": "media/audio/mix-{orientation}.wav",
     "clean": {
@@ -146,6 +146,19 @@
     "loudnorm": {
       "lra": 11,
       "true_peak_margin_db": 0.5
+    },
+    "layout": {
+      "_note": "Per version: how source clips fill the frame. 'cover' = scale to the output size (same aspect). 'blur_fill' = decision 0006: the landscape clip at full width, placed at picture_y_ratio of the free height, over a blurred, dimmed copy of the same frame that covers the whole portrait frame. The blur runs at background_scale of the output size.",
+      "16x9": {
+        "mode": "cover"
+      },
+      "9x16": {
+        "mode": "blur_fill",
+        "background_scale": 0.25,
+        "blur_radius": 10,
+        "background_brightness": -0.12,
+        "picture_y_ratio": 0.5
+      }
     }
   },
   "measure": {

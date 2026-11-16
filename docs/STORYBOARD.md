@@ -17,5 +17,6 @@ Clips: `config/shots.json`. Captions: `config/captions.en.json`. End card text i
 
 ## 9:16 version
 
-Same story and captions from separately generated portrait clips (same shot prompts). Captions sit above the bottom 20% of the
-frame so phone app controls do not cover them.
+Same story, captions and audio, cut from the landscape clips (decision 0006): the full picture across the width, centred over
+a blurred copy of the same frame. Captions sit below the picture and above the bottom 20% of the frame so phone app
+controls do not cover them.

@@ -1,6 +1,6 @@
 # 0001: Story, look and credit rules
 
-Date: 2026-11-16. Status: accepted.
+Date: 2026-11-16. Status: accepted; the 9:16 film is cut from the landscape clips instead of portrait generations (decision 0006).
 
 ## Story and look
 A wordless 60 s fable: a toll bridge takes a big coin from every traveller; a small rower carries one gold coin across a river

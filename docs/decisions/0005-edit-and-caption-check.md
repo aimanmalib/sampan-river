@@ -16,8 +16,8 @@ absolute luma difference between the clean master and the final file, inside the
 `measure.in_cue_min` (4.0); at the middle of each gap between cues it must be below `measure.out_cue_max` (1.5). The
 clean master and the final file are separate H.264 encodes, so the gaps are not exactly 0; the measured gap noise is
 0.1 to 0.8. A band over the bottom 28% of the frame diluted one cue to 4.04, too close to the limit; the band now covers
-rows 79% to 95% of the height, where the 16:9 captions sit (weakest cue 6.58). The 9:16 band is set from the caption
-margin and is checked when that version is cut. A person reads one frame per cue (`docs/frames/<version>-cue-NN.jpg`).
+rows 79% to 95% of the height, where the 16:9 captions sit (weakest cue 6.58). The 9:16 band (rows 68% to 80%) was
+measured when that version was cut: weakest cue 9.78, largest gap 0.24. A person reads one frame per cue (`docs/frames/<version>-cue-NN.jpg`).
 
 ## Caption size for 9:16
 At 64 px and 26 characters per line the closing caption needed three lines and a line would have run past the frame

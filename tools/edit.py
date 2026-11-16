@@ -3,6 +3,8 @@
 1. Clean master: each shot's `window_s` from its accepted clip (config/shots.json), scaled to the output size with the
    scaler named in config/film.json `output` (lanczos), concatenated in `film_s` order; the last frame is held for the
    end card, dimmed, and the end card text (tools/captions.py) is drawn over it. No captions, no audio.
+   `edit.layout` per version: `cover` scales the clip to the frame; `blur_fill` (9:16 from landscape clips, decision
+   0006) puts the clip at full width over a blurred, dimmed copy of the same frame.
 2. Final: the clean master with the captions burned in, the audio mix (`edit.mix`) through two-pass loudnorm to
    `audio.lufs_target` with the true peak `edit.loudnorm.true_peak_margin_db` under `audio.true_peak_max_db`.
    H.264 High yuv420p, AAC 48 kHz stereo, faststart.
@@ -46,13 +48,46 @@ def plan(film, shots_cfg, version):
     return segs
 
 
+def picture_box(film, version):
+    """(x, y, w, h) of the source picture inside the output frame for the version's layout."""
+    o, lay = film["output"][version], film["edit"]["layout"][version]
+    if lay["mode"] == "cover":
+        return 0, 0, o["width"], o["height"]
+    if lay["mode"] != "blur_fill":
+        raise EditError(f"{version}: unknown layout {lay['mode']}")
+    src = film["ve"]["resolution"][film["edit"]["orientation"][version]]
+    sw, sh = (int(v) for v in src.split("x"))
+    w = o["width"]
+    h = int(round(w * sh / sw / 2)) * 2
+    if h > o["height"]:
+        raise EditError(f"{version}: source {src} does not fit the width")
+    y = int(round((o["height"] - h) * lay["picture_y_ratio"] / 2)) * 2
+    return 0, y, w, h
+
+
+def segment_graph(film, version, i):
+    """Filter chain for input i -> [v<i>] at the output size, fps and pixel format."""
+    o, fps, lay = film["output"][version], film["edit"]["fps"], film["edit"]["layout"][version]
+    if lay["mode"] == "cover":
+        return f"[{i}:v]scale={o['width']}:{o['height']}:flags={o['scale']},setsar=1,fps={fps},format=yuv420p[v{i}]"
+    head = f"[{i}:v]setsar=1,fps={fps}"
+    x, y, w, h = picture_box(film, version)
+    bw = int(round(o["width"] * lay["background_scale"] / 2)) * 2
+    bh = int(round(o["height"] * lay["background_scale"] / 2)) * 2
+    return (f"{head},split=2[b{i}][f{i}];"
+            f"[b{i}]scale={bw}:{bh}:force_original_aspect_ratio=increase:flags=bicubic,crop={bw}:{bh},"
+            f"boxblur={lay['blur_radius']}:2,eq=brightness={lay['background_brightness']},"
+            f"scale={o['width']}:{o['height']}:flags=bicubic[bg{i}];"
+            f"[f{i}]scale={w}:{h}:flags={o['scale']}[fg{i}];"
+            f"[bg{i}][fg{i}]overlay={x}:{y},format=yuv420p[v{i}]")
+
+
 def clean_graph(film, segs, version, endcard_name):
     """filter_complex for the clean master; input i = segment i, already cut to its window."""
     o, e, fps = film["output"][version], film["end_card"], film["edit"]["fps"]
     total = float(film["duration_s"]["target"])
     card = float(e["start_s"])
-    parts = [f"[{i}:v]scale={o['width']}:{o['height']}:flags={o['scale']},setsar=1,fps={fps},format=yuv420p[v{i}]"
-             for i in range(len(segs))]
+    parts = [segment_graph(film, version, i) for i in range(len(segs))]
     joined = "".join(f"[v{i}]" for i in range(len(segs)))
     dim = (f"eq=eval=frame:brightness='if(gte(t,{card}),{e['dim']}*min(1,(t-{card})/{e['dim_fade_s']}),0)'")
     tail = (f"{joined}concat=n={len(segs)}:v=1:a=0,tpad=stop_mode=clone:stop_duration={total - card},{dim},"

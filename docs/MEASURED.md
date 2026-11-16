@@ -41,9 +41,19 @@ bottom edge, one line except cue 8 ("The fare for a real / transfer: 219 satoshi
 that / crosses for almost nothing."); no caption covers the coin. Cue 10 sits under the end card, which shows
 "Bitcoin Cash" and "bitcoincash.org" over the dimmed last frame of the jetty shot.
 
+`python3 tools/edit.py 9x16` then `python3 tools/measure.py 9x16 --write` (2026-11-16). Cut from the same landscape
+clips, windows and mix as 16:9 (decision 0006): the full picture at 1080 x 608 (lanczos from 1280 x 720) centred over a
+blurred, dimmed copy of the same frame. The 9:16 caption band (rows 68% to 80%) was measured here for the first time:
+weakest cue 9.78, largest gap 0.24, against limits 4.0 and 1.5. Frames read by a person: `docs/frames/9x16-cue-01.jpg`
+to `-10.jpg`. Read in the frames (2026-11-16): every cue shows its full config text in two lines of white with a dark
+outline, centred in the blurred area below the picture, except cue 9 ("Less than a tenth of a cent.") on one line; no
+caption overlaps the picture, the boat or the coin. Cue 10 sits under the end card ("Bitcoin Cash", "bitcoincash.org")
+drawn over the dimmed jetty picture in the middle of the frame.
+
 | version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | caption_cues | sha256 |
 |---|---|---|---|---|---|---|---|---|---|
 | 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 50ca1e0997c12f70913d8c74c49626dff723ab744d3a7419c8a572406c10b0d8 |
+| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 85f0dc02cc32d291e6d9382720a0662d62b7eb053ce0cc99029bef76b1e815dc |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
@@ -73,3 +83,32 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | gap 10 | 53.5 | 0.64 | yes |
 | gap 11 | 59.75 | 0.11 | yes |
 <!-- /detail:16x9 -->
+
+<!-- detail:9x16 -->
+### 9x16 detail
+
+Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+
+| sample | t (s) | caption band diff | pass |
+|---|---|---|---|
+| cue 1 | 1.7 | 10.61 | yes |
+| cue 2 | 5.8 | 13.46 | yes |
+| cue 3 | 13.25 | 11.12 | yes |
+| cue 4 | 18.5 | 10.09 | yes |
+| cue 5 | 25.75 | 16.33 | yes |
+| cue 6 | 31.75 | 13.6 | yes |
+| cue 7 | 37.25 | 12.86 | yes |
+| cue 8 | 43.5 | 15.42 | yes |
+| cue 9 | 49.5 | 9.78 | yes |
+| cue 10 | 57.0 | 21.54 | yes |
+| gap 2 | 3.4 | 0.2 | yes |
+| gap 3 | 9.5 | 0.12 | yes |
+| gap 4 | 15.75 | 0.21 | yes |
+| gap 5 | 22.0 | 0.05 | yes |
+| gap 6 | 28.75 | 0.0 | yes |
+| gap 7 | 34.75 | 0.12 | yes |
+| gap 8 | 40.25 | 0.24 | yes |
+| gap 9 | 46.25 | 0.24 | yes |
+| gap 10 | 53.5 | 0.22 | yes |
+| gap 11 | 59.75 | 0.03 | yes |
+<!-- /detail:9x16 -->

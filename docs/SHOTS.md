@@ -50,4 +50,5 @@ sound. With voice activity detection the model finds nothing in `crossing` and i
 returns 0 words for both clips. The binding check is the zero-word transcription of the final mixed audio (decision 0001).
 
 ## Portrait
-Generated in the 9:16 step.
+Not generated: the credit guard refused the first portrait submit (balance 457, reserve 450, cost 9). The 9:16 version
+uses the accepted landscape clips and windows above (decision 0006).
