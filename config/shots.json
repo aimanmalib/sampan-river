@@ -1,7 +1,11 @@
 {
-  "_note": "One generation = one 30 s clip. `window_s` = the seconds of the clip planned for the edit; M1/M2 replace them with the windows actually used (docs/SHOTS.md). `film_s` = where the window sits in the film.",
+  "_note": "One generation = one 30 s clip. `window_s` = the seconds of the accepted clip used in the edit (docs/SHOTS.md); its length equals the `film_s` span. `film_s` = where the window sits in the film. `accepted` = the clip file chosen per orientation (a `done` ledger row).",
   "style": "Handmade paper diorama world filmed as a miniature: folded paper boats, cut-paper river banks, layered paper hills, watercolour washes on textured cotton paper, visible paper fibres and soft fold creases, warm practical light, shallow depth of field, gentle slow camera moves, calm and wordless. Small paper figures are simple silhouettes seen from behind or far away, wearing wide conical paper hats; no detailed faces. Ambient sound of a quiet river: water lapping, light wind, distant birds.",
-  "style_locked": {"date": "2026-11-16", "decision": "docs/decisions/0002-style-test-generation.md", "test_clip": "toll-bridge-L1.mp4"},
+  "style_locked": {
+    "date": "2026-11-16",
+    "decision": "docs/decisions/0002-style-test-generation.md",
+    "test_clip": "toll-bridge-L1.mp4"
+  },
   "exclude": "No text, no letters, no numbers, no signs, no logos, no watermarks, no speech, no voices, no singing, no music. Ambient river sound only. No photorealistic human faces.",
   "shots": [
     {
@@ -10,8 +14,11 @@
       "route": "t2v",
       "beat": "hook",
       "prompt": "Opening on a huge grey paper toll bridge over a watercolour river at late afternoon. A heavy paper gate swings down in front of a line of tiny paper travellers; a tall faceless paper toll keeper scoops a big shiny gold coin from each traveller into an overflowing chest. The camera slowly pulls back and drifts down to the riverbank below the bridge, where a small paper rower in a conical hat, seen from behind, picks up one bright gold coin, sets it in the bow of a little folded paper sampan and pushes the boat out onto the water.",
-      "window_s": [0.0, 22.0],
-      "film_s": [0.0, 22.0]
+      "window_s": [5.0, 27.0],
+      "film_s": [0.0, 22.0],
+      "accepted": {
+        "landscape": "toll-bridge-L1.mp4"
+      }
     },
     {
       "id": "crossing",
@@ -19,8 +26,11 @@
       "route": "t2v",
       "beat": "crossing",
       "prompt": "A small folded paper sampan glides across a wide watercolour river at golden dusk, seen from behind and from the side. A paper rower in a conical hat, seen from behind, pulls a long paper oar in slow even strokes. In the bow a single gold coin stays exactly the same size and keeps shining while paper waves rise and fall, wind ripples the water and paper reeds drift past. Far ahead, a soft green light glows on the opposite bank.",
-      "window_s": [2.0, 20.0],
-      "film_s": [22.0, 40.0]
+      "window_s": [4.0, 22.0],
+      "film_s": [22.0, 40.0],
+      "accepted": {
+        "landscape": "crossing-L1.mp4"
+      }
     },
     {
       "id": "green-bank",
@@ -28,8 +38,11 @@
       "route": "t2v",
       "beat": "arrival",
       "prompt": "Night falls on a cosy paper riverbank lit by small green paper lanterns. A folded paper sampan bumps gently against a little paper jetty. The paper rower in a conical hat, seen from behind, lifts the gold coin and hands it, whole and unchanged, to a waiting paper figure on the jetty. Then the rower drops a single tiny grain of rice into a small paper bowl at the end of the jetty as the fare. The camera rises slowly to show many small lantern-lit paper boats crossing the calm river.",
-      "window_s": [4.0, 18.0],
-      "film_s": [40.0, 54.0]
+      "window_s": [8.0, 22.0],
+      "film_s": [40.0, 54.0],
+      "accepted": {
+        "landscape": "green-bank-L1.mp4"
+      }
     }
   ]
 }

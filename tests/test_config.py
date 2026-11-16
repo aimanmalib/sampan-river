@@ -72,6 +72,24 @@ class ConfigTest(unittest.TestCase):
         done = [json.loads(line) for line in load("log/generations.jsonl").splitlines() if line.strip()]
         self.assertIn(lock["test_clip"], [r["file"] for r in done if r["status"] == "done" and r["sha256"]])
 
+    def test_accepted_clips_are_logged_and_windows_fit(self):
+        data = load("config/shots.json")
+        rows = [json.loads(line) for line in load("log/generations.jsonl").splitlines() if line.strip()]
+        done = {r["file"]: r for r in rows if r["status"] == "done" and r["sha256"]}
+        shots_md = load("docs/SHOTS.md")
+        clip_s = self.film["ve"]["clip_s"]
+        for s in data["shots"]:
+            a, b = s["window_s"]
+            f0, f1 = s["film_s"]
+            self.assertAlmostEqual(b - a, f1 - f0, places=3, msg=s["id"])
+            self.assertTrue(0 <= a < b <= clip_s, s["id"])
+            for orientation, name in s.get("accepted", {}).items():
+                self.assertIn(name, done, f"{s['id']} {orientation}: no done ledger row")
+                self.assertEqual(done[name]["shot"], s["id"])
+                line = next((ln for ln in shots_md.splitlines() if name in ln and "accepted" in ln), None)
+                self.assertIsNotNone(line, f"{name} not marked accepted in docs/SHOTS.md")
+                self.assertIn(f"accepted, window {a:g} to {b:g} s", line, f"{name}: window in SHOTS.md differs from config")
+
     def test_prize_address_consistent(self):
         self.assertIn(self.film["prize_address"], load("README.md"))
         self.assertTrue(self.film["prize_address"].startswith("bitcoincash:"))
