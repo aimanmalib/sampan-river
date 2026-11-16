@@ -45,6 +45,13 @@ python3 tools/mix.py --orientation landscape
 python3 tools/transcribe.py media/audio/mix-landscape.wav
 ```
 
+The edit and its measurement (captions, end card, loudness to -14 LUFS, caption pixel check):
+
+```
+python3 tools/edit.py 16x9
+python3 tools/measure.py 16x9 --write
+```
+
 Measured results: [docs/MEASURED.md](docs/MEASURED.md).
 
 Tests run offline: `python3 -m unittest discover -s tests`.
