@@ -66,6 +66,12 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(ends[0][0], 0.0)
         self.assertEqual(ends[-1][1], self.film["end_card"]["start_s"])
 
+    def test_locked_style_points_to_a_decision_and_a_logged_clip(self):
+        lock = load("config/shots.json")["style_locked"]
+        self.assertTrue(os.path.exists(os.path.join(ROOT, lock["decision"])))
+        done = [json.loads(line) for line in load("log/generations.jsonl").splitlines() if line.strip()]
+        self.assertIn(lock["test_clip"], [r["file"] for r in done if r["status"] == "done" and r["sha256"]])
+
     def test_prize_address_consistent(self):
         self.assertIn(self.film["prize_address"], load("README.md"))
         self.assertTrue(self.film["prize_address"].startswith("bitcoincash:"))

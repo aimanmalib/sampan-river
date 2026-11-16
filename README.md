@@ -27,12 +27,14 @@ bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q
 | Credit ledger | `tools/ledger.py` writes `log/generations.jsonl` before every request | `config/film.json` `credits` |
 | Captions | burned in from one source file; SRT for closed captions | `config/captions.en.json` |
 | Music | original theme synthesised in code | `config/music.json` |
+| Speech check | `tools/transcribe.py`, local faster-whisper; the audio must contain zero words | `config/film.json` `audio.speech_check` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
 
 ```
 python3 tools/ve.py me
 python3 tools/ve.py generate --shot toll-bridge --orientation landscape --out media/clips/toll-bridge-1.mp4
+python3 tools/transcribe.py media/clips/toll-bridge-1.mp4
 ```
 
 Tests run offline: `python3 -m unittest discover -s tests`.

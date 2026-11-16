@@ -1,6 +1,7 @@
 {
   "_note": "One generation = one 30 s clip. `window_s` = the seconds of the clip planned for the edit; M1/M2 replace them with the windows actually used (docs/SHOTS.md). `film_s` = where the window sits in the film.",
   "style": "Handmade paper diorama world filmed as a miniature: folded paper boats, cut-paper river banks, layered paper hills, watercolour washes on textured cotton paper, visible paper fibres and soft fold creases, warm practical light, shallow depth of field, gentle slow camera moves, calm and wordless. Small paper figures are simple silhouettes seen from behind or far away, wearing wide conical paper hats; no detailed faces. Ambient sound of a quiet river: water lapping, light wind, distant birds.",
+  "style_locked": {"date": "2026-11-16", "decision": "docs/decisions/0002-style-test-generation.md", "test_clip": "toll-bridge-L1.mp4"},
   "exclude": "No text, no letters, no numbers, no signs, no logos, no watermarks, no speech, no voices, no singing, no music. Ambient river sound only. No photorealistic human faces.",
   "shots": [
     {
