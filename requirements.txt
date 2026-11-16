@@ -1,0 +1,4 @@
+# Runtime: Python 3.10+, ffmpeg and ffprobe on PATH.
+numpy>=1.24
+# Measurement only (speech check on the final audio).
+faster-whisper>=1.0

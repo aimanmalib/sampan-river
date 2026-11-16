@@ -1,0 +1,19 @@
+{
+  "_note": "Original theme synthesised by code (numpy, deterministic, no samples). Read by tools/music.py (M3).",
+  "seed": 20261116,
+  "sample_rate": 48000,
+  "duration_s": 60,
+  "tempo_bpm": 84,
+  "key": "D major",
+  "instrument": "kalimba (Karplus-Strong plucked string)",
+  "progression": ["D", "Bm", "G", "A"],
+  "sections": [
+    {"name": "toll", "start_s": 0.0, "end_s": 11.0, "density": 0.35, "register": "low"},
+    {"name": "departure", "start_s": 11.0, "end_s": 22.0, "density": 0.5, "register": "mid"},
+    {"name": "crossing", "start_s": 22.0, "end_s": 40.0, "density": 0.7, "register": "mid"},
+    {"name": "arrival", "start_s": 40.0, "end_s": 54.0, "density": 0.6, "register": "high"},
+    {"name": "end_card", "start_s": 54.0, "end_s": 60.0, "density": 0.3, "register": "mid"}
+  ],
+  "motif": {"at_s": 44.0, "notes": ["A5", "F#5", "D6"], "note_s": 0.28, "label": "fare paid"},
+  "mix": {"music_db": -18, "ambience_db": -24, "fade_in_s": 0.3, "fade_out_s": 2.0}
+}

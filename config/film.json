@@ -1,0 +1,48 @@
+{
+  "_note": "Every value the tools read. Credit limits are hard rules (decision 0001): a submit needs balance - cost >= reserve_ai_film AND Media credits spent + cost <= media_cap.",
+  "title": "The River Fare",
+  "event": "BCH BLAZE 2026 Media Track",
+  "prize_address": "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q",
+  "end_card": {"lines": ["Bitcoin Cash", "bitcoincash.org"], "start_s": 54.0},
+  "duration_s": {"min": 45, "max": 75, "target": 60, "hook_max_s": 3.0, "hook_max_words": 7},
+  "credits": {
+    "reserve_ai_film": 450,
+    "media_cap": 120,
+    "cost_per_generation": 9,
+    "budget_generations": {"test": 1, "landscape": 3, "landscape_retries": 3, "portrait": 3, "portrait_retries": 2}
+  },
+  "ve": {
+    "api_base": "https://ve-studio.my.id",
+    "route": "/v1/t2v",
+    "models": {"landscape": "vid25-30s-landscape", "portrait": "vid25-30s-portrait"},
+    "resolution": {"landscape": "1280x720", "portrait": "720x1280"},
+    "fps": 24,
+    "clip_s": 30,
+    "duration_tolerance_s": 0.2,
+    "key_env": "SEEDANCE_API_KEY",
+    "key_file_env": "VE_KEY_FILE",
+    "poll_s": 10,
+    "wait_max_s": 1800,
+    "submit_attempts": 3,
+    "submit_timeout_s": 120,
+    "min_download_bytes": 1000000,
+    "download_timeout_s": 300
+  },
+  "audio": {"lufs_target": -14, "lufs_tolerance": 1, "true_peak_max_db": -1.0, "sample_rate": 48000, "silence_check_s": 15, "silence_max_s": 2.0},
+  "output": {
+    "16x9": {"width": 1920, "height": 1080, "scale": "lanczos"},
+    "9x16": {"width": 1080, "height": 1920, "scale": "lanczos"}
+  },
+  "captions": {
+    "font": "DejaVu Sans",
+    "bold": true,
+    "size": {"16x9": 54, "9x16": 64},
+    "primary_colour": "#FFF8E7",
+    "outline_colour": "#1B1A17",
+    "outline_px": 3,
+    "shadow_px": 1,
+    "margin_v": {"16x9": 70, "9x16": 420},
+    "safe_bottom_ratio": {"9x16": 0.2},
+    "max_chars_per_line": {"16x9": 42, "9x16": 26}
+  }
+}
