@@ -78,6 +78,15 @@ class CaptionsTest(unittest.TestCase):
             usable = f["output"][v]["width"] * (1 - 2 * 0.06)
             self.assertLessEqual(c["max_chars_per_line"][v] * c["size"][v] * 0.6, usable, v)
 
+    def test_end_card_lines_fit_frame_width(self):
+        f = film()
+        e = f["end_card"]
+        for v in ("16x9", "9x16"):
+            usable = f["output"][v]["width"] * (1 - 2 * 0.06)
+            for i, line in enumerate(e["lines"]):
+                size = e["size"][v][0 if i == 0 else 1]
+                self.assertLessEqual(len(line) * size * 0.6, usable, f"{v}: {line}")
+
 
 if __name__ == "__main__":
     unittest.main()

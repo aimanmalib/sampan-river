@@ -26,7 +26,7 @@ Measured by `tools/measure.py` on the final files (per-cue detail in [the measur
 
 | version | size | seconds | loudness | true peak | words heard | captions burned in | sha256 |
 |---|---|---|---|---|---|---|---|
-| 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `50ca1e09...` |
+| 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `aeda33e0...` |
 | 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `85f0dc02...` |
 
 Both are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio; zero

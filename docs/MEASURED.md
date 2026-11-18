@@ -30,18 +30,21 @@ The final film loudness (-14 LUFS integrated, true peak at most -1 dBTP) is set 
 
 ## Final films
 
-`python3 tools/edit.py 16x9` then `python3 tools/measure.py 16x9 --write` (2026-11-16). The 1080p picture is the 720p
+`python3 tools/edit.py 16x9` then `python3 tools/measure.py 16x9 --write` (2026-11-18, after the cue 5 and end card
+wording change; same clips, windows and mix as 2026-11-16). The 1080p picture is the 720p
 clips scaled with ffmpeg lanczos; no AI upscaler. Loudness: ffmpeg `ebur128=peak=true` on the final file. Speech: local
 check with voice activity detection (decision 0004). caption_cues = cues whose caption band differs from the clean
 master at the cue middle (decision 0005); the gaps between cues must not differ. Frames read by a person:
 `docs/frames/16x9-cue-01.jpg` to `-10.jpg`.
 
-Read in the frames (2026-11-16): every cue shows its full config text in white with a dark outline, centred above the
+Read in the frames (2026-11-18): every cue shows its full config text in white with a dark outline, centred above the
 bottom edge, one line except cue 8 ("The fare for a real / transfer: 219 satoshis.") and cue 10 ("Bitcoin Cash. Money
-that / crosses for almost nothing."); no caption covers the coin. Cue 10 sits under the end card, which shows
-"Bitcoin Cash" and "bitcoincash.org" over the dimmed last frame of the jetty shot.
+that / crosses for almost nothing."); no caption covers the coin. Cue 5 reads "A digital dollar on Bitcoin Cash." on one
+line under the boat, with the coin clear above it. Cue 10 sits under the end card, which shows "Bitcoin Cash" and "Get a
+wallet: bitcoincash.org" in full over the dimmed last frame of the jetty shot; neither card line touches the caption.
 
-`python3 tools/edit.py 9x16` then `python3 tools/measure.py 9x16 --write` (2026-11-16). Cut from the same landscape
+`python3 tools/edit.py 9x16` then `python3 tools/measure.py 9x16 --write` (2026-11-16, before the cue 5 and end card
+wording change of 2026-11-18; this row is replaced when 9:16 is cut again). Cut from the same landscape
 clips, windows and mix as 16:9 (decision 0006): the full picture at 1080 x 608 (lanczos from 1280 x 720) centred over a
 blurred, dimmed copy of the same frame. The 9:16 caption band (rows 68% to 80%) was measured here for the first time:
 weakest cue 9.78, largest gap 0.24, against limits 4.0 and 1.5. Frames read by a person: `docs/frames/9x16-cue-01.jpg`
@@ -52,7 +55,7 @@ drawn over the dimmed jetty picture in the middle of the frame.
 
 | version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | caption_cues | sha256 |
 |---|---|---|---|---|---|---|---|---|---|
-| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 50ca1e0997c12f70913d8c74c49626dff723ab744d3a7419c8a572406c10b0d8 |
+| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
 | 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 85f0dc02cc32d291e6d9382720a0662d62b7eb053ce0cc99029bef76b1e815dc |
 
 <!-- detail:16x9 -->
@@ -66,12 +69,12 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | cue 2 | 5.8 | 9.81 | yes |
 | cue 3 | 13.25 | 8.29 | yes |
 | cue 4 | 18.5 | 7.2 | yes |
-| cue 5 | 25.75 | 9.9 | yes |
+| cue 5 | 25.75 | 8.4 | yes |
 | cue 6 | 31.75 | 7.9 | yes |
 | cue 7 | 37.25 | 8.52 | yes |
 | cue 8 | 43.5 | 10.29 | yes |
 | cue 9 | 49.5 | 6.58 | yes |
-| cue 10 | 57.0 | 15.77 | yes |
+| cue 10 | 57.0 | 15.76 | yes |
 | gap 2 | 3.4 | 0.69 | yes |
 | gap 3 | 9.5 | 0.58 | yes |
 | gap 4 | 15.75 | 0.81 | yes |
@@ -81,7 +84,7 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | gap 8 | 40.25 | 0.58 | yes |
 | gap 9 | 46.25 | 0.65 | yes |
 | gap 10 | 53.5 | 0.64 | yes |
-| gap 11 | 59.75 | 0.11 | yes |
+| gap 11 | 59.75 | 0.12 | yes |
 <!-- /detail:16x9 -->
 
 <!-- detail:9x16 -->

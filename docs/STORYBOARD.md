@@ -9,11 +9,11 @@ Clips: `config/shots.json`. Captions: `config/captions.en.json`. End card text i
 | 3.6 to 8.0 | The chest of coins overflows; travellers walk away lighter | The old bridge takes a cut from everyone. | |
 | 8.0 to 15.5 | Camera drifts down under the bridge to a small rower in a conical hat, seen from behind | One rower takes the river instead. | |
 | 16.0 to 22.0 | The rower sets one gold coin in the bow and pushes the paper sampan out | She carries one dollar across. | |
-| 22.0 to 34.5 | Golden dusk; long even oar strokes; the coin keeps its size and shine in the bow | PUSD is a dollar token on Bitcoin Cash. / It is designed to hold one dollar. | pusd-token, pusd-design |
+| 22.0 to 34.5 | Golden dusk; long even oar strokes; the coin keeps its size and shine in the bow | A digital dollar on Bitcoin Cash. / It is designed to hold one dollar. | pusd-token, pusd-design |
 | 35.0 to 40.0 | Paper waves rise and fall; a green light grows on the far bank | The coin does not shrink on the way. | |
 | 40.0 to 46.0 | Lantern-lit jetty; the coin is handed over whole | The fare for a real transfer: 219 satoshis. | fee-tx |
 | 46.5 to 54.0 | The rower pays a tiny fare at a paper jetty; many small boats cross | Less than a tenth of a cent. | fee-usd |
-| 54.0 to 60.0 | End card drawn by code: "Bitcoin Cash" and "bitcoincash.org" over a still of the river | Bitcoin Cash. Money that crosses for almost nothing. | fee-usd |
+| 54.0 to 60.0 | End card drawn by code: "Bitcoin Cash" and "Get a wallet: bitcoincash.org" over a still of the river | Bitcoin Cash. Money that crosses for almost nothing. | fee-usd, wallet-link |
 
 ## 9:16 version
 

@@ -6,7 +6,7 @@
   "end_card": {
     "lines": [
       "Bitcoin Cash",
-      "bitcoincash.org"
+      "Get a wallet: bitcoincash.org"
     ],
     "start_s": 54.0,
     "dim": -0.18,
@@ -19,14 +19,17 @@
       ],
       "9x16": [
         120,
-        64
+        50
       ]
     },
     "colour": "#FFF8E7",
     "outline_colour": "#1B1A17",
     "outline_px": 4,
     "fade_in_s": 0.6,
-    "film_fade_out_s": 1.0
+    "film_fade_out_s": 1.0,
+    "line_facts": {
+      "Get a wallet: bitcoincash.org": "wallet-link"
+    }
   },
   "duration_s": {
     "min": 45,

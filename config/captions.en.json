@@ -5,7 +5,7 @@
     {"start": 3.6, "end": 8.0, "text": "The old bridge takes a cut from everyone.", "fact": null},
     {"start": 11.0, "end": 15.5, "text": "One rower takes the river instead.", "fact": null},
     {"start": 16.0, "end": 21.0, "text": "She carries one dollar across.", "fact": null},
-    {"start": 23.0, "end": 28.5, "text": "PUSD is a dollar token on Bitcoin Cash.", "fact": "pusd-token"},
+    {"start": 23.0, "end": 28.5, "text": "A digital dollar on Bitcoin Cash.", "fact": "pusd-token"},
     {"start": 29.0, "end": 34.5, "text": "It is designed to hold one dollar.", "fact": "pusd-design"},
     {"start": 35.0, "end": 39.5, "text": "The coin does not shrink on the way.", "fact": null},
     {"start": 41.0, "end": 46.0, "text": "The fare for a real transfer: 219 satoshis.", "fact": "fee-tx"},

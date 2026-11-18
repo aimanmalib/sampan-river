@@ -48,6 +48,16 @@ class ConfigTest(unittest.TestCase):
             if c["fact"]:
                 self.assertRegex(facts, r"\| `" + re.escape(c["fact"]) + r"` \|.*https://", c["text"])
 
+    def test_end_card_claims_are_sourced(self):
+        facts = load("docs/FACTS.md")
+        e = self.film["end_card"]
+        for line, fact in e.get("line_facts", {}).items():
+            self.assertIn(line, e["lines"])
+            self.assertRegex(facts, r"\| `" + re.escape(fact) + r"` \|.*https://", line)
+        for line in e["lines"]:
+            if re.search(r"wallet|dollar|fee|cent", line, re.I):
+                self.assertIn(line, e.get("line_facts", {}), f"end card claim without a fact: {line}")
+
     def test_no_forbidden_words_in_captions(self):
         bad = re.compile(r"guarantee|risk.?free|always \$?1|trustless|revolutionary|financial advice|\u2014|!", re.I)
         for c in self.cues:
