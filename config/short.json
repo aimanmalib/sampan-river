@@ -1,0 +1,19 @@
+{
+  "_note": "tools/short.py, decision 0008. The vertical short: segments [start, end] in film seconds of the 9:16 clean master (same picture, layout and end card as the film; no new clips, no new music). Joins: video xfade and audio acrossfade of crossfade_s each, so picture and sound stay in step. Captions from config/captions.short.en.json in short seconds. Limits from duration_s.",
+  "version": "short-9x16",
+  "source": "9x16",
+  "segments": [
+    [0.0, 3.8],
+    [23.5, 27.5],
+    [42.0, 48.0],
+    [54.0, 60.0]
+  ],
+  "crossfade_s": 0.4,
+  "audio_fade_out_s": 1.0,
+  "captions": "config/captions.short.en.json",
+  "duration_s": {
+    "min": 15,
+    "max": 20
+  },
+  "hook_max_s": 3.0
+}

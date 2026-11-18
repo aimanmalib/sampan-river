@@ -57,6 +57,7 @@ drawn over the dimmed jetty picture in the middle of the frame.
 |---|---|---|---|---|---|---|---|---|---|
 | 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
 | 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
+| short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
@@ -143,3 +144,20 @@ Variance of the Laplacian of the luma, same scene region shown at each layout's 
 
 Mean ratio to blur_fill: 4:5 0.103, 1:1 0.196. Limit: 0.55. Chosen: blur_fill (no crop passes).
 <!-- /sharpness -->
+
+<!-- detail:short-9x16 -->
+### short-9x16 detail
+
+Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+
+| sample | t (s) | caption band diff | pass |
+|---|---|---|---|
+| cue 1 | 1.7 | 10.62 | yes |
+| cue 2 | 5.4 | 13.56 | yes |
+| cue 3 | 8.8 | 15.45 | yes |
+| cue 4 | 11.45 | 10.29 | yes |
+| gap 2 | 3.5 | 0.17 | yes |
+| gap 3 | 7.2 | 0.1 | yes |
+| gap 4 | 10.35 | 0.25 | yes |
+| gap 5 | 15.5 | 0.04 | yes |
+<!-- /detail:short-9x16 -->

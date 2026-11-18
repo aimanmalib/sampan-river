@@ -74,6 +74,8 @@ python3 tools/measure.py 16x9 --write
 python3 tools/sharpness.py --write
 python3 tools/edit.py 9x16
 python3 tools/measure.py 9x16 --write
+python3 tools/short.py
+python3 tools/measure.py short-9x16 --write
 python3 tools/thumb.py
 ```
 

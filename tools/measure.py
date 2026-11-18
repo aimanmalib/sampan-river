@@ -5,7 +5,8 @@ loudness and true peak (ffmpeg ebur128), no silence longer than `audio.silence_m
 `audio.silence_check_s` seconds, zero words from the local speech check (tools/transcribe.py), and the caption pixel
 check (decision 0005): at each cue middle the caption band of the final file differs from the clean master, and at each
 gap between cues it does not. One frame per cue goes to `measure.frames_dir` for a person to read.
-Usage: python3 tools/measure.py <16x9|9x16> [--write]
+The vertical short (`short-9x16`, decision 0008) is measured the same way against config/short.json (tools/short.py).
+Usage: python3 tools/measure.py <16x9|9x16|short-9x16> [--write]
 """
 import json
 import os
@@ -18,7 +19,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
-from tools import captions, transcribe, ve  # noqa: E402
+from tools import captions, short, transcribe, ve  # noqa: E402
 
 MEASURED = os.path.join(ROOT, "docs", "MEASURED.md")
 COLUMNS = ("version", "width", "height", "duration_s", "audio", "lufs_i", "true_peak_db", "whisper_words",
@@ -206,11 +207,14 @@ def measure(version, film, cues):
 
 
 def main(argv):
-    if not argv or argv[0] not in ("16x9", "9x16"):
+    film, sh = captions.load(captions.FILM), captions.load(short.SHORT)
+    if not argv or argv[0] not in ("16x9", "9x16", sh["version"]):
         print(__doc__.strip().splitlines()[-1], file=sys.stderr)
         return 2
-    film = captions.load(captions.FILM)
-    result = measure(argv[0], film, captions.load(captions.CAPTIONS)["cues"])
+    cues = captions.load(captions.CAPTIONS)["cues"]
+    if argv[0] == sh["version"]:
+        film, cues = short.short_film(film, sh), captions.load(os.path.join(ROOT, sh["captions"]))["cues"]
+    result = measure(argv[0], film, cues)
     print(json.dumps(result))
     if "--write" in argv:
         with open(MEASURED, encoding="utf-8") as f:
