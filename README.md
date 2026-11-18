@@ -2,7 +2,7 @@
 
 A 60 second animated film with no dialogue, made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
 every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
-of one grain of rice. English captions are burned into the picture, so it works with the sound off.
+of less than a tenth of a US cent. English captions are burned into the picture, so it works with the sound off.
 
 ![Thumbnail: the paper rower and the dollar coin in a folded paper boat](docs/frames/thumbnail.jpg)
 

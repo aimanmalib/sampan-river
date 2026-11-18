@@ -4,7 +4,8 @@ Date: 2026-11-16. Status: accepted; the 9:16 film is cut from the landscape clip
 
 ## Story and look
 A wordless 60 s fable: a toll bridge takes a big coin from every traveller; a small rower carries one gold coin across a river
-to a green-lit Bitcoin Cash bank instead, arriving with the coin unchanged and paying a fare of one grain of rice.
+to a green-lit Bitcoin Cash bank instead, arriving with the coin unchanged and paying a fare of less than a tenth of a
+US cent. Amended 2026-11-18: the fare is carried by the caption, because no object that small is visible in the clips.
 Look: folded paper diorama with watercolour washes. Figures are silhouettes seen from behind with conical hats, so the model
 never has to draw detailed or photorealistic faces. All on-screen text (captions, end card) is drawn by code; prompts forbid
 generated text, logos, speech and music.
