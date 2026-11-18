@@ -56,7 +56,7 @@ drawn over the dimmed jetty picture in the middle of the frame.
 | version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | caption_cues | sha256 |
 |---|---|---|---|---|---|---|---|---|---|
 | 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
-| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 85f0dc02cc32d291e6d9382720a0662d62b7eb053ce0cc99029bef76b1e815dc |
+| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
@@ -98,12 +98,12 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | cue 2 | 5.8 | 13.46 | yes |
 | cue 3 | 13.25 | 11.12 | yes |
 | cue 4 | 18.5 | 10.09 | yes |
-| cue 5 | 25.75 | 16.33 | yes |
+| cue 5 | 25.75 | 13.56 | yes |
 | cue 6 | 31.75 | 13.6 | yes |
 | cue 7 | 37.25 | 12.86 | yes |
 | cue 8 | 43.5 | 15.42 | yes |
 | cue 9 | 49.5 | 9.78 | yes |
-| cue 10 | 57.0 | 21.54 | yes |
+| cue 10 | 57.0 | 21.53 | yes |
 | gap 2 | 3.4 | 0.2 | yes |
 | gap 3 | 9.5 | 0.12 | yes |
 | gap 4 | 15.75 | 0.21 | yes |
@@ -123,3 +123,23 @@ film), 1280 x 720 lanczos, JPEG 95,358 bytes, sha256 f97ba088f9bea2cbc2875917a50
 Copy: `docs/frames/thumbnail.jpg`. Read in the image (2026-11-16): the paper rower in a conical hat at the stern of a
 folded paper boat, the gold coin with a raised "1" in the bow; "The River Fare" in large cream letters with a dark
 outline at the top right, "A dollar crosses to Bitcoin Cash" below it; neither line touches the rower, the oar or the coin.
+
+<!-- sharpness -->
+## Sharpness (9:16 layouts)
+
+Variance of the Laplacian of the luma, same scene region shown at each layout's size (tools/sharpness.py).
+
+| clip | t (s) | blur_fill | 4:5 | 1:1 |
+|---|---|---|---|---|
+| toll-bridge-L1.mp4 | 10.5 | 69.3 | 6.6 | 12.8 |
+| toll-bridge-L1.mp4 | 16.0 | 63.8 | 7.0 | 13.4 |
+| toll-bridge-L1.mp4 | 21.5 | 40.1 | 4.7 | 8.5 |
+| crossing-L1.mp4 | 8.5 | 92.7 | 9.1 | 18.6 |
+| crossing-L1.mp4 | 13.0 | 89.3 | 8.7 | 17.5 |
+| crossing-L1.mp4 | 17.5 | 67.5 | 6.4 | 12.4 |
+| green-bank-L1.mp4 | 11.5 | 40.2 | 4.5 | 8.1 |
+| green-bank-L1.mp4 | 15.0 | 40.3 | 4.4 | 7.8 |
+| green-bank-L1.mp4 | 18.5 | 54.8 | 5.3 | 10.1 |
+
+Mean ratio to blur_fill: 4:5 0.103, 1:1 0.196. Limit: 0.55. Chosen: blur_fill (no crop passes).
+<!-- /sharpness -->

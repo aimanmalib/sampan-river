@@ -27,7 +27,7 @@ Measured by `tools/measure.py` on the final files (per-cue detail in [the measur
 | version | size | seconds | loudness | true peak | words heard | captions burned in | sha256 |
 |---|---|---|---|---|---|---|---|
 | 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `aeda33e0...` |
-| 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `85f0dc02...` |
+| 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `82198353...` |
 
 Both are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio; zero
 means no voice and no stray speech from the video model. The captions are also exported as an SRT file for closed
@@ -39,7 +39,8 @@ Every request to the video service is written to [log/generations.jsonl](log/gen
 with the balance before and after and the file hash. The film used three generations of 9 credits each, 27 credits in
 total. One more request failed at the provider and was refunded (0 credits). Portrait clips were not generated: the
 credit rule in decision 0001 keeps a reserve for other work, and a portrait request would have gone below it. The 9:16
-version is therefore cut from the same landscape clips (decision 0006).
+version is therefore cut from the same landscape clips (decision 0006). A cropped, larger picture was measured and
+was too soft against the limit set before measuring, so the full-width picture stays (decision 0007).
 
 ## How it is made
 
@@ -53,6 +54,7 @@ version is therefore cut from the same landscape clips (decision 0006).
 | Speech check | `tools/transcribe.py`, local faster-whisper with voice activity detection; zero words allowed | `config/film.json` `audio.speech_check` |
 | Edit | `tools/edit.py`, ffmpeg: clips scaled with lanczos, end card, burned captions, two-pass loudness | `config/film.json` `edit`, `end_card` |
 | Measurement | `tools/measure.py`, ffprobe, ebur128, silence and caption pixel checks | `config/film.json` `measure` |
+| 9:16 layout | `tools/layout.py` frame layouts, `tools/sharpness.py` compares a crop with the full-width picture | `config/film.json` `edit.layout`, `measure.sharpness` |
 | Thumbnail | `tools/thumb.py`, one film frame with the title drawn by code | `config/film.json` `thumbnail` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
@@ -69,6 +71,7 @@ Everything after the clips needs no key, only the accepted clips in `media/clips
 python3 tools/mix.py --orientation landscape
 python3 tools/edit.py 16x9
 python3 tools/measure.py 16x9 --write
+python3 tools/sharpness.py --write
 python3 tools/edit.py 9x16
 python3 tools/measure.py 9x16 --write
 python3 tools/thumb.py

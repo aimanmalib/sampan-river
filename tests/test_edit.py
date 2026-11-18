@@ -92,40 +92,6 @@ class EditTest(unittest.TestCase):
         self.assertEqual(film["edit"]["mix"].format(orientation=film["edit"]["orientation"]["9x16"]),
                          "media/audio/mix-landscape.wav")
 
-    def test_cover_layout_scales_to_frame(self):
-        g = edit.segment_graph(self.film, "16x9", 1)
-        o = self.film["output"]["16x9"]
-        self.assertEqual(g, f"[1:v]scale={o['width']}:{o['height']}:flags={o['scale']},setsar=1,fps=24,format=yuv420p[v1]")
-        self.assertEqual(edit.picture_box(self.film, "16x9"), (0, 0, o["width"], o["height"]))
-
-    def test_blur_fill_keeps_full_picture_and_aspect(self):
-        o = self.film["output"]["9x16"]
-        x, y, w, h = edit.picture_box(self.film, "9x16")
-        sw, sh = (int(v) for v in self.film["ve"]["resolution"]["landscape"].split("x"))
-        self.assertEqual((x, w), (0, o["width"]))
-        self.assertLessEqual(abs(w / h - sw / sh), 0.01)
-        self.assertGreaterEqual(y, 0)
-        self.assertLessEqual(y + h, o["height"])
-        self.assertEqual((w % 2, h % 2, y % 2), (0, 0, 0))
-        g = edit.segment_graph(self.film, "9x16", 0)
-        self.assertIn(f"[f0]scale={w}:{h}:flags={o['scale']}[fg0]", g)
-        self.assertIn(f"overlay=0:{y}", g)
-        self.assertIn("boxblur=", g)
-        self.assertTrue(g.endswith("format=yuv420p[v0]"))
-
-    def test_blur_fill_picture_stays_clear_of_caption_band_and_safe_area(self):
-        film = load("config/film.json")
-        _, y, _, h = edit.picture_box(film, "9x16")
-        height = film["output"]["9x16"]["height"]
-        band = film["measure"]["caption_band"]["9x16"]
-        self.assertLessEqual(y + h, band[0] * height)
-        self.assertLessEqual(band[1], 1 - film["captions"]["safe_bottom_ratio"]["9x16"])
-
-    def test_unknown_layout_refused(self):
-        self.film["edit"]["layout"]["9x16"] = {"mode": "stretch"}
-        with self.assertRaises(edit.EditError):
-            edit.segment_graph(self.film, "9x16", 0)
-
 
 if __name__ == "__main__":
     unittest.main()

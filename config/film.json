@@ -151,7 +151,7 @@
       "true_peak_margin_db": 0.5
     },
     "layout": {
-      "_note": "Per version: how source clips fill the frame. 'cover' = scale to the output size (same aspect). 'blur_fill' = decision 0006: the landscape clip at full width, placed at picture_y_ratio of the free height, over a blurred, dimmed copy of the same frame that covers the whole portrait frame. The blur runs at background_scale of the output size.",
+      "_note": "Per version: how source clips fill the frame (tools/layout.py). 'cover' = scale to the output size. 'blur_fill' = decision 0006: the landscape clip at full width over a blurred, dimmed copy of the same frame. 'crop_fill' = decision 0007: a crop_aspect box following centre_x keyframes ([seconds from the window start, box centre in source px] per accepted clip), scaled to full width over the same blurred background. picture_y_ratio places the picture in the free height. The blur runs at background_scale of the output size.",
       "16x9": {
         "mode": "cover"
       },
@@ -160,7 +160,75 @@
         "background_scale": 0.25,
         "blur_radius": 10,
         "background_brightness": -0.12,
-        "picture_y_ratio": 0.5
+        "picture_y_ratio": 0.5,
+        "crop_aspect": [
+          1,
+          1
+        ],
+        "centre_x": {
+          "toll-bridge-L1.mp4": [
+            [
+              0,
+              900
+            ],
+            [
+              4.4,
+              880
+            ],
+            [
+              8.8,
+              720
+            ],
+            [
+              17.5,
+              480
+            ],
+            [
+              22,
+              485
+            ]
+          ],
+          "crossing-L1.mp4": [
+            [
+              0,
+              640
+            ],
+            [
+              3.6,
+              720
+            ],
+            [
+              7.2,
+              615
+            ],
+            [
+              10.7,
+              590
+            ],
+            [
+              18,
+              565
+            ]
+          ],
+          "green-bank-L1.mp4": [
+            [
+              0,
+              645
+            ],
+            [
+              8.3,
+              650
+            ],
+            [
+              11.1,
+              570
+            ],
+            [
+              14,
+              600
+            ]
+          ]
+        }
       }
     }
   },
@@ -183,7 +251,30 @@
     "frames_dir": "docs/frames",
     "frame_width": 640,
     "frame_quality": 5,
-    "frame_max_bytes": 150000
+    "frame_max_bytes": 150000,
+    "sharpness": {
+      "_note": "tools/sharpness.py, decision 0007.",
+      "sample_fracs": [
+        0.25,
+        0.5,
+        0.75
+      ],
+      "region_aspect": [
+        4,
+        5
+      ],
+      "aspects": {
+        "4:5": [
+          4,
+          5
+        ],
+        "1:1": [
+          1,
+          1
+        ]
+      },
+      "min_ratio": 0.55
+    }
   },
   "thumbnail": {
     "_note": "tools/thumb.py. One frame of an accepted clip (inside the shot's edit window, so the still is in the film), scaled with lanczos, text drawn by code at the top right where the frame is open paper sky. The coin sits below the text.",
