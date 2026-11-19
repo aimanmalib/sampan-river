@@ -144,6 +144,19 @@ def write_srt(which, out_path, voice_cfg=None):
     return out_path
 
 
+def _burned(cues, film, version):
+    """Captions ASS for the final file: the bands (decision 0010) when the version has them, else the bottom line."""
+    from tools import bands  # bands imports this module
+    if not bands.style(film, version):
+        return captions_ass(cues, film, version)
+    rows = bands.rows_for(version)
+    with open(os.path.join(ROOT, "docs", "FACTS.md"), encoding="utf-8") as f:
+        bad = bands.check_layout(film, version, cues, rows) + bands.check_figures(rows, cues, f.read(), film)
+    if bad:
+        raise ValueError("; ".join(bad))
+    return bands.ass(film, version, cues, rows)
+
+
 def write(out_dir, version, film=None, cues=None):
     """Write the three subtitle files for `version`; returns their paths."""
     film = film or load(FILM)
@@ -153,7 +166,7 @@ def write(out_dir, version, film=None, cues=None):
     paths = {"captions": os.path.join(out_dir, f"captions-{version}.ass"),
              "endcard": os.path.join(out_dir, f"endcard-{version}.ass"),
              "srt": os.path.join(out_dir, "captions.en.srt")}
-    texts = {"captions": captions_ass(cues, film, version), "endcard": endcard_ass(film, version, end),
+    texts = {"captions": _burned(cues, film, version), "endcard": endcard_ass(film, version, end),
              "srt": srt(cues, film["captions"]["max_chars_per_line"]["16x9"])}
     for k, p in paths.items():
         with open(p, "w", encoding="utf-8") as f:

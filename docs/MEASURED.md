@@ -56,9 +56,10 @@ drawn over the dimmed jetty picture in the middle of the frame.
 | version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | speech_match | caption_cues | sha256 |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 16x9 | 1920 | 1080 | 60.0 | yes | -14.0 | -1.4 | 67 | 0.973 | 10/10 | cfff07f113d73e36b0dcf99c87288f5886f0de7b79de53ce26b2fdba0eadba85 |
-| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
+| 9x16 | 1080 | 1920 | 60.0 | yes | -14.0 | -1.4 | 67 | 0.973 | 14/14 | 1530a180ad7361cad01bdca7400b35fcf899e00d235625229e17e17f344fd3cc |
 | short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | - | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
 | 16x9-tanpa-suara | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 53598d66b72a52e9fe4e4c554fa38df4faad54bfe54b777b7975b9b345b4a0e8 |
+| 9x16-tanpa-suara | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 14/14 | f990017876f5177cce948ad74d5269eda8e5a39e7fce9d47e817c4ee7252e2cf |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
@@ -91,30 +92,59 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 <!-- detail:9x16 -->
 ### 9x16 detail
 
-Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none. Heard: "Sending $5 should not cost $5. The old bridge takes a cut from everyone. One rower takes the river instead. She carries $1 across. A digital dollar on Bitcoin Cash. It is designed to hold $1. The coin does not shrink on the way. The fare for a real transfer, 219 satoshis. Less than a tenth of a cent. Bitcoin Cash. Money that crosses for almost nothing."; speech match 0.973.
 
 | sample | t (s) | caption band diff | pass |
 |---|---|---|---|
-| cue 1 | 1.7 | 10.61 | yes |
-| cue 2 | 5.8 | 13.46 | yes |
-| cue 3 | 13.25 | 11.12 | yes |
-| cue 4 | 18.5 | 10.09 | yes |
-| cue 5 | 25.75 | 13.56 | yes |
-| cue 6 | 31.75 | 13.6 | yes |
-| cue 7 | 37.25 | 12.86 | yes |
-| cue 8 | 43.5 | 15.42 | yes |
-| cue 9 | 49.5 | 9.78 | yes |
-| cue 10 | 57.0 | 21.53 | yes |
-| gap 2 | 3.4 | 0.2 | yes |
-| gap 3 | 9.5 | 0.12 | yes |
-| gap 4 | 15.75 | 0.21 | yes |
-| gap 5 | 22.0 | 0.05 | yes |
-| gap 6 | 28.75 | 0.0 | yes |
-| gap 7 | 34.75 | 0.12 | yes |
-| gap 8 | 40.25 | 0.24 | yes |
-| gap 9 | 46.25 | 0.24 | yes |
-| gap 10 | 53.5 | 0.22 | yes |
-| gap 11 | 59.75 | 0.03 | yes |
+| top cue 1 | 1.81 | 7.44 | yes |
+| top cue 2 | 7.175 | 11.41 | yes |
+| top cue 3 | 13.375 | 9.62 | yes |
+| top cue 4 | 19.375 | 8.2 | yes |
+| top cue 5 | 25.875 | 7.63 | yes |
+| top cue 6 | 31.875 | 7.44 | yes |
+| top cue 7 | 37.875 | 7.79 | yes |
+| top cue 8 | 43.625 | 11.39 | yes |
+| top cue 9 | 50.25 | 7.35 | yes |
+| top cue 10 | 57.25 | 15.24 | yes |
+| top gap 10 | 54.25 | 0.0 | yes |
+| bottom cue 1 | 5.35 | 5.84 | yes |
+| bottom cue 2 | 27.75 | 6.09 | yes |
+| bottom cue 3 | 43.5 | 15.31 | yes |
+| bottom cue 4 | 50.25 | 16.43 | yes |
+| bottom gap 2 | 13.25 | 0.06 | yes |
+| bottom gap 3 | 40.25 | 0.02 | yes |
+| bottom gap 4 | 46.25 | 0.01 | yes |
+| bottom gap 5 | 57.0 | 0.0 | yes |
+
+Bands (decision 0010): share of 0..54 s with text, minimum 0.7.
+
+| version | band | cover | min |
+|---|---|---|---|
+| 9x16 | top | 0.961 | 0.7 |
+| 9x16 | bottom | 0.857 | 0.7 |
+
+Text contrast (WCAG, text #FFF8E7 over the clean master inside each text box), minimum 4.5.
+
+| band | t (s) | contrast |
+|---|---|---|
+| top | 1.81 | 13.72 |
+| top | 7.175 | 18.04 |
+| top | 13.375 | 19.83 |
+| top | 19.375 | 19.83 |
+| top | 25.875 | 10.95 |
+| top | 31.875 | 9.13 |
+| top | 37.875 | 6.3 |
+| top | 43.625 | 19.83 |
+| top | 50.25 | 19.83 |
+| top | 57.25 | 19.83 |
+| bottom | 5.35 | 19.72 |
+| bottom | 5.35 | 19.19 |
+| bottom | 27.75 | 19.83 |
+| bottom | 27.75 | 19.83 |
+| bottom | 43.5 | 19.62 |
+| bottom | 43.5 | 19.83 |
+| bottom | 50.25 | 19.74 |
+| bottom | 50.25 | 19.83 |
 <!-- /detail:9x16 -->
 
 ## Thumbnail
@@ -168,6 +198,7 @@ Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Sil
 |---|---|---|---|---|
 | preview-16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
 | 16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
+| 9x16 | -16.0 | -28.97 | 12.97 | 0.0 |
 
 <!-- detail:16x9-tanpa-suara -->
 ### 16x9-tanpa-suara detail
@@ -196,3 +227,61 @@ Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silen
 | gap 10 | 51.75 | 0.6 | yes |
 | gap 11 | 59.5 | 0.13 | yes |
 <!-- /detail:16x9-tanpa-suara -->
+
+<!-- detail:9x16-tanpa-suara -->
+### 9x16-tanpa-suara detail
+
+Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+
+| sample | t (s) | caption band diff | pass |
+|---|---|---|---|
+| top cue 1 | 1.81 | 7.44 | yes |
+| top cue 2 | 7.175 | 11.41 | yes |
+| top cue 3 | 13.375 | 9.62 | yes |
+| top cue 4 | 19.375 | 8.2 | yes |
+| top cue 5 | 25.875 | 7.63 | yes |
+| top cue 6 | 31.875 | 7.44 | yes |
+| top cue 7 | 37.875 | 7.79 | yes |
+| top cue 8 | 43.625 | 11.39 | yes |
+| top cue 9 | 50.25 | 7.35 | yes |
+| top cue 10 | 57.25 | 15.24 | yes |
+| top gap 10 | 54.25 | 0.0 | yes |
+| bottom cue 1 | 5.35 | 5.84 | yes |
+| bottom cue 2 | 27.75 | 6.09 | yes |
+| bottom cue 3 | 43.5 | 15.31 | yes |
+| bottom cue 4 | 50.25 | 16.43 | yes |
+| bottom gap 2 | 13.25 | 0.06 | yes |
+| bottom gap 3 | 40.25 | 0.02 | yes |
+| bottom gap 4 | 46.25 | 0.01 | yes |
+| bottom gap 5 | 57.0 | 0.0 | yes |
+
+Bands (decision 0010): share of 0..54 s with text, minimum 0.7.
+
+| version | band | cover | min |
+|---|---|---|---|
+| 9x16-tanpa-suara | top | 0.961 | 0.7 |
+| 9x16-tanpa-suara | bottom | 0.857 | 0.7 |
+
+Text contrast (WCAG, text #FFF8E7 over the clean master inside each text box), minimum 4.5.
+
+| band | t (s) | contrast |
+|---|---|---|
+| top | 1.81 | 13.72 |
+| top | 7.175 | 18.04 |
+| top | 13.375 | 19.83 |
+| top | 19.375 | 19.83 |
+| top | 25.875 | 10.95 |
+| top | 31.875 | 9.13 |
+| top | 37.875 | 6.3 |
+| top | 43.625 | 19.83 |
+| top | 50.25 | 19.83 |
+| top | 57.25 | 19.83 |
+| bottom | 5.35 | 19.72 |
+| bottom | 5.35 | 19.19 |
+| bottom | 27.75 | 19.83 |
+| bottom | 27.75 | 19.83 |
+| bottom | 43.5 | 19.62 |
+| bottom | 43.5 | 19.83 |
+| bottom | 50.25 | 19.74 |
+| bottom | 50.25 | 19.83 |
+<!-- /detail:9x16-tanpa-suara -->

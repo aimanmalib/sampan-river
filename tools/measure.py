@@ -22,7 +22,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
-from tools import captions, narrate, short, transcribe, ve, voice  # noqa: E402
+from tools import bands, captions, narrate, short, transcribe, ve, voice  # noqa: E402
 
 MEASURED = os.path.join(ROOT, "docs", "MEASURED.md")
 COLUMNS = ("version", "width", "height", "duration_s", "audio", "lufs_i", "true_peak_db", "whisper_words",
@@ -74,9 +74,7 @@ def silences(path, upto_s, noise_db, min_s):
 
 
 def luma(path, t, width, height):
-    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{t:.3f}", "-i", path, "-frames:v", "1", "-f", "rawvideo",
-                          "-pix_fmt", "gray", "-"], capture_output=True, check=True).stdout
-    return np.frombuffer(raw, dtype=np.uint8)[:width * height].reshape(height, width).astype(np.int16)
+    return bands.frame(path, t, width, height)
 
 
 def band_diff(a, b, band):
@@ -166,11 +164,11 @@ def verdict(result, film):
         fails.append("speech")
     if not all(r["ok"] for r in result["captions"]):
         fails.append("captions")
-    return fails
+    return fails + result.get("band_fails", [])
 
 
 def table_row(result):
-    p, cues = result["probe"], [r for r in result["captions"] if r["kind"] == "cue"]
+    p, cues = result["probe"], [r for r in result["captions"] if r["kind"].endswith("cue")]
     vals = (result["version"], p["width"], p["height"], p["duration_s"], "yes" if p["audio"] else "no", result["lufs_i"],
             result["true_peak_db"], result["whisper_words"],
             "-" if result.get("speech_match") is None else result["speech_match"], f"{sum(r['ok'] for r in cues)}/{len(cues)}", result["sha256"])
@@ -230,7 +228,7 @@ def detail(result):
            "| sample | t (s) | caption band diff | pass |", "|---|---|---|---|"]
     out += [f"| {r['kind']} {r['index'] + 1} | {r['t']} | {r['diff']} | {'yes' if r['ok'] else 'no'} |"
             for r in result["captions"]]
-    return "\n".join(out)
+    return "\n".join(out + [ln.replace("{version}", result["version"]) for ln in result.get("band_md", [])])
 
 
 def measure(version, film, cues):
@@ -244,9 +242,12 @@ def measure(version, film, cues):
     result = {"version": version, "probe": probe(final), "lufs_i": lufs_i, "true_peak_db": tp,
               "silences": silences(final, a["silence_check_s"], film["measure"]["silence_noise_db"], a["silence_max_s"]),
               "whisper_words": heard["words"], "speech_match": match, "heard": heard["text"] if narrated else "",
-              "captions": caption_check(clean, final, cues, film, base),
+              "captions": caption_check(clean, final, cues, film, base) if not bands.style(film, base) else [],
               "frames": save_frames(final, cues, film, base) if base == version else [],
               "sha256": ve.sha256_file(final)}
+    if bands.style(film, base):
+        b = bands.measure(clean, final, film, base, cues, bands.rows_for(base), sample_times)
+        result.update(captions=b["captions"], band_fails=b["fails"], band_md=b["md"], band_cover=b["cover"])
     result["fails"] = verdict(result, film)
     return result
 
