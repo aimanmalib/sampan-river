@@ -187,6 +187,15 @@ class DeployFilesTest(unittest.TestCase):
     def test_deploy_script_parses(self):
         subprocess.run(["bash", "-n", os.path.join(ROOT, "deploy", "deploy.sh")], check=True)
 
+    def test_rollback_holder_follows_the_container_name(self):
+        # The host keeps the previous image in a stopped container named "<live container>-undur"; a second name
+        # would leave two holders and a rollback reading the wrong one.
+        script = self.read("deploy/deploy.sh")
+        service = re.search(r"^SERVICE=(\S+)$", script, re.M).group(1)
+        holder = re.search(r"^HOLDER=(\S+)$", script, re.M).group(1).strip("\"")
+        self.assertIn(holder, (service + "-undur", "$SERVICE-undur", "${SERVICE}-undur"))
+        self.assertIn("container_name: " + service, self.read("deploy/compose.yaml"))
+
     def test_headers_live_in_one_block(self):
         conf = self.read("deploy/nginx.conf")
         locations = re.findall(r"^  location [^{]*\{(.*?)\n  \}", conf, re.S | re.M)

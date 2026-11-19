@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Deploy the film page as one static container behind the host's reverse proxy (decision 0009).
 #   deploy/deploy.sh              build HEAD from a clean `git archive` plus the measured videos, run it, install the route, verify
-#   deploy/deploy.sh --rollback   run the previous image again (held by the stopped `sampan-river-undur` container)
+#   deploy/deploy.sh --rollback   run the previous image again (held by the stopped `sampan-river-site-undur` container)
 #   deploy/deploy.sh --status     container, tags, rollback image and the public health code
 # The videos come from MEDIA_DIR; tools/site.py stops the build when a file's sha256 differs from docs/MEASURED.md.
 # Verification: /healthz through the public URL (retried), then deploy/check_page.py (WebKit iPhone 13, Chromium desktop
@@ -24,7 +24,7 @@ DC="docker compose -f compose.yaml"
 URL="https://$SITE_DOMAIN"
 NAME=sampan-river
 SERVICE=sampan-river-site
-HOLDER=sampan-river-undur
+HOLDER="$SERVICE-undur"
 
 # Certificates use the HTTP-01 challenge: a name that does not resolve fails it.
 dns_ok() { getent ahosts "$SITE_DOMAIN" >/dev/null; }
