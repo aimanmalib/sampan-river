@@ -1,5 +1,5 @@
 {
-  "_note": "tools/site.py builds the static page from this file, site/lang/*.json and site/index.html. Videos are copied from a media folder given at build time; each file's sha256 must equal its row in docs/MEASURED.md or the build stops.",
+  "_note": "tools/site.py builds the static page from this file, site/lang/*.json and site/index.html. Videos are copied from a media folder given at build time; each file's sha256 must equal its row in docs/MEASURED.md or the build stops. `vertical` is the first player on a phone, `film` on a wide screen; `short` is offered as a download link only. Only narrated versions belong here: a version ending in -tanpa-suara stops the build.",
   "domain": "riverfare.sasateguh.com",
   "languages": [
     {
@@ -16,6 +16,13 @@
   "default_language": "en",
   "prize_address": "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q",
   "videos": {
+    "vertical": {
+      "version": "9x16",
+      "file": "sampan-river-9x16.mp4",
+      "poster": "docs/frames/9x16-cue-01.jpg",
+      "width": 1080,
+      "height": 1920
+    },
     "film": {
       "version": "16x9",
       "file": "sampan-river-16x9.mp4",
@@ -26,7 +33,6 @@
     "short": {
       "version": "short-9x16",
       "file": "sampan-river-short-9x16.mp4",
-      "poster": "docs/frames/short-9x16-cue-01.jpg",
       "width": 1080,
       "height": 1920
     }
@@ -35,6 +41,8 @@
   "og_image": "docs/frames/thumbnail.jpg",
   "og_image_max_bytes": 300000,
   "links": {
+    "paytaca": "https://www.paytaca.com",
+    "selene": "https://selene.cash",
     "wallets": "https://bitcoincash.org",
     "event": "https://dorahacks.io/hackathon/bchblaze2026/detail"
   },
@@ -61,6 +69,10 @@
       "ember-vote"
     ],
     "wallet.label": [
+      "wallet-paytaca",
+      "wallet-selene"
+    ],
+    "wallet.more": [
       "wallet-link"
     ]
   },
@@ -81,5 +93,10 @@
     "pusd",
     "ember2026",
     "stablecoin"
-  ]
+  ],
+  "silent_suffix": "-tanpa-suara",
+  "check": {
+    "_note": "deploy/check_page.py: share of the 9:16 player's height a phone must show without scrolling",
+    "min_visible": 0.6
+  }
 }

@@ -1,6 +1,6 @@
 # 0009: A small live page for the film
 
-Date: 2026-11-19. Status: accepted.
+Date: 2026-11-19. Status: accepted, amended 2026-11-19 (vertical player first on phones, wallet line, narration label).
 
 ## Context
 Judges and viewers need one link that plays the film, shows the prize address and says how AI was used, in English and
@@ -44,6 +44,28 @@ Built from the media folder and served by `nginx:1.27-alpine` with `deploy/nginx
 `deploy/check_page.py`: six runs (three browsers, two languages) all ok. Screenshots read: banner, title and film on
 the first iPhone 13 screen in both languages; address wraps inside the banner at 320 px; sections spaced; vertical cut
 beside its text on desktop and under it on a phone.
+
+## Amendment: vertical player first on phones (2026-11-19)
+- Most viewers open the link on a phone, where a 16:9 player is a thin strip. The page now has two players in the hero:
+  the 60 s 9:16 film (`videos.vertical`, version `9x16`, poster its first caption frame) and the 16:9 film. Below
+  37.5rem the 9:16 player comes first, as tall as `min(66svh, width x 16/9)` so the whole player and its controls sit
+  under the banner (the kicker line moves below the players); on wider screens the 16:9 film leads and the 9:16 film stands beside it at the same height (columns
+  256:81). The 18.6 s vertical cut is no longer a player; it stays one download link away.
+- Only the first player loads ahead: `preload="metadata"` on the 9:16 player, `preload="none"` on the 16:9 one, which
+  saves phone data. The poster still shows.
+- Wallet line under the lede: "Get a wallet: Paytaca · Selene" with links (facts `wallet-paytaca`, `wallet-selene`, the
+  same as the end card, decision 0011). bitcoincash.org stays in the facts section as "More wallets are listed at"
+  (fact `wallet-link`).
+- Narration label (decision 0012): the AI section opens with "Narration: an AI clone of the maker's own voice
+  (ElevenLabs), reading the on-screen captions." in both languages; "no voice" and "no dialogue" are gone.
+- Only narrated files are served: a video entry whose version or file carries `silent_suffix` stops the build.
+- `deploy/check_page.py` adds: on iPhone 13 and at 320 px the first visible video is the 9:16 player and at least
+  `check.min_visible` (0.6) of its height is on the first screen; on desktop the 16:9 film is on the first screen.
+  Players set to `preload="none"` are asked to load after the first-screen check, so every video is still proven to load.
+- Measured locally (2026-11-19, built from the media folder with the measured 9x16 `1530a180`, 16x9 `cfff07f1` and
+  short `51380201`, served by `nginx:1.27-alpine` with `deploy/nginx.conf`): six runs ok. iPhone 13: the 9:16 player
+  starts at 215 px (EN) and 220 px (BM), 438 px tall, inside the 664 px screen with its controls. 320 x 640: it starts
+  at 235 px, 422 px tall, 96 % on the first screen. Desktop 1366 x 900: 16:9 and 9:16 side by side, both 424 px tall.
 
 ## Undo
 `deploy/deploy.sh --rollback` returns the previous image. To remove the page: `docker compose -f deploy/compose.yaml

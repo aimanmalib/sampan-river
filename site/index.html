@@ -39,30 +39,28 @@
   <section class="wrap hero">
     <p class="kicker">{{t:hero.kicker}}</p>
     <h1>{{t:hero.title}}</h1>
-    <figure class="film">
-      <video controls playsinline preload="metadata" poster="{{v:film_poster}}" width="{{v:film_width}}" height="{{v:film_height}}" aria-label="{{t:film.label}}">
-        <source src="{{v:film_src}}" type="video/mp4">
-        <p>{{t:film.fallback}} <a href="{{v:film_src}}">{{t:film.download}}</a></p>
-      </video>
-      <figcaption>{{t:film.label}}</figcaption>
-    </figure>
+    <div class="players">
+      <figure class="vertical">
+        <video controls playsinline preload="metadata" poster="{{v:vertical_poster}}" width="{{v:vertical_width}}" height="{{v:vertical_height}}" aria-label="{{t:vertical.label}}">
+          <source src="{{v:vertical_src}}" type="video/mp4">
+          <p>{{t:film.fallback}} <a href="{{v:vertical_src}}">{{t:film.download}}</a></p>
+        </video>
+        <figcaption>{{t:vertical.label}}</figcaption>
+      </figure>
+      <figure class="film">
+        <video controls playsinline preload="none" poster="{{v:film_poster}}" width="{{v:film_width}}" height="{{v:film_height}}" aria-label="{{t:film.label}}">
+          <source src="{{v:film_src}}" type="video/mp4">
+          <p>{{t:film.fallback}} <a href="{{v:film_src}}">{{t:film.download}}</a></p>
+        </video>
+        <figcaption>{{t:film.label}}</figcaption>
+      </figure>
+    </div>
     <p class="lede">{{t:hero.lede}}</p>
+    <p class="wallet">{{t:wallet.label}} <a href="{{v:paytaca_url}}" rel="noopener">{{t:wallet.paytaca}}</a> <span aria-hidden="true">&middot;</span> <a href="{{v:selene_url}}" rel="noopener">{{t:wallet.selene}}</a></p>
+    <p class="short-link">{{t:short.text}} <a href="{{v:short_src}}" download>{{t:short.download}}</a></p>
 <!--if:youtube-->
     <p class="out"><a href="{{v:youtube_url}}" rel="noopener">{{t:links.youtube}}</a></p>
 <!--end:youtube-->
-  </section>
-
-  <section class="wrap short" aria-labelledby="short-title">
-    <div class="short-text">
-      <h2 id="short-title">{{t:short.title}}</h2>
-      <p>{{t:short.text}}</p>
-    </div>
-    <figure class="short-video">
-      <video controls playsinline preload="metadata" poster="{{v:short_poster}}" width="{{v:short_width}}" height="{{v:short_height}}" aria-label="{{t:short.label}}">
-        <source src="{{v:short_src}}" type="video/mp4">
-        <p>{{t:film.fallback}} <a href="{{v:short_src}}">{{t:film.download}}</a></p>
-      </video>
-    </figure>
   </section>
 
   <section class="wrap facts" aria-labelledby="facts-title">
@@ -72,12 +70,13 @@
       <li>{{t:facts.pusd}}</li>
     </ul>
     <p class="note">{{t:facts.note}}</p>
-    <p class="wallet">{{t:wallet.label}} <a href="{{v:wallets_url}}" rel="noopener">{{v:wallets_host}}</a></p>
+    <p class="wallet-more">{{t:wallet.more}} <a href="{{v:wallets_url}}" rel="noopener">{{v:wallets_host}}</a></p>
   </section>
 
   <section class="wrap ai" aria-labelledby="ai-title">
     <h2 id="ai-title">{{t:ai.title}}</h2>
     <ul>
+      <li>{{t:ai.voice}}</li>
       <li>{{t:ai.clips}}</li>
       <li>{{t:ai.scale}}</li>
       <li>{{t:ai.music}}</li>

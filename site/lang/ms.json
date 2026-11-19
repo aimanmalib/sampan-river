@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "The River Fare: filem 60 saat tentang satu dolar menyeberang ke Bitcoin Cash",
-    "description": "Seorang pendayung kertas membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash dan membayar tambang kurang daripada sepersepuluh sen AS. Filem animasi 60 saat tanpa dialog."
+    "description": "Seorang pendayung kertas membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash dan membayar tambang kurang daripada sepersepuluh sen AS. Filem animasi 60 saat dengan narasi dan sari kata Inggeris."
   },
   "banner": {
     "event": "Dibuat untuk BCH BLAZE 2026 Media Track",
@@ -15,7 +15,7 @@
     "switch_short": "EN"
   },
   "hero": {
-    "kicker": "Filem animasi pendek, 60 saat, tanpa dialog",
+    "kicker": "Filem animasi pendek, 60 saat, narasi bahasa Inggeris",
     "title": "The River Fare",
     "lede": "Sebuah jambatan tol mengambil syiling besar daripada setiap pengembara. Seorang pendayung kecil pula membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash, dan membayar tambang kurang daripada sepersepuluh sen AS."
   },
@@ -25,9 +25,8 @@
     "download": "Muat turun MP4"
   },
   "short": {
-    "title": "Potongan menegak",
-    "text": "Kurang daripada 20 saat untuk suapan telefon: jambatan tol, syiling dalam sampan, tambang di tebing seberang dan kad akhir. Klip dan muzik yang sama, sari kata sendiri.",
-    "label": "Potongan menegak, 9:16"
+    "text": "Juga: potongan menegak kurang daripada 20 saat untuk suapan telefon.",
+    "download": "Muat turun MP4"
   },
   "facts": {
     "title": "Apa yang filem ini katakan",
@@ -36,15 +35,19 @@
     "note": "Satu pemindahan yang diukur, bukan janji tentang setiap yuran akan datang. Tiada apa-apa di sini nasihat pelaburan."
   },
   "wallet": {
-    "label": "Dapatkan dompet:"
+    "label": "Dapatkan dompet:",
+    "paytaca": "Paytaca",
+    "selene": "Selene",
+    "more": "Lebih banyak dompet disenaraikan di"
   },
   "ai": {
     "title": "Cara ia dibuat, dan di mana AI digunakan",
     "clips": "Klip video dijana oleh model video AI melalui API VE Studio, daripada prompt teks bertulis. Setiap permintaan dan kosnya direkodkan.",
     "scale": "Gambar 1920 x 1080 dibesarkan daripada klip 1280 x 720 dengan ffmpeg (lanczos). Tiada penaik skala AI.",
-    "music": "Muzik disintesis oleh kod yang ditulis bersama ejen pengekodan AI. Tiada sampel, tiada servis muzik AI, tiada suara.",
+    "music": "Muzik disintesis oleh kod yang ditulis bersama ejen pengekodan AI. Tiada sampel, tiada servis muzik AI.",
     "text": "Sari kata, kad akhir dan tajuk thumbnail dilukis oleh kod.",
-    "credit": "Arahan dan semakan: Muhammad Aiman. Alat: Claude Code."
+    "credit": "Arahan dan semakan: Muhammad Aiman. Alat: Claude Code.",
+    "voice": "Narasi: klon AI suara pembuat sendiri (ElevenLabs), membaca sari kata pada skrin."
   },
   "links": {
     "youtube": "Tonton di YouTube",
@@ -53,5 +56,8 @@
   "footer": {
     "license": "Filem, muzik dan gambar pegun: CC BY 4.0. Kod: MIT.",
     "event": "BCH BLAZE 2026"
+  },
+  "vertical": {
+    "label": "Filem untuk telefon, 9:16, sari kata di atas gambar"
   }
 }

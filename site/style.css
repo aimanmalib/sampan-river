@@ -94,9 +94,45 @@ h1 { font-size: clamp(2.25rem, 8vw, 4.75rem); margin: 0.1rem 0 clamp(0.6rem, 2vw
 h2 { font-size: clamp(1.6rem, 4.5vw, 2.4rem); margin-bottom: 0.75rem; }
 figure { margin: 0; }
 video { display: block; width: 100%; height: auto; background: var(--ink); border-radius: var(--radius); }
+figcaption { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.5rem; }
 .film video { aspect-ratio: 16 / 9; box-shadow: 0 1px 0 var(--rule), 0 18px 40px -24px var(--ink); }
-.film figcaption { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.5rem; }
+
+/* Two players. A phone sees the 9:16 film first, sized so the whole player and its controls fit under the banner;
+   a wide screen sees the 16:9 film with the 9:16 film beside it at the same height (256:81 is 16/9 against 9/16). */
+.players { display: flex; flex-direction: column; gap: var(--gap); }
+.vertical { align-self: center; width: auto; max-width: 100%; }
+.vertical video {
+  aspect-ratio: 9 / 16;
+  height: min(var(--vertical-h), calc(100vw * 16 / 9));
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+.vertical figcaption { text-align: center; }
+:root { --vertical-h: 66vh; }
+@supports (height: 1svh) {
+  :root { --vertical-h: 66svh; }
+}
+@media (min-width: 37.5rem) {
+  .players { display: grid; grid-template-columns: minmax(0, 256fr) minmax(0, 81fr); align-items: start; }
+  .players .film { grid-column: 1; grid-row: 1; }
+  .players .vertical { grid-column: 2; grid-row: 1; width: 100%; }
+  .vertical video { height: auto; width: 100%; }
+  .vertical figcaption { text-align: left; }
+}
+/* On a phone the kicker moves under the players so the title and the whole 9:16 player fit under the banner. */
+@media (max-width: 37.49rem) {
+  .hero { display: flex; flex-direction: column; }
+  .hero > * { order: 3; }
+  .hero h1 { order: 1; font-size: clamp(2rem, 9vw, 2.6rem); margin: 0 0 0.6rem; }
+  .hero .players { order: 2; }
+  .hero .kicker { margin-top: 1.25rem; }
+}
+
 .lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.45; max-width: var(--measure); margin: 1.25rem 0 0; }
+.wallet { margin: 1rem 0 0; font-weight: 600; font-size: 1.125rem; }
+.wallet a { display: inline-block; padding: 0.35rem 0; }
+.short-link { margin: 0.75rem 0 0; color: var(--ink-soft); max-width: var(--measure); }
 .out { margin: 1rem 0 0; font-weight: 600; }
 
 /* Padding, not margin: .wrap sets the margins for centring. */
@@ -108,14 +144,6 @@ section h2::before {
   height: 3px;
   background: var(--brass);
   margin-bottom: 0.9rem;
-}
-
-.short { display: grid; gap: var(--gap); align-items: center; }
-.short-text p { max-width: var(--measure); margin: 0; }
-.short-video { justify-self: center; width: min(100%, 18rem); }
-.short-video video { aspect-ratio: 9 / 16; max-height: 75vh; width: auto; max-width: 100%; margin: 0 auto; }
-@media (min-width: 48rem) {
-  .short { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); }
 }
 
 .facts ul, .ai ul { margin: 0; padding: 0; list-style: none; max-width: var(--measure); }
@@ -132,7 +160,7 @@ section h2::before {
 }
 .facts li { font-family: var(--serif); font-size: 1.2rem; line-height: 1.45; }
 .note { font-size: 0.9375rem; color: var(--ink-soft); max-width: var(--measure); }
-.wallet { font-weight: 600; }
+.wallet-more { font-weight: 600; }
 .ai p { max-width: var(--measure); }
 
 .foot {

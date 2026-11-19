@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ADDRESS = "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q"
 # Smallest JPEG shape the size reader accepts: SOI, then a SOF0 segment for 64 x 36.
 FAKE_JPEG = b"\xff\xd8\xff\xc0\x00\x11\x08\x00\x24\x00\x40\x03" + b"\x00" * 9 + b"\xff\xd9"
-VIDEOS = {"16x9": b"fixture film bytes", "short-9x16": b"fixture short bytes"}
+VIDEOS = {"9x16": b"fixture vertical bytes", "16x9": b"fixture film bytes", "short-9x16": b"fixture short bytes"}
 
 
 def sha(data):
@@ -40,7 +40,7 @@ class SiteBuildTest(unittest.TestCase):
         shutil.copy(os.path.join(ROOT, "docs", "FACTS.md"), os.path.join(self.root, "docs", "FACTS.md"))
         with open(os.path.join(ROOT, "config", "site.json"), encoding="utf-8") as f:
             self.cfg = json.load(f)
-        for rel in {v["poster"] for v in self.cfg["videos"].values()} | {self.cfg["og_image"]}:
+        for rel in {v["poster"] for v in self.cfg["videos"].values() if v.get("poster")} | {self.cfg["og_image"]}:
             with open(os.path.join(self.root, rel), "wb") as f:
                 f.write(FAKE_JPEG)
         self.media = os.path.join(self.tmp, "media")
@@ -90,13 +90,53 @@ class SiteBuildTest(unittest.TestCase):
 
     def test_video_with_a_different_sha_stops_the_build(self):
         self.write_cfg()
-        self.write_measured({"16x9": sha(b"another file"), "short-9x16": sha(VIDEOS["short-9x16"])})
+        self.write_measured(dict({v: sha(b) for v, b in VIDEOS.items()}, **{"16x9": sha(b"another file")}))
         with self.assertRaisesRegex(site.BuildError, "not the measured"):
             site.build(self.root, self.media, self.out)
 
+    def test_vertical_video_with_a_different_sha_stops_the_build(self):
+        self.write_cfg()
+        self.write_measured(dict({v: sha(b) for v, b in VIDEOS.items()}, **{"9x16": sha(b"an older render")}))
+        with self.assertRaisesRegex(site.BuildError, "sampan-river-9x16.mp4 sha256 .* not the measured"):
+            site.build(self.root, self.media, self.out)
+
+    def test_silent_copy_is_refused(self):
+        self.cfg["videos"]["vertical"] = dict(self.cfg["videos"]["vertical"], version="9x16-tanpa-suara",
+                                              file="sampan-river-9x16-tanpa-suara.mp4")
+        self.write_cfg()
+        with self.assertRaisesRegex(site.BuildError, "silent copy"):
+            site.build(self.root, self.media, self.out)
+
+    def test_vertical_player_comes_first_and_alone_preloads(self):
+        self.write_cfg()
+        site.build(self.root, self.media, self.out)
+        vertical = f"/media/the-river-fare-9x16.{sha(VIDEOS['9x16'])[:8]}.mp4"
+        short = f"/media/the-river-fare-short-9x16.{sha(VIDEOS['short-9x16'])[:8]}.mp4"
+        for rel in ("index.html", "ms/index.html"):
+            html = self.page(rel)
+            main = html.split("<main>", 1)[1]
+            videos = re.findall(r"<video\b[^>]*>\s*<source src=\"([^\"]+)\"", main)
+            self.assertEqual(videos[0], vertical, rel)
+            self.assertEqual(len(videos), 2, rel)
+            self.assertNotIn(short, videos)
+            self.assertIn(f'href="{short}" download', main)
+            preloads = re.findall(r'<video\b[^>]*preload="(\w+)"', main)
+            self.assertEqual(preloads, ["metadata", "none"], rel)
+
+    def test_wallet_links_and_narration_label_in_both_languages(self):
+        self.write_cfg()
+        site.build(self.root, self.media, self.out)
+        links = self.cfg["links"]
+        for rel in ("index.html", "ms/index.html"):
+            html = self.page(rel)
+            for key in ("paytaca", "selene", "wallets"):
+                self.assertIn(f'href="{links[key]}"', html, f"{rel} {key}")
+            self.assertRegex(html, r">Paytaca</a>.*>Selene</a>")
+            self.assertIn("ElevenLabs", html, rel)
+
     def test_version_missing_from_measured_stops_the_build(self):
         self.write_cfg()
-        self.write_measured({"16x9": sha(VIDEOS["16x9"])})
+        self.write_measured({v: sha(b) for v, b in VIDEOS.items() if v != "short-9x16"})
         with self.assertRaisesRegex(site.BuildError, "short-9x16 has no sha256"):
             site.build(self.root, self.media, self.out)
 
@@ -160,6 +200,19 @@ class CopyTest(unittest.TestCase):
         self.cfg["copy_facts"]["facts.fee"] = ["no-such-fact"]
         self.assertTrue(any("no-such-fact" in p for p in site.check_copy(self.langs, self.cfg, self.facts)))
 
+    def test_narration_is_declared_in_both_languages(self):
+        for code, copy in self.langs.items():
+            line = site.flatten(copy)["ai.voice"]
+            self.assertIn("ElevenLabs", line, code)
+            self.assertIn("AI", line, code)
+            self.assertNotIn("no voice", site.flatten(copy)["ai.music"].lower(), code)
+            self.assertNotIn("tiada suara", site.flatten(copy)["ai.music"].lower(), code)
+
+    def test_wallet_line_has_its_facts(self):
+        self.assertEqual(self.cfg["copy_facts"]["wallet.label"], ["wallet-paytaca", "wallet-selene"])
+        for fid in ("wallet-paytaca", "wallet-selene", "wallet-link"):
+            self.assertIn(f"| `{fid}` |", self.facts)
+
     def test_address_in_config_is_the_prize_address(self):
         self.assertEqual(self.cfg["prize_address"], ADDRESS)
 
@@ -177,6 +230,41 @@ class RenderTest(unittest.TestCase):
     def test_measured_reader_takes_only_full_sha_rows(self):
         text = measured({"16x9": "a" * 64}) + "\n| file | sha256 |\n|---|---|\n| x.wav | " + "b" * 64 + " |\n"
         self.assertEqual(site.measured_shas(text), {"16x9": "a" * 64})
+
+
+class FirstScreenTest(unittest.TestCase):
+    """deploy/check_page.py decisions on a probe result, without a browser."""
+
+    def probe(self, first="vertical", top=200.0, h=480.0, viewport=664):
+        return {"firstVideo": first, "viewport": viewport, "addrBox": {"top": 60, "bottom": 140, "h": 80},
+                "verticalBox": {"top": top, "bottom": top + h, "h": h},
+                "filmBox": {"top": top + h + 40, "bottom": top + h + 260, "h": 220}}
+
+    def setUp(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("check_page", os.path.join(ROOT, "deploy", "check_page.py"))
+        self.cp = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.cp)
+
+    def test_phone_with_vertical_first_and_on_screen_passes(self):
+        self.assertEqual(self.cp.first_screen_problems(self.probe(), "iphone", 0.6), [])
+
+    def test_phone_with_film_first_fails(self):
+        problems = self.cp.first_screen_problems(self.probe(first="film"), "phone", 0.6)
+        self.assertTrue(any("not the 9:16 film" in p for p in problems))
+
+    def test_phone_with_vertical_mostly_below_the_fold_fails(self):
+        problems = self.cp.first_screen_problems(self.probe(top=500), "phone", 0.6)
+        self.assertTrue(any("of the 9:16 player" in p for p in problems))
+
+    def test_desktop_wants_the_film_on_screen(self):
+        self.assertEqual(self.cp.first_screen_problems(self.probe(first="film", top=100, h=300), "desktop", 0.6), [])
+        problems = self.cp.first_screen_problems(self.probe(first="film", top=900), "desktop", 0.6)
+        self.assertTrue(any("film is not on the first screen" in p for p in problems))
+
+    def test_threshold_comes_from_config(self):
+        with open(os.path.join(ROOT, "config", "site.json"), encoding="utf-8") as f:
+            self.assertGreater(json.load(f)["check"]["min_visible"], 0)
 
 
 class DeployFilesTest(unittest.TestCase):

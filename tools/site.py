@@ -3,7 +3,7 @@
 python3 tools/site.py --media DIR --out DIR
 
 Reads config/site.json, site/lang/*.json, site/index.html, site/style.css, site/copy.js and docs/MEASURED.md. Writes one
-HTML page per language, the two videos, their posters, robots.txt and healthz into an empty output folder. A video
+HTML page per language, the videos, their posters, robots.txt and healthz into an empty output folder. A video
 whose sha256 differs from its row in docs/MEASURED.md stops the build: the page only ever serves measured files.
 """
 import argparse
@@ -174,13 +174,18 @@ def build(root, media_dir, out_dir):
 
     values = {"address": cfg["prize_address"], "copy_reset_ms": cfg["copy_reset_ms"],
               "wallets_url": cfg["links"]["wallets"], "wallets_host": urlparse(cfg["links"]["wallets"]).netloc,
+              "paytaca_url": cfg["links"]["paytaca"], "selene_url": cfg["links"]["selene"],
               "event_url": cfg["links"]["event"], "youtube_url": cfg["youtube_url"], "repo_url": cfg["repo_url"]}
+    silent = cfg.get("silent_suffix", "")
     for name, v in cfg["videos"].items():
+        if silent and (v["version"].endswith(silent) or silent in v["file"]):
+            raise BuildError(f"video {name} is the silent copy {v['version']}; the page serves the narrated files")
         if v["version"] not in shas:
             raise BuildError(f"version {v['version']} has no sha256 in {cfg['measured']}")
         values[name + "_src"] = place(os.path.join(media_dir, v["file"]), out_dir, "media", f"the-river-fare-{v['version']}",
                                       shas[v["version"]])
-        values[name + "_poster"] = place(os.path.join(root, v["poster"]), out_dir, "img", f"poster-{name}")
+        if v.get("poster"):
+            values[name + "_poster"] = place(os.path.join(root, v["poster"]), out_dir, "img", f"poster-{name}")
         values[name + "_width"], values[name + "_height"] = v["width"], v["height"]
     og_src = os.path.join(root, cfg["og_image"])
     if os.path.getsize(og_src) > cfg["og_image_max_bytes"]:
