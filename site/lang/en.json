@@ -30,9 +30,10 @@
   },
   "facts": {
     "title": "What the film says",
-    "fee": "A real Bitcoin Cash transfer on 15 November 2026 paid a fee of 219 satoshis, less than a tenth of a US cent at that day's price.",
+    "fee": "A real Bitcoin Cash transfer on 15 November 2026 paid a fee of [[fee]]219 satoshis[[/fee]], less than a tenth of a US cent at that day's price.",
     "pusd": "PUSD is a dollar stablecoin token on Bitcoin Cash, designed to hold a value of one US dollar.",
-    "note": "One measured transfer, not a promise about every future fee. Nothing here is investment advice."
+    "note": "One measured transfer, not a promise about every future fee. Nothing here is investment advice.",
+    "fee_link_label": "(the transaction on a block explorer)"
   },
   "wallet": {
     "label": "Get a wallet:",
@@ -59,5 +60,18 @@
   },
   "vertical": {
     "label": "The film for phones, 9:16, captions above the picture"
+  },
+  "share": {
+    "button": "Share",
+    "label": "Share this film",
+    "text": "The River Fare: a 60 second film. A dollar coin crosses to Bitcoin Cash for a fare of less than a tenth of a US cent.",
+    "copy_link": "Copy link",
+    "copied": "Link copied",
+    "copy_failed": "Select the link and copy it",
+    "targets": {
+      "x": "X",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram"
+    }
   }
 }

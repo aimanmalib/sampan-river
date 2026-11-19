@@ -24,6 +24,8 @@ page describes itself (`wallet-paytaca`, `wallet-selene`, decision 0011). It cla
 
 https://riverfare.sasateguh.com plays both films in English and Malay, with the prize address and the AI
 disclosure. It is built by `tools/site.py` from the measured files only (decision 0009).
+A Share button under the players opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
+Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013).
 
 ## Prize address
 

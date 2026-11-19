@@ -2,7 +2,7 @@
 
 python3 tools/site.py --media DIR --out DIR
 
-Reads config/site.json, site/lang/*.json, site/index.html, site/style.css, site/copy.js and docs/MEASURED.md. Writes one
+Reads config/site.json, site/lang/*.json, site/index.html, site/*.css|js and docs/MEASURED.md. Writes one
 HTML page per language, the videos, their posters, robots.txt and healthz into an empty output folder. A video
 whose sha256 differs from its row in docs/MEASURED.md stops the build: the page only ever serves measured files.
 """
@@ -15,6 +15,11 @@ import re
 import shutil
 import sys
 from urllib.parse import urlparse
+
+try:
+    from tools import page_links
+except ImportError:  # run as python3 tools/site.py
+    import page_links
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OG_LOCALES = {"en": "en_GB", "ms": "ms_MY"}
@@ -98,11 +103,12 @@ def check_copy(langs, cfg, facts_text):
             claims = [w for w in cfg.get("claim_words", []) if w.lower() in low]
             if claims and key not in cfg.get("copy_facts", {}):
                 problems.append(f"{code} {key} states a claim ({claims[0]}) with no fact in copy_facts")
-    return problems
+    return problems + page_links.mark_problems(flat, cfg, facts_text)
 
 
-def render(template, strings, values, flags):
-    """`<!--if:x-->...<!--end:x-->` kept only when flags[x]; {{t:key}} copy and {{v:key}} values escaped, {{r:key}} raw."""
+def render(template, strings, values, flags, link=None):
+    """`<!--if:x-->...<!--end:x-->` kept only when flags[x]; {{t:key}} copy and {{v:key}} values escaped, {{r:key}} raw.
+    `link` turns the link marks in escaped copy into links (page_links.link_marked); without it they are dropped."""
     def block(m):
         name = m.group(1)
         if name not in flags:
@@ -116,7 +122,12 @@ def render(template, strings, values, flags):
         if key not in table:
             raise BuildError(f"no value for {{{{{kind}:{key}}}}}")
         text = str(table[key])
-        return text if kind == "r" else html.escape(text, quote=True)
+        if kind == "r":
+            return text
+        if kind == "v":
+            return html.escape(text, quote=True)
+        escaped = html.escape(text, quote=True)
+        return link(escaped) if link else page_links.plain(escaped)
     out = re.sub(r"\{\{([tvr]):([\w.]+)\}\}", field, out)
     if "{{" in out:
         raise BuildError("unfilled placeholder left in the page")
@@ -198,16 +209,17 @@ def build(root, media_dir, out_dir):
     values["og_image"] = base + place(og_src, out_dir, "img", "og")
     values["og_width"], values["og_height"] = jpeg_size(og_src)
 
-    for asset in ("style.css", "copy.js"):
+    for asset in ("style.css", "copy.js", "share.js"):
         with open(os.path.join(root, "site", asset), "rb") as f:
             data = f.read()
         with open(os.path.join(out_dir, asset), "wb") as f:
             f.write(data)
-        values[("css" if asset.endswith("css") else "js") + "_v"] = short_hash(data)
+        values[asset.split(".")[0] + "_v"] = short_hash(data)
 
     with open(os.path.join(root, "site", "index.html"), encoding="utf-8") as f:
         template = f.read()
-    flags = {"youtube": bool(cfg["youtube_url"]), "repo": bool(cfg["repo_public"] and cfg["repo_url"])}
+    flags = {"youtube": bool(cfg["youtube_url"]), "repo": bool(cfg["repo_public"] and cfg["repo_url"]),
+             "share": bool(cfg.get("share", {}).get("enabled"))}
     alternates = "\n".join(f'<link rel="alternate" hreflang="{l["html_lang"]}" href="{base}{l["path"]}">'
                            for l in cfg["languages"])
     default = next(l for l in cfg["languages"] if l["code"] == cfg["default_language"])
@@ -218,7 +230,12 @@ def build(root, media_dir, out_dir):
         page_values = dict(values, html_lang=lang["html_lang"], canonical=base + lang["path"], alternates=alternates,
                            other_path=other["path"], other_lang=other["html_lang"],
                            og_locale=OG_LOCALES.get(lang["code"], lang["code"]))
-        page = render(template, flatten(langs[lang["code"]]), page_values, flags)
+        strings = flatten(langs[lang["code"]])
+        if flags["share"]:
+            page_values["share_links"] = page_links.share_links(cfg, strings, page_values["canonical"])
+            page_values["share_text"] = page_links.plain(strings["share.text"])
+        page = render(template, strings, page_values, flags,
+                      link=lambda text: page_links.link_marked(text, cfg, strings))
         folder = os.path.join(out_dir, lang["path"].strip("/"))
         os.makedirs(folder, exist_ok=True)
         with open(os.path.join(folder, "index.html"), "w", encoding="utf-8") as f:

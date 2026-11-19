@@ -30,9 +30,10 @@
   },
   "facts": {
     "title": "Apa yang filem ini katakan",
-    "fee": "Satu pemindahan Bitcoin Cash sebenar pada 15 November 2026 membayar yuran 219 satoshi, kurang daripada sepersepuluh sen AS pada harga hari itu.",
+    "fee": "Satu pemindahan Bitcoin Cash sebenar pada 15 November 2026 membayar yuran [[fee]]219 satoshi[[/fee]], kurang daripada sepersepuluh sen AS pada harga hari itu.",
     "pusd": "PUSD ialah token stablecoin dolar di Bitcoin Cash, yang direka untuk memegang nilai satu dolar AS.",
-    "note": "Satu pemindahan yang diukur, bukan janji tentang setiap yuran akan datang. Tiada apa-apa di sini nasihat pelaburan."
+    "note": "Satu pemindahan yang diukur, bukan janji tentang setiap yuran akan datang. Tiada apa-apa di sini nasihat pelaburan.",
+    "fee_link_label": "(transaksi itu di penjelajah blok)"
   },
   "wallet": {
     "label": "Dapatkan dompet:",
@@ -59,5 +60,18 @@
   },
   "vertical": {
     "label": "Filem untuk telefon, 9:16, sari kata di atas gambar"
+  },
+  "share": {
+    "button": "Kongsi",
+    "label": "Kongsi filem ini",
+    "text": "The River Fare: filem 60 saat. Syiling dolar menyeberang ke Bitcoin Cash dengan tambang kurang daripada sepersepuluh sen AS.",
+    "copy_link": "Salin pautan",
+    "copied": "Pautan disalin",
+    "copy_failed": "Pilih pautan dan salin",
+    "targets": {
+      "x": "X",
+      "whatsapp": "WhatsApp",
+      "telegram": "Telegram"
+    }
   }
 }

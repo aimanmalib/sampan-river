@@ -44,7 +44,8 @@
     "paytaca": "https://www.paytaca.com",
     "selene": "https://selene.cash",
     "wallets": "https://bitcoincash.org",
-    "event": "https://dorahacks.io/hackathon/bchblaze2026/detail"
+    "event": "https://dorahacks.io/hackathon/bchblaze2026/detail",
+    "fee_tx": "https://bchexplorer.info/tx/9b9586cbd567b0560c3a7d2f2137c244c425582f1ecd378154184eb6186ee588"
   },
   "youtube_url": "",
   "repo_url": "https://github.com/aimanmalib/sampan-river",
@@ -74,6 +75,9 @@
     ],
     "wallet.more": [
       "wallet-link"
+    ],
+    "share.text": [
+      "fee-usd"
     ]
   },
   "banned_words": [
@@ -98,5 +102,34 @@
   "check": {
     "_note": "deploy/check_page.py: share of the 9:16 player's height a phone must show without scrolling",
     "min_visible": 0.6
+  },
+  "link_marks": {
+    "_note": "tools/site.py: copy text between [[name]] and [[/name]] becomes a link to links.<href>, with lang <label> read only by screen readers. Only the copy keys listed may carry the mark. `fact`: the link must carry the transaction id written in that docs/FACTS.md row.",
+    "fee": {
+      "href": "fee_tx",
+      "label": "facts.fee_link_label",
+      "keys": [
+        "facts.fee"
+      ],
+      "fact": "fee-tx"
+    }
+  },
+  "share": {
+    "_note": "site/share.js: the phone share sheet when the browser has one, otherwise a panel with copy link and these targets. {url} and {text} are filled URL encoded by tools/site.py; the label of each target is lang share.targets.<id>.",
+    "enabled": true,
+    "targets": [
+      {
+        "id": "x",
+        "url": "https://x.com/intent/post?text={text}&url={url}"
+      },
+      {
+        "id": "whatsapp",
+        "url": "https://wa.me/?text={text}%20{url}"
+      },
+      {
+        "id": "telegram",
+        "url": "https://t.me/share/url?url={url}&text={text}"
+      }
+    ]
   }
 }

@@ -17,8 +17,11 @@
 <meta property="og:image:height" content="{{v:og_height}}">
 <meta property="og:locale" content="{{v:og_locale}}">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="/style.css?v={{v:css_v}}">
-<script src="/copy.js?v={{v:js_v}}" defer></script>
+<link rel="stylesheet" href="/style.css?v={{v:style_v}}">
+<script src="/copy.js?v={{v:copy_v}}" defer></script>
+<!--if:share-->
+<script src="/share.js?v={{v:share_v}}" defer></script>
+<!--end:share-->
 </head>
 <body>
 <header class="banner">
@@ -55,6 +58,21 @@
         <figcaption>{{t:film.label}}</figcaption>
       </figure>
     </div>
+<!--if:share-->
+    <div class="share" data-share data-url="{{v:canonical}}" data-title="{{t:hero.title}}" data-text="{{v:share_text}}">
+      <button type="button" class="share-btn" aria-expanded="false" aria-controls="share-panel">{{t:share.button}}</button>
+      <div class="share-panel" id="share-panel" role="group" aria-label="{{t:share.label}}" hidden>
+        <div class="share-row">
+          <code class="share-url" id="share-url">{{v:canonical}}</code>
+          <button type="button" class="share-copy" data-done="{{t:share.copied}}" data-fail="{{t:share.copy_failed}}" data-reset-ms="{{v:copy_reset_ms}}">{{t:share.copy_link}}</button>
+        </div>
+        <ul class="share-to-list">
+{{r:share_links}}
+        </ul>
+      </div>
+      <p class="share-status" role="status" aria-live="polite"></p>
+    </div>
+<!--end:share-->
     <p class="lede">{{t:hero.lede}}</p>
     <p class="wallet">{{t:wallet.label}} <a href="{{v:paytaca_url}}" rel="noopener">{{t:wallet.paytaca}}</a> <span aria-hidden="true">&middot;</span> <a href="{{v:selene_url}}" rel="noopener">{{t:wallet.selene}}</a></p>
     <p class="short-link">{{t:short.text}} <a href="{{v:short_src}}" download>{{t:short.download}}</a></p>
