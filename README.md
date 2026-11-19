@@ -56,6 +56,7 @@ was too soft against the limit set before measuring, so the full-width picture s
 | Measurement | `tools/measure.py`, ffprobe, ebur128, silence and caption pixel checks | `config/film.json` `measure` |
 | 9:16 layout | `tools/layout.py` frame layouts, `tools/sharpness.py` compares a crop with the full-width picture | `config/film.json` `edit.layout`, `measure.sharpness` |
 | Thumbnail | `tools/thumb.py`, one film frame with the title drawn by code | `config/film.json` `thumbnail` |
+| Film page | `tools/site.py` builds the English and Malay page from measured files only; `deploy/` serves it | `config/site.json`, `site/` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
 
@@ -77,6 +78,7 @@ python3 tools/measure.py 9x16 --write
 python3 tools/short.py
 python3 tools/measure.py short-9x16 --write
 python3 tools/thumb.py
+python3 tools/site.py --media media/edit --out public
 ```
 
 Tests run offline: `python3 -m unittest discover -s tests`.

@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "title": "The River Fare: filem 60 saat tentang satu dolar menyeberang ke Bitcoin Cash",
+    "description": "Seorang pendayung kertas membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash dan membayar tambang kurang daripada sepersepuluh sen AS. Filem animasi 60 saat tanpa dialog."
+  },
+  "banner": {
+    "event": "Dibuat untuk BCH BLAZE 2026 Media Track",
+    "address_label": "Alamat CashTokens untuk hadiah dan undian komuniti EMBER2026",
+    "copy": "Salin",
+    "copied": "Disalin",
+    "copy_failed": "Pilih alamat itu dan salin"
+  },
+  "lang": {
+    "switch": "English",
+    "switch_short": "EN"
+  },
+  "hero": {
+    "kicker": "Filem animasi pendek, 60 saat, tanpa dialog",
+    "title": "The River Fare",
+    "lede": "Sebuah jambatan tol mengambil syiling besar daripada setiap pengembara. Seorang pendayung kecil pula membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash, dan membayar tambang kurang daripada sepersepuluh sen AS."
+  },
+  "film": {
+    "label": "Filem, 16:9, sari kata Inggeris dibakar dalam gambar",
+    "fallback": "Pelayar ini tidak dapat memainkan video di sini.",
+    "download": "Muat turun MP4"
+  },
+  "short": {
+    "title": "Potongan menegak",
+    "text": "Kurang daripada 20 saat untuk suapan telefon: jambatan tol, syiling dalam sampan, tambang di tebing seberang dan kad akhir. Klip dan muzik yang sama, sari kata sendiri.",
+    "label": "Potongan menegak, 9:16"
+  },
+  "facts": {
+    "title": "Apa yang filem ini katakan",
+    "fee": "Satu pemindahan Bitcoin Cash sebenar pada 15 November 2026 membayar yuran 219 satoshi, kurang daripada sepersepuluh sen AS pada harga hari itu.",
+    "pusd": "PUSD ialah token stablecoin dolar di Bitcoin Cash, yang direka untuk memegang nilai satu dolar AS.",
+    "note": "Satu pemindahan yang diukur, bukan janji tentang setiap yuran akan datang. Tiada apa-apa di sini nasihat pelaburan."
+  },
+  "wallet": {
+    "label": "Dapatkan dompet:"
+  },
+  "ai": {
+    "title": "Cara ia dibuat, dan di mana AI digunakan",
+    "clips": "Klip video dijana oleh model video AI melalui API VE Studio, daripada prompt teks bertulis. Setiap permintaan dan kosnya direkodkan.",
+    "scale": "Gambar 1920 x 1080 dibesarkan daripada klip 1280 x 720 dengan ffmpeg (lanczos). Tiada penaik skala AI.",
+    "music": "Muzik disintesis oleh kod yang ditulis bersama ejen pengekodan AI. Tiada sampel, tiada servis muzik AI, tiada suara.",
+    "text": "Sari kata, kad akhir dan tajuk thumbnail dilukis oleh kod.",
+    "credit": "Arahan dan semakan: Muhammad Aiman. Alat: Claude Code."
+  },
+  "links": {
+    "youtube": "Tonton di YouTube",
+    "repo": "Kod sumber, prompt dan log"
+  },
+  "footer": {
+    "license": "Filem, muzik dan gambar pegun: CC BY 4.0. Kod: MIT.",
+    "event": "BCH BLAZE 2026"
+  }
+}

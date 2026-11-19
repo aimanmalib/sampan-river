@@ -1,0 +1,162 @@
+/* The River Fare page. Palette taken from the film: folded paper, dark ink, the brass of the coin. */
+:root {
+  --paper: #f3ead8;
+  --paper-deep: #e6d8bc;
+  --ink: #1b1a17;
+  --ink-soft: #4a4338;
+  --cream: #fff8e7;
+  --brass: #b07a1f;
+  --brass-ink: #7a5212;
+  --rule: #cdbb98;
+  --focus: #b07a1f;
+  --radius: 6px;
+  --gap: clamp(1rem, 3vw, 2rem);
+  --measure: 62ch;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper) radial-gradient(120% 70% at 50% 0%, var(--cream) 0%, var(--paper) 55%, var(--paper-deep) 100%) no-repeat;
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--sans);
+  overflow-wrap: break-word;
+}
+a { color: var(--brass-ink); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wrap { width: 100%; max-width: 68rem; margin: 0 auto; padding: 0 var(--gap); }
+
+/* Banner: event line, language switch, prize address with a copy button. */
+.banner { background: var(--ink); color: var(--cream); }
+.banner-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 1rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  align-items: center;
+}
+.banner p { margin: 0; }
+.banner-event { font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--paper-deep); }
+.lang {
+  color: var(--cream);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--ink-soft);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.6rem;
+  min-height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+}
+.lang:hover { color: var(--paper); border-color: var(--brass); }
+.addr { grid-column: 1 / -1; min-width: 0; }
+.addr-label { font-size: 0.875rem; color: var(--paper-deep); }
+.addr-row { display: flex; gap: 0.6rem; align-items: center; margin-top: 0.25rem; min-width: 0; }
+.addr-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  font: 500 0.9rem/1.35 var(--mono);
+  color: var(--cream);
+  overflow-wrap: anywhere;
+  word-break: break-all;
+}
+.copy {
+  flex: 0 0 auto;
+  font: 600 0.9375rem/1 var(--sans);
+  color: var(--ink);
+  background: var(--brass);
+  border: 0;
+  border-radius: var(--radius);
+  min-height: 2.5rem;
+  min-width: 4.5rem;
+  padding: 0 0.9rem;
+  cursor: pointer;
+}
+.copy:hover { background: var(--cream); }
+.copy:focus-visible { outline-color: var(--cream); }
+.copy-status { font-size: 0.8125rem; color: var(--paper-deep); min-height: 0; }
+.copy-status:empty { display: none; }
+
+/* Film first: title and video are on screen without scrolling on a phone. */
+.hero { padding-top: clamp(0.9rem, 3vw, 2.5rem); }
+.kicker { margin: 0; font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); }
+h1, h2 { font-family: var(--serif); font-weight: 700; line-height: 1.08; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(2.25rem, 8vw, 4.75rem); margin: 0.1rem 0 clamp(0.6rem, 2vw, 1.25rem); }
+h2 { font-size: clamp(1.6rem, 4.5vw, 2.4rem); margin-bottom: 0.75rem; }
+figure { margin: 0; }
+video { display: block; width: 100%; height: auto; background: var(--ink); border-radius: var(--radius); }
+.film video { aspect-ratio: 16 / 9; box-shadow: 0 1px 0 var(--rule), 0 18px 40px -24px var(--ink); }
+.film figcaption { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 0.5rem; }
+.lede { font-family: var(--serif); font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.45; max-width: var(--measure); margin: 1.25rem 0 0; }
+.out { margin: 1rem 0 0; font-weight: 600; }
+
+/* Padding, not margin: .wrap sets the margins for centring. */
+main > .wrap + .wrap { padding-top: clamp(3rem, 8vw, 5.5rem); }
+section h2::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  background: var(--brass);
+  margin-bottom: 0.9rem;
+}
+
+.short { display: grid; gap: var(--gap); align-items: center; }
+.short-text p { max-width: var(--measure); margin: 0; }
+.short-video { justify-self: center; width: min(100%, 18rem); }
+.short-video video { aspect-ratio: 9 / 16; max-height: 75vh; width: auto; max-width: 100%; margin: 0 auto; }
+@media (min-width: 48rem) {
+  .short { grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); }
+}
+
+.facts ul, .ai ul { margin: 0; padding: 0; list-style: none; max-width: var(--measure); }
+.facts li, .ai li { position: relative; padding-left: 1.4rem; margin: 0 0 0.75rem; }
+.facts li::before, .ai li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--brass);
+}
+.facts li { font-family: var(--serif); font-size: 1.2rem; line-height: 1.45; }
+.note { font-size: 0.9375rem; color: var(--ink-soft); max-width: var(--measure); }
+.wallet { font-weight: 600; }
+.ai p { max-width: var(--measure); }
+
+.foot {
+  margin-top: clamp(3rem, 8vw, 6rem);
+  padding-top: 1.25rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  justify-content: space-between;
+}
+.foot p { margin: 0; }
+
+@media (min-width: 48rem) {
+  .banner-in { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .addr { grid-column: 2; grid-row: 1; justify-self: end; text-align: right; }
+  .addr-row { justify-content: flex-end; }
+  .addr-value { flex: 0 1 auto; }
+  .lang { grid-column: 3; grid-row: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto; }
+}

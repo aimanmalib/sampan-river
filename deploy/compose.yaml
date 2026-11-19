@@ -1,0 +1,20 @@
+# sampan-river: one static container (film page + measured videos) behind the host's reverse proxy. No published
+# ports, no keys, read-only root file system. Run through deploy/deploy.sh, which sources deploy/hos.env (not tracked).
+name: sampan-river
+services:
+  sampan-river-site:
+    image: sampan-river:${SITE_TAG:-latest}
+    container_name: sampan-river-site
+    restart: unless-stopped
+    environment:
+      TZ: UTC
+    read_only: true
+    tmpfs: [/tmp]
+    cpus: 0.5
+    mem_limit: 64m
+    networks: [proxy]
+
+networks:
+  proxy:
+    name: ${SITE_NETWORK:?set SITE_NETWORK in deploy/hos.env}
+    external: true

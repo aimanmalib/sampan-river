@@ -1,0 +1,4 @@
+# The image needs only the built page and the nginx config; the build context is a clean `git archive` plus public/.
+*
+!public/
+!deploy/nginx.conf

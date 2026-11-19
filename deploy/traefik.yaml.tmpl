@@ -1,0 +1,33 @@
+# Route for the public host name to the film page container, on its own router so a certificate problem here cannot
+# affect any other name. deploy/deploy.sh fills the @...@ values from deploy/hos.env and copies the result into the
+# proxy's dynamic configuration folder. HTML is compressed here; the videos are already compressed and pass through.
+http:
+  routers:
+    sampan-river:
+      entryPoints: [https]
+      rule: Host(`@DOMAIN@`)
+      service: sampan-river-svc
+      middlewares: [sampan-river-compress]
+      tls:
+        certResolver: @CERT_RESOLVER@
+      priority: 100
+    sampan-river-http:
+      entryPoints: [http]
+      rule: Host(`@DOMAIN@`)
+      service: sampan-river-svc
+      middlewares: [sampan-river-https]
+      priority: 100
+  middlewares:
+    sampan-river-compress:
+      compress:
+        minResponseBodyBytes: 256
+        excludedContentTypes: [video/mp4, image/jpeg]
+    sampan-river-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+  services:
+    sampan-river-svc:
+      loadBalancer:
+        servers:
+          - url: http://sampan-river-site:8080

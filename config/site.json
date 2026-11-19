@@ -1,0 +1,85 @@
+{
+  "_note": "tools/site.py builds the static page from this file, site/lang/*.json and site/index.html. Videos are copied from a media folder given at build time; each file's sha256 must equal its row in docs/MEASURED.md or the build stops.",
+  "domain": "riverfare.sasateguh.com",
+  "languages": [
+    {
+      "code": "en",
+      "path": "/",
+      "html_lang": "en"
+    },
+    {
+      "code": "ms",
+      "path": "/ms/",
+      "html_lang": "ms"
+    }
+  ],
+  "default_language": "en",
+  "prize_address": "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q",
+  "videos": {
+    "film": {
+      "version": "16x9",
+      "file": "sampan-river-16x9.mp4",
+      "poster": "docs/frames/thumbnail.jpg",
+      "width": 1920,
+      "height": 1080
+    },
+    "short": {
+      "version": "short-9x16",
+      "file": "sampan-river-short-9x16.mp4",
+      "poster": "docs/frames/short-9x16-cue-01.jpg",
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "measured": "docs/MEASURED.md",
+  "og_image": "docs/frames/thumbnail.jpg",
+  "og_image_max_bytes": 300000,
+  "links": {
+    "wallets": "https://bitcoincash.org",
+    "event": "https://dorahacks.io/hackathon/bchblaze2026/detail"
+  },
+  "youtube_url": "",
+  "repo_url": "https://github.com/aimanmalib/sampan-river",
+  "repo_public": false,
+  "copy_facts": {
+    "meta.description": [
+      "fee-usd"
+    ],
+    "hero.lede": [
+      "fee-usd"
+    ],
+    "facts.fee": [
+      "fee-tx",
+      "bch-price",
+      "fee-usd"
+    ],
+    "facts.pusd": [
+      "pusd-token",
+      "pusd-design"
+    ],
+    "banner.address_label": [
+      "ember-vote"
+    ],
+    "wallet.label": [
+      "wallet-link"
+    ]
+  },
+  "banned_words": [
+    "guaranteed",
+    "risk-free",
+    "always $1",
+    "trustless",
+    "revolutionary",
+    "grain of rice",
+    "financial advice"
+  ],
+  "copy_reset_ms": 2500,
+  "claim_words": [
+    "satoshi",
+    "cent",
+    "sen as",
+    "pusd",
+    "ember2026",
+    "stablecoin"
+  ]
+}
