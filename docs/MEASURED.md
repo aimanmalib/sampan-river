@@ -53,11 +53,11 @@ outline, centred in the blurred area below the picture, except cue 9 ("Less than
 caption overlaps the picture, the boat or the coin. Cue 10 sits under the end card ("Bitcoin Cash", "bitcoincash.org")
 drawn over the dimmed jetty picture in the middle of the frame.
 
-| version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | caption_cues | sha256 |
-|---|---|---|---|---|---|---|---|---|---|
-| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
-| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
-| short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
+| version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | speech_match | caption_cues | sha256 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
+| 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
+| short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | - | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
 
 <!-- detail:16x9 -->
 ### 16x9 detail

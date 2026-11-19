@@ -3,7 +3,9 @@
 Style values (font, size, colours, outline, bottom margin, line length) come from config/film.json `captions` and the
 end card text from `end_card`, per version (`16x9` or `9x16`). The end card text is drawn by this code, never by the
 video model; it is rendered into the clean master, the captions only into the final file.
-Usage: python3 tools/captions.py <16x9|9x16> <out_dir>   (writes captions-<v>.ass, endcard-<v>.ass, captions.en.srt)
+Narrated versions (decision 0012): cue times come from the voice (tools/narrate.py --retime) and the SRT is held to the
+limits in config/voice.json `srt` (characters per line, lines, characters per second, minimum length, no overlap).
+Usage: python3 tools/captions.py <16x9|9x16> <out_dir> | srt <film|short> <out.srt>
 """
 import json
 import os
@@ -107,6 +109,41 @@ def srt(cues, width_chars):
                    for i, (a, b, lines) in enumerate(caption_lines(cues, width_chars), 1))
 
 
+def srt_problems(cues, lim):
+    """Every way the cues break the SRT limits; empty = pass."""
+    out, cues = [], sorted(cues, key=lambda c: c["start"])
+    for i, (a, b, lines) in enumerate(caption_lines(cues, lim["max_chars_per_line"]), 1):
+        if len(lines) > lim["max_lines"] or any(len(x) > lim["max_chars_per_line"] for x in lines):
+            out.append(f"cue {i}: {len(lines)} lines, longest {max(len(x) for x in lines)} characters")
+        if b - a < lim["min_s"] - 1e-6:
+            out.append(f"cue {i}: {b - a:.2f} s < {lim['min_s']} s")
+        elif len(" ".join(lines)) / (b - a) > lim["max_cps"]:
+            out.append(f"cue {i}: {len(' '.join(lines)) / (b - a):.1f} characters/s > {lim['max_cps']}")
+        if i < len(cues) and b > float(cues[i]["start"]) + 1e-6:
+            out.append(f"cue {i}: ends at {b} s after cue {i + 1} starts")
+    return out
+
+
+def dump_cues(doc):
+    """Caption file text with one cue per line (the layout of config/captions*.json)."""
+    rows = ",\n".join("    " + json.dumps(c, ensure_ascii=False) for c in doc["cues"])
+    head = "".join(f"  {json.dumps(k)}: {json.dumps(v, ensure_ascii=False)},\n" for k, v in doc.items() if k != "cues")
+    return "{\n" + head + '  "cues": [\n' + rows + "\n  ]\n}\n"
+
+
+def write_srt(which, out_path, voice_cfg=None):
+    """SRT of the film or the short, refused when it breaks the limits."""
+    voice_cfg = voice_cfg or load(os.path.join(ROOT, "config", "voice.json"))
+    path = CAPTIONS if which == "film" else os.path.join(ROOT, load(os.path.join(ROOT, "config", "short.json"))["captions"])
+    cues, lim = load(path)["cues"], voice_cfg["srt"]
+    bad = srt_problems(cues, lim)
+    if bad:
+        raise ValueError("; ".join(bad))
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(srt(cues, lim["max_chars_per_line"]))
+    return out_path
+
+
 def write(out_dir, version, film=None, cues=None):
     """Write the three subtitle files for `version`; returns their paths."""
     film = film or load(FILM)
@@ -125,6 +162,9 @@ def write(out_dir, version, film=None, cues=None):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) == 4 and sys.argv[1] == "srt" and sys.argv[2] in ("film", "short"):
+        print(write_srt(sys.argv[2], sys.argv[3]))
+    elif len(sys.argv) == 3 and sys.argv[1] in ("16x9", "9x16"):
+        print(json.dumps(write(sys.argv[2], sys.argv[1])))
+    else:
         sys.exit(__doc__.strip().splitlines()[-1])
-    print(json.dumps(write(sys.argv[2], sys.argv[1])))

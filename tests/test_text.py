@@ -44,11 +44,14 @@ README_LABELS = {"16x9": "16:9", "9x16": "9:16", "short-9x16": "9:16 short"}
 
 def measured_rows():
     """version -> (seconds, lufs, true peak, cues, sha256) from the final-file table in docs/MEASURED.md."""
-    out = {}
+    out, head = {}, None
     for line in read("docs/MEASURED.md").splitlines():
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) == 10 and cells[0] in README_LABELS:
-            out[cells[0]] = (cells[3], cells[5], cells[6], cells[8], cells[9])
+        if cells[:1] == ["version"] and "caption_cues" in cells:
+            head = cells
+        elif head and len(cells) == len(head) and cells[0] in README_LABELS:
+            r = dict(zip(head, cells))
+            out[cells[0]] = (r["duration_s"], r["lufs_i"], r["true_peak_db"], r["caption_cues"], r["sha256"])
     return out
 
 

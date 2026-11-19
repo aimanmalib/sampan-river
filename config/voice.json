@@ -1,0 +1,36 @@
+{
+  "_note": "Narration (decision 0012): the maker's own cloned voice reads the on-screen captions. tools/voice.py and tools/narrate.py read every value here. The voice id and the API key come from the environment variables named below, never from a tracked file. A request is sent only when the account keeps at least reserve_chars after it AND the ledger total plus the request stays within char_budget.",
+  "enabled": true,
+  "api_base": "https://api.elevenlabs.io",
+  "voice_env": "NARRATION_VOICE_ID",
+  "key_env": "ELEVENLABS_API_KEY",
+  "model_id": "eleven_v3",
+  "language_code": "en",
+  "output_format": "mp3_44100_192",
+  "timeout_s": 180,
+  "char_budget": 2500,
+  "reserve_chars": 2000,
+  "max_takes": 3,
+  "match_min": 0.9,
+  "cache_dir": "media/voice",
+  "ledger": "log/voice.jsonl",
+  "sample_rate": 48000,
+  "voice_rms_dbfs": -16,
+  "duck_db": 12,
+  "ramp_s": 0.25,
+  "lead_s": 0.1,
+  "tail_s": 0.4,
+  "min_gap_s": 0.1,
+  "max_tempo": 1.08,
+  "min_cue_s": 1.0,
+  "srt": {
+    "max_chars_per_line": 42,
+    "max_lines": 2,
+    "max_cps": 20,
+    "min_s": 1.0
+  },
+  "spoken_map": {
+    "$5": "five dollars",
+    "219": "two hundred and nineteen"
+  }
+}

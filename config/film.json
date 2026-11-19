@@ -82,11 +82,15 @@
     "silence_check_s": 15,
     "silence_max_s": 2.0,
     "speech_check": {
+      "_note": "Silent versions: more than max_words words fails (decision 0004). Narrated versions (expect = script, decision 0012): the words of the script heard in order / words of the script must reach match_min. A version whose name ends in silent_suffix is the same picture without the voice and is checked as silent. Set expect to none (and voice.enabled to false) to go back to the silent film.",
       "model": "small.en",
       "language": "en",
       "beam_size": 5,
       "vad_filter": true,
-      "max_words": 0
+      "max_words": 0,
+      "expect": "script",
+      "match_min": 0.85,
+      "silent_suffix": "-tanpa-suara"
     }
   },
   "output": {

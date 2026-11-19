@@ -3,6 +3,7 @@
 Settings come from config/film.json `audio.speech_check`. CPU, int8; the model loads once per process.
 `vad_filter` (decision 0004): Silero voice activity detection runs first, because without it the model invents stock
 outro phrases on music and river sound.
+A narrated version (decision 0012) is checked the other way: `speech_match` = words of the script heard in order.
 Usage: python3 tools/transcribe.py <media file> [<media file> ...]
 Prints one JSON object per file: {"file", "words", "text"}. Exit 1 when any file has more than `max_words` words.
 """
@@ -23,6 +24,47 @@ _MODEL = {}
 def count_words(text):
     """Words that contain at least one letter or digit (whisper punctuation alone is not speech)."""
     return len([w for w in text.split() if re.search(r"[A-Za-z0-9]", w)])
+
+
+def lcs_len(a, b):
+    """Length of the longest common subsequence of two word lists."""
+    prev = [0] * (len(b) + 1)
+    for x in a:
+        cur = [0]
+        for j, y in enumerate(b):
+            cur.append(prev[j] + 1 if x == y else max(prev[j + 1], cur[j]))
+        prev = cur
+    return prev[-1]
+
+
+ONES = ("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen "
+        "seventeen eighteen nineteen").split()
+TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
+def number_words(n):
+    """English words for 0 <= n < 1,000,000 (British "and" after hundred), so "219" and "two hundred and nineteen"
+    count as the same words whichever way the speech model writes them."""
+    if n < 20:
+        return ONES[n]
+    if n < 100:
+        return TENS[n // 10] + ("" if n % 10 == 0 else " " + ONES[n % 10])
+    if n < 1000:
+        return ONES[n // 100] + " hundred" + ("" if n % 100 == 0 else " and " + number_words(n % 100))
+    return number_words(n // 1000) + " thousand" + ("" if n % 1000 == 0 else " " + number_words(n % 1000))
+
+
+def script_words(text):
+    """Normalised words: lower case, "$5" read as "5 dollars", digits as words, punctuation dropped."""
+    t = re.sub(r"\$(\d+)", r"\1 dollars", text.lower().replace("'", "").replace(",", ""))
+    t = re.sub(r"\d+", lambda m: " " + number_words(int(m.group())) + " " if int(m.group()) < 10 ** 6 else m.group(), t)
+    return re.findall(r"[a-z0-9]+", t)
+
+
+def speech_match(transcript, script):
+    """Decision 0012: words of the script heard in order (LCS) / words of the script. 0..1."""
+    want = script_words(script)
+    return round(lcs_len(script_words(transcript), want) / len(want), 3) if want else 0.0
 
 
 def pcm16k(path):

@@ -24,5 +24,8 @@ like and subscribe to our channel!" on the mix (no-speech probability 0.36 to 0.
 return no segments. The check now runs with `audio.speech_check.vad_filter: true`. The rule is unchanged: more than 0
 words fails.
 
+Amended 2026-11-19 by decision 0012: a narrated version must instead be heard saying the script (`speech_match` at
+least `audio.speech_check.match_min`); the copy without the voice keeps the 0 word rule.
+
 ## Rollback
 Set `vad_filter` to false to see the raw model output. Mix levels and limiter ceiling live in `config/music.json` `mix`.

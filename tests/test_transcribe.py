@@ -60,5 +60,21 @@ class ExitCode(unittest.TestCase):
         self.assertEqual((rc, row["words"]), (1, 2))
 
 
+class SpeechMatch(unittest.TestCase):
+    def test_numbers_match_whichever_way_they_are_written(self):
+        self.assertEqual(transcribe.number_words(219), "two hundred and nineteen")
+        self.assertEqual(transcribe.number_words(1005), "one thousand five")
+        self.assertEqual(transcribe.script_words("$5, 219 satoshis"), transcribe.script_words("five dollars two hundred and nineteen satoshis"))
+
+    def test_words_heard_in_order_over_script_words(self):
+        script = "Sending five dollars should not cost five dollars."
+        self.assertEqual(transcribe.speech_match("Sending $5 should not cost $5!", script), 1.0)
+        self.assertEqual(transcribe.speech_match("", script), 0.0)
+        self.assertEqual(transcribe.speech_match("sending dollars should cost", script), 0.5)
+        self.assertEqual(transcribe.speech_match("cost not should sending", script), 0.125)
+        self.assertEqual(transcribe.speech_match("anything", ""), 0.0)
+        self.assertEqual(transcribe.lcs_len(list("abcbdab"), list("bdcaba")), 4)
+
+
 if __name__ == "__main__":
     unittest.main()

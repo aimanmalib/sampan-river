@@ -67,6 +67,7 @@ class MeasureTest(unittest.TestCase):
     def test_verdict_names_each_failed_limit(self):
         f = film()
         f["duration_s"].update(min=45, max=75)
+        f["audio"]["speech_check"]["expect"] = "none"
         self.assertEqual(measure.verdict(result(), f), [])
         bad = result(lufs_i=-16.0, true_peak_db=-0.5, whisper_words=2, silences=[(1.0, 4.0)])
         bad["probe"] = dict(bad["probe"], audio_s=59.5, fps=25.0)
@@ -78,7 +79,7 @@ class MeasureTest(unittest.TestCase):
         r = result(fails=[])
         once = measure.upsert(md, r)
         self.assertIn("| " + " | ".join(measure.COLUMNS) + " |", once)
-        self.assertIn("| 16x9 | 1920 | 1080 | 60.0 | yes | -14.0 | -1.5 | 0 | 1/1 | " + "a" * 64 + " |", once)
+        self.assertIn("| 16x9 | 1920 | 1080 | 60.0 | yes | -14.0 | -1.5 | 0 | - | 1/1 | " + "a" * 64 + " |", once)
         twice = measure.upsert(once, result(lufs_i=-13.8, fails=[]))
         self.assertEqual(twice.count("| 16x9 |"), 1)
         self.assertEqual(twice.count("<!-- detail:16x9 -->"), 1)
@@ -87,6 +88,37 @@ class MeasureTest(unittest.TestCase):
         rows = [ln for ln in both.splitlines() if ln.startswith("| 16x9 |") or ln.startswith("| 9x16 |")]
         self.assertEqual(len(rows), 2)
         self.assertLess(both.index("| 9x16 |"), both.index("<!-- detail:16x9 -->"))
+
+    def test_narrated_version_needs_the_script_and_silent_copy_needs_silence(self):
+        f = film()
+        f["duration_s"].update(min=45, max=75)
+        sc = f["audio"]["speech_check"]
+        self.assertEqual(measure.split_version("16x9" + sc["silent_suffix"], f), ("16x9", False))
+        self.assertEqual(measure.split_version("16x9", f), ("16x9", sc["expect"] == "script"))
+        f["audio"]["speech_check"]["expect"] = "script"
+        heard = result(whisper_words=40, speech_match=0.97)
+        self.assertEqual(measure.verdict(heard, f), [])
+        self.assertEqual(measure.verdict(result(whisper_words=40, speech_match=0.5), f), ["speech_match"])
+        self.assertEqual(measure.verdict(result(whisper_words=0), f), ["speech_match"])
+        silent = "16x9" + sc["silent_suffix"]
+        self.assertEqual(measure.verdict(result(version=silent), f), [])
+        self.assertEqual(measure.verdict(result(version=silent, whisper_words=3), f), ["speech"])
+        row = measure.table_row(dict(heard, fails=[]))
+        self.assertIn("| 40 | 0.97 | 1/1 |", row)
+
+    def test_old_table_gains_the_speech_match_column(self):
+        old = ("# M\n\n| version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | "
+               "caption_cues | sha256 |\n|---|---|---|---|---|---|---|---|---|---|\n"
+               "| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | 10/10 | " + "b" * 64 + " |\n\nafter | x |\n")
+        new = measure.migrate(old)
+        self.assertIn("| " + " | ".join(measure.COLUMNS) + " |", new)
+        self.assertIn("|" + "---|" * len(measure.COLUMNS), new)
+        self.assertIn("| 0 | - | 10/10 |", new)
+        self.assertIn("after | x |", new)
+        self.assertEqual(measure.migrate(new), new)
+        merged = measure.upsert(old, result(fails=[], whisper_words=30, speech_match=0.9))
+        self.assertEqual(merged.count("| 16x9 |"), 1)
+        self.assertIn("| 30 | 0.9 |", merged)
 
 
 if __name__ == "__main__":

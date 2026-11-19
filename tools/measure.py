@@ -6,7 +6,9 @@ loudness and true peak (ffmpeg ebur128), no silence longer than `audio.silence_m
 check (decision 0005): at each cue middle the caption band of the final file differs from the clean master, and at each
 gap between cues it does not. One frame per cue goes to `measure.frames_dir` for a person to read.
 The vertical short (`short-9x16`, decision 0008) is measured the same way against config/short.json (tools/short.py).
-Usage: python3 tools/measure.py <16x9|9x16|short-9x16> [--write]
+Narrated versions (decision 0012, `audio.speech_check.expect` = script) must instead be heard saying the script:
+`speech_match` >= match_min. `<version><silent_suffix>` is the same picture without the voice: checked as silent, no frames.
+Usage: python3 tools/measure.py <16x9|9x16|short-9x16>[<silent_suffix>] [--write]
 """
 import json
 import os
@@ -19,11 +21,11 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
-from tools import captions, short, transcribe, ve  # noqa: E402
+from tools import captions, short, transcribe, ve, voice  # noqa: E402
 
 MEASURED = os.path.join(ROOT, "docs", "MEASURED.md")
 COLUMNS = ("version", "width", "height", "duration_s", "audio", "lufs_i", "true_peak_db", "whisper_words",
-           "caption_cues", "sha256")
+           "speech_match", "caption_cues", "sha256")
 
 
 def probe(path):
@@ -124,9 +126,23 @@ def save_frames(final, cues, film, version):
     return out
 
 
+def split_version(version, film):
+    """(picture version, narrated?) e.g. '16x9-tanpa-suara' -> ('16x9', False)."""
+    sc = film["audio"]["speech_check"]
+    suffix = sc.get("silent_suffix")
+    if suffix and version.endswith(suffix):
+        return version[:-len(suffix)], False
+    return version, sc.get("expect") == "script"
+
+
+def script_text(cues, voice_cfg):
+    return " ".join(voice.say(c, voice_cfg) for c in sorted(cues, key=lambda c: c["start"]))
+
+
 def verdict(result, film):
     """Names of failed limits; empty = pass."""
-    d, a, o = film["duration_s"], film["audio"], film["output"][result["version"]]
+    base, narrated = split_version(result["version"], film)
+    d, a, o = film["duration_s"], film["audio"], film["output"][base]
     p, fails = result["probe"], []
     if (p["width"], p["height"]) != (o["width"], o["height"]):
         fails.append("size")
@@ -142,7 +158,10 @@ def verdict(result, film):
         fails.append("true_peak")
     if any(e - s > a["silence_max_s"] for s, e in result["silences"]):
         fails.append("silence")
-    if result["whisper_words"] > a["speech_check"]["max_words"]:
+    if narrated:
+        if result.get("speech_match") is None or result["speech_match"] < a["speech_check"]["match_min"]:
+            fails.append("speech_match")
+    elif result["whisper_words"] > a["speech_check"]["max_words"]:
         fails.append("speech")
     if not all(r["ok"] for r in result["captions"]):
         fails.append("captions")
@@ -152,13 +171,15 @@ def verdict(result, film):
 def table_row(result):
     p, cues = result["probe"], [r for r in result["captions"] if r["kind"] == "cue"]
     vals = (result["version"], p["width"], p["height"], p["duration_s"], "yes" if p["audio"] else "no", result["lufs_i"],
-            result["true_peak_db"], result["whisper_words"], f"{sum(r['ok'] for r in cues)}/{len(cues)}", result["sha256"])
+            result["true_peak_db"], result["whisper_words"],
+            "-" if result.get("speech_match") is None else result["speech_match"], f"{sum(r['ok'] for r in cues)}/{len(cues)}", result["sha256"])
     return "| " + " | ".join(str(v) for v in vals) + " |"
 
 
 def upsert(md, result):
     """Insert or replace the version's row in the Final films table and its detail block."""
     head = "| " + " | ".join(COLUMNS) + " |"
+    md = migrate(md)
     if head not in md:
         md = md.rstrip("\n") + "\n\n## Final films\n\n" + head + "\n|" + "---|" * len(COLUMNS) + "\n"
     lines = md.split("\n")
@@ -179,13 +200,32 @@ def upsert(md, result):
     return md.rstrip("\n") + "\n\n" + block + "\n"
 
 
+def migrate(md):
+    """Add the speech_match column ("-" = silent version) to a table written before decision 0012."""
+    old = [c for c in COLUMNS if c != "speech_match"]
+    at = COLUMNS.index("speech_match")
+    out, inside = [], False
+    for ln in md.split("\n"):
+        cells = [c.strip() for c in ln.strip().strip("|").split("|")] if ln.startswith("|") else None
+        if cells == old:
+            inside = True
+        elif not ln.startswith("|"):
+            inside = False
+        if inside and cells and len(cells) == len(old):
+            cells.insert(at, "speech_match" if cells == old else ("---" if set(cells[0]) == {"-"} else "-"))
+            ln = "| " + " | ".join(cells) + " |" if cells[0] != "---" else "|" + "---|" * len(cells)
+        out.append(ln)
+    return "\n".join(out)
+
+
 def detail(result):
     p = result["probe"]
     out = [f"### {result['version']} detail", "",
            f"Video {p['video_codec']} {p['profile']} {p['pix_fmt']} {p['fps']} fps, {p['video_s']} s; audio "
            f"{p.get('audio_codec')} {p.get('sample_rate')} Hz {p.get('channels')} ch, {p.get('audio_s')} s. "
            f"Silences over the limit in the opening seconds: {len(result['silences'])}. Failed limits: "
-           f"{', '.join(result['fails']) or 'none'}.", "",
+           f"{', '.join(result['fails']) or 'none'}." + (f" Heard: \"{result['heard']}\"; speech match "
+                                                         f"{result['speech_match']}." if result.get("heard") else ""), "",
            "| sample | t (s) | caption band diff | pass |", "|---|---|---|---|"]
     out += [f"| {r['kind']} {r['index'] + 1} | {r['t']} | {r['diff']} | {'yes' if r['ok'] else 'no'} |"
             for r in result["captions"]]
@@ -194,25 +234,30 @@ def detail(result):
 
 def measure(version, film, cues):
     out_dir = os.path.join(ROOT, film["edit"]["out_dir"])
-    final, clean = (os.path.join(out_dir, f"{n}-{version}.mp4") for n in ("sampan-river", "clean"))
+    base, narrated = split_version(version, film)
+    final, clean = os.path.join(out_dir, f"sampan-river-{version}.mp4"), os.path.join(out_dir, f"clean-{base}.mp4")
     a = film["audio"]
     lufs_i, tp = loudness(final)
+    heard = transcribe.check(final, a["speech_check"])
+    match = transcribe.speech_match(heard["text"], script_text(cues, captions.load(voice.CONFIG))) if narrated else None
     result = {"version": version, "probe": probe(final), "lufs_i": lufs_i, "true_peak_db": tp,
               "silences": silences(final, a["silence_check_s"], film["measure"]["silence_noise_db"], a["silence_max_s"]),
-              "whisper_words": transcribe.check(final, a["speech_check"])["words"],
-              "captions": caption_check(clean, final, cues, film, version),
-              "frames": save_frames(final, cues, film, version), "sha256": ve.sha256_file(final)}
+              "whisper_words": heard["words"], "speech_match": match, "heard": heard["text"] if narrated else "",
+              "captions": caption_check(clean, final, cues, film, base),
+              "frames": save_frames(final, cues, film, base) if base == version else [],
+              "sha256": ve.sha256_file(final)}
     result["fails"] = verdict(result, film)
     return result
 
 
 def main(argv):
     film, sh = captions.load(captions.FILM), captions.load(short.SHORT)
-    if not argv or argv[0] not in ("16x9", "9x16", sh["version"]):
+    base = split_version(argv[0], film)[0] if argv else None
+    if base not in ("16x9", "9x16", sh["version"]):
         print(__doc__.strip().splitlines()[-1], file=sys.stderr)
         return 2
     cues = captions.load(captions.CAPTIONS)["cues"]
-    if argv[0] == sh["version"]:
+    if base == sh["version"]:
         film, cues = short.short_film(film, sh), captions.load(os.path.join(ROOT, sh["captions"]))["cues"]
     result = measure(argv[0], film, cues)
     print(json.dumps(result))

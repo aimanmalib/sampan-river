@@ -9,6 +9,10 @@
 *.mp4
 *.wav
 *.mov
+# Narration audio is a clone of the maker's voice: never tracked (decision 0012)
+*.mp3
+*.m4a
+/media/voice/
 # Secrets and tooling
 .env
 .env.*
@@ -18,6 +22,7 @@ __pycache__/
 node_modules/
 log/*.lock
 log/.generations-*
+log/.voice-*
 # Deploy host values and site build output
 /deploy/hos.env
 /public/

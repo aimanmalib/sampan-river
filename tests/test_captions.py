@@ -87,6 +87,28 @@ class CaptionsTest(unittest.TestCase):
                 size = e["size"][v][0 if i == 0 else 1]
                 self.assertLessEqual(len(line) * size * 0.6, usable, f"{v}: {line}")
 
+    def test_srt_limits_name_each_problem(self):
+        lim = {"max_chars_per_line": 42, "max_lines": 2, "max_cps": 20, "min_s": 1.0}
+        ok = [{"start": 0.0, "end": 2.0, "text": "Short line."}, {"start": 2.0, "end": 4.0, "text": "Next."}]
+        self.assertEqual(captions.srt_problems(ok, lim), [])
+        fast = [{"start": 0.0, "end": 1.0, "text": "A line that is far too long to read in one second."}]
+        self.assertIn("characters/s", captions.srt_problems(fast, lim)[0])
+        short = [{"start": 0.0, "end": 0.5, "text": "Hi."}]
+        self.assertIn("< 1.0 s", captions.srt_problems(short, lim)[0])
+        overlap = [{"start": 0.0, "end": 3.0, "text": "One."}, {"start": 2.0, "end": 4.0, "text": "Two."}]
+        self.assertIn("after cue 2 starts", captions.srt_problems(overlap, lim)[0])
+
+    def test_shipped_captions_pass_the_srt_limits_and_round_trip(self):
+        with open(os.path.join(ROOT, "config", "voice.json"), encoding="utf-8") as f:
+            lim = json.load(f)["srt"]
+        for name in ("captions.en.json", "captions.short.en.json"):
+            path = os.path.join(ROOT, "config", name)
+            with open(path, encoding="utf-8") as f:
+                raw = f.read()
+            doc = json.loads(raw)
+            self.assertEqual(captions.srt_problems(doc["cues"], lim), [], name)
+            self.assertEqual(captions.dump_cues(doc), raw, name)
+
 
 if __name__ == "__main__":
     unittest.main()

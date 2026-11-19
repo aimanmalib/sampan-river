@@ -1,9 +1,9 @@
 {
-  "_note": "Burned-in captions of the vertical short (decision 0008). Times are short seconds. A cue with `fact` must match an id in docs/FACTS.md. The end card comes from the film's clean master.",
+  "_note": "Burned-in captions of the vertical short (decision 0008). Times are short seconds. A cue with `fact` must match an id in docs/FACTS.md. The end card comes from the film's clean master. `id` names the narration line (decision 0012); `say`, when present, is how the line is read aloud and must be the same words as `text`.",
   "cues": [
-    {"start": 0.2, "end": 3.2, "text": "Sending $5 should not cost $5.", "fact": null},
-    {"start": 3.8, "end": 7.0, "text": "A digital dollar on Bitcoin Cash.", "fact": "pusd-token"},
-    {"start": 7.4, "end": 10.2, "text": "The fare for a real transfer: 219 satoshis.", "fact": "fee-tx"},
-    {"start": 10.5, "end": 12.4, "text": "Less than a tenth of a cent.", "fact": "fee-usd"}
+    {"id": "short-01", "start": 0.2, "end": 3.2, "text": "Sending $5 should not cost $5.", "fact": null},
+    {"id": "short-02", "start": 3.8, "end": 7.0, "text": "A digital dollar on Bitcoin Cash.", "fact": "pusd-token"},
+    {"id": "short-03", "start": 7.4, "end": 10.2, "text": "The fare for a real transfer: 219 satoshis.", "fact": "fee-tx"},
+    {"id": "short-04", "start": 10.5, "end": 12.4, "text": "Less than a tenth of a cent.", "fact": "fee-usd"}
   ]
 }
