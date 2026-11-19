@@ -1,15 +1,15 @@
 {
   "_note": "Single source for burned-in captions and the SRT. A cue with `fact` must match an id in docs/FACTS.md. Times are film seconds. `id` names the narration line (decision 0012); `say`, when present, is how the line is read aloud and must be the same words as `text`.",
   "cues": [
-    {"id": "film-01", "start": 0.2, "end": 3.2, "text": "Sending $5 should not cost $5.", "fact": null},
-    {"id": "film-02", "start": 3.6, "end": 8.0, "text": "The old bridge takes a cut from everyone.", "fact": null},
-    {"id": "film-03", "start": 11.0, "end": 15.5, "text": "One rower takes the river instead.", "fact": null},
-    {"id": "film-04", "start": 16.0, "end": 21.0, "text": "She carries one dollar across.", "fact": null},
-    {"id": "film-05", "start": 23.0, "end": 28.5, "text": "A digital dollar on Bitcoin Cash.", "fact": "pusd-token"},
-    {"id": "film-06", "start": 29.0, "end": 34.5, "text": "It is designed to hold one dollar.", "fact": "pusd-design"},
-    {"id": "film-07", "start": 35.0, "end": 39.5, "text": "The coin does not shrink on the way.", "fact": null},
-    {"id": "film-08", "start": 41.0, "end": 46.0, "text": "The fare for a real transfer: 219 satoshis.", "fact": "fee-tx"},
-    {"id": "film-09", "start": 46.5, "end": 52.5, "text": "Less than a tenth of a cent.", "fact": "fee-usd"},
-    {"id": "film-10", "start": 54.5, "end": 59.5, "text": "Bitcoin Cash. Money that crosses for almost nothing.", "fact": "fee-usd"}
+    {"id": "film-01", "start": 0.2, "end": 3.42, "text": "Sending $5 should not cost $5.", "fact": null},
+    {"id": "film-02", "start": 3.6, "end": 6.58, "text": "The old bridge takes a cut from everyone.", "fact": null},
+    {"id": "film-03", "start": 11.0, "end": 13.5, "text": "One rower takes the river instead.", "fact": null},
+    {"id": "film-04", "start": 16.0, "end": 18.42, "text": "She carries one dollar across.", "fact": null},
+    {"id": "film-05", "start": 23.0, "end": 25.66, "text": "A digital dollar on Bitcoin Cash.", "fact": "pusd-token"},
+    {"id": "film-06", "start": 29.0, "end": 31.5, "text": "It is designed to hold one dollar.", "fact": "pusd-design"},
+    {"id": "film-07", "start": 35.0, "end": 37.26, "text": "The coin does not shrink on the way.", "fact": null},
+    {"id": "film-08", "start": 41.0, "end": 45.18, "text": "The fare for a real transfer: 219 satoshis.", "fact": "fee-tx"},
+    {"id": "film-09", "start": 46.5, "end": 49.0, "text": "Less than a tenth of a cent.", "fact": "fee-usd"},
+    {"id": "film-10", "start": 54.5, "end": 59.0, "text": "Bitcoin Cash. Money that crosses for almost nothing.", "fact": "fee-usd"}
   ]
 }

@@ -161,3 +161,9 @@ Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Sil
 | gap 4 | 10.35 | 0.25 | yes |
 | gap 5 | 15.5 | 0.04 | yes |
 <!-- /detail:short-9x16 -->
+
+## Narration mix
+
+| version | voice_rms_db | bed_under_voice_db | gap_db | bed_outside_change_db |
+|---|---|---|---|---|
+| preview-16x9 | -16.0 | -28.97 | 12.97 | 0.0 |

@@ -1,6 +1,6 @@
 # 0012: Narration in the maker's own cloned voice
 
-Date: 2026-11-19. Status: draft (code and offline tests done; takes not generated yet).
+Date: 2026-11-19. Status: accepted (takes generated 2026-11-19; the films are rendered with them in the next steps).
 
 ## Context
 The maker asked for the film to be read aloud in their own voice. They already have an instant voice clone at
@@ -73,3 +73,19 @@ README, the upload texts and the page in both languages once the narrated files 
 The files without the voice need no new render. In code: `voice.enabled` false and `audio.speech_check.expect` "none",
 then render again; caption times before narration are in git history. Characters already spent cannot be refunded;
 `char_budget` caps them.
+
+## Takes generated (2026-11-19)
+- 14 lines (film-01..10, short-01..04), 19 requests, 837 characters in log/voice.jsonl (char_budget 2500). The
+  account had 100958 characters left before the first request and 100590 after the last one (it counted fewer
+  characters than the ledger; the ledger counts every character sent).
+- Every line has a take with whisper match >= 0.9. Lines that needed more than one take: film-06 (3 takes, 0.857,
+  0.857, 1.0), film-08 (3 takes, 0.727, 0.818, 0.909), short-03 (2 takes, 0.818, 1.0). The best take is used.
+- Placement: every film line fits its window at tempo 1.0 (longest: film-10, 4.0 s in a 5.3 s window). In the short,
+  short-03 (3.84 s) did not fit before short-04 at 10.5 s (it needed tempo 1.325). short-04 moved to 11.5 s, which is
+  still inside the same shot (film 42 to 48 s) and closer to where the same line sits in the film (46.5 s); then
+  every short line fits at tempo 1.0.
+- Caption end times now follow the voice (config/captions.en.json, config/captions.short.en.json); start times are
+  unchanged. Both SRT files pass the `srt` limits.
+- Landscape preview mix (bed and voice, no picture): voice -16.0 dB, bed under the voice -28.97 dB, gap 12.97 dB,
+  bed level change away from the voice 0.0 dB (docs/MEASURED.md "Narration mix").
+- Not checked by ear: pronunciation, tone and pacing. Only whisper and the measurements above were used.
