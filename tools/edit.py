@@ -151,6 +151,16 @@ def narration(film, version):
     return res["wav"], res["mix"]
 
 
+def write_silent(film, version, final, bed, stats, out_dir):
+    """The silent copy of a narrated render (same video stream, the bed alone) and narration-<version>.json."""
+    silent = os.path.join(out_dir, f"sampan-river-{version}{film['audio']['speech_check']['silent_suffix']}.mp4")
+    bed_measured, bed_ln = loudnorm_pass2(film, bed, out_dir)
+    run(silent_cmd(film, final, bed, bed_ln, silent), out_dir)
+    with open(os.path.join(out_dir, f"narration-{version}.json"), "w", encoding="utf-8") as f:
+        json.dump(stats, f)
+    return {"silent": os.path.relpath(silent, ROOT), "mix": stats, "loudnorm_pass1_silent": bed_measured}
+
+
 def main(argv):
     if len(argv) != 1 or argv[0] not in ("16x9", "9x16"):
         print(__doc__.strip().splitlines()[-1], file=sys.stderr)
@@ -173,12 +183,7 @@ def main(argv):
     report = {"clean": os.path.relpath(clean, ROOT), "final": os.path.relpath(final, ROOT),
               "srt": os.path.relpath(subs["srt"], ROOT), "loudnorm_pass1": measured}
     if voiced:
-        silent = os.path.join(out_dir, f"sampan-river-{version}{film['audio']['speech_check']['silent_suffix']}.mp4")
-        bed_measured, bed_ln = loudnorm_pass2(film, bed, out_dir)
-        run(silent_cmd(film, final, bed, bed_ln, silent), out_dir)
-        with open(os.path.join(out_dir, f"narration-{version}.json"), "w", encoding="utf-8") as f:
-            json.dump(voiced[1], f)
-        report.update(silent=os.path.relpath(silent, ROOT), mix=voiced[1], loudnorm_pass1_silent=bed_measured)
+        report.update(write_silent(film, version, final, bed, voiced[1], out_dir))
     print(json.dumps(report))
     return 0
 

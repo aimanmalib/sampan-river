@@ -3,8 +3,12 @@
 Picture: the segments [start, end] (film seconds, config/short.json) are cut from the 9:16 clean master, so the layout and
 the end card are the film's own; joins are `xfade` of `crossfade_s`. Sound: the same segments of the film mix joined
 with `acrossfade` of the same length (picture and sound stay in step), a fade out at the end, then the film's two-pass
-loudnorm. Captions: config/captions.short.en.json in short seconds, drawn with the film's caption style for `source`.
-Writes clean-short-9x16.mp4 (no captions, for the caption pixel check) and sampan-river-short-9x16.mp4 to `edit.out_dir`.
+loudnorm. Captions: config/captions.short.en.json in short seconds, drawn like the source: the bands of decision 0010
+(top band captions, bottom band figures from config/bands.json `short-9x16`) when the source has them, else the line.
+Narration (decision 0012): the bed is cut first, then the cached takes of the short's lines are placed and ducked over
+that cut bed (the narrated film is never cut). The silent copy `<version><silent_suffix>` is written in the same pass.
+Writes clean-short-9x16.mp4 (no captions, for the pixel check), mix-short-9x16.wav (cut bed), sampan-river-short-9x16.mp4,
+its silent copy and narration-short-9x16.json (mix stats) to `edit.out_dir`.
 Usage: python3 tools/short.py
 """
 import copy
@@ -55,14 +59,31 @@ def check_cues(short, cues):
         raise ShortError(f"no caption starts in the first {short['hook_max_s']} s")
 
 
+def to_short(short, t):
+    """Short second at which film second `t` is shown; a time in a gap maps to the start of the next segment."""
+    s, c = 0.0, float(short["crossfade_s"])
+    for a, b in short["segments"]:
+        if t <= b:
+            return round(s + max(0.0, t - a), 3)
+        s += b - a - c
+    return total_s(short)
+
+
 def short_film(film, short):
-    """A copy of film.json in which `version` has the source's size, caption style and band, and the short's length."""
+    """A copy of film.json in which `version` has the source's size, layout, caption style, bands and band, the
+    short's length and hook window, and the end card start in short seconds."""
     f, v, src = copy.deepcopy(film), short["version"], short["source"]
     f["output"][v] = f["output"][src]
+    for key in ("layout", "orientation"):
+        f["edit"][key][v] = f["edit"][key][src]
     for key in ("size", "margin_v", "max_chars_per_line"):
         f["captions"][key][v] = f["captions"][key][src]
+    if src in f["captions"].get("bands", {}):
+        f["captions"]["bands"][v] = f["captions"]["bands"][src]
     f["measure"]["caption_band"][v] = f["measure"]["caption_band"][src]
-    f["duration_s"] = {"min": short["duration_s"]["min"], "max": short["duration_s"]["max"], "target": total_s(short)}
+    f["duration_s"] = {"min": short["duration_s"]["min"], "max": short["duration_s"]["max"], "target": total_s(short),
+                       "hook_max_s": short["hook_max_s"]}
+    f["end_card"]["start_s"] = to_short(short, float(film["end_card"]["start_s"]))
     return f
 
 
@@ -132,20 +153,22 @@ def main(argv):
     for p in (source_clean, source_mix):
         if not os.path.exists(p):
             raise ShortError(f"{p} missing: run tools/mix.py and tools/edit.py {src} first")
-    ass = os.path.join(out_dir, f"captions-{v}.ass")
-    with open(ass, "w", encoding="utf-8") as f:
-        f.write(captions.captions_ass(cues, sf, v))
-    clean = os.path.join(out_dir, f"clean-{v}.mp4")
-    edit.run(clean_cmd(short, sf, source_clean, clean), out_dir)
     mix_path = os.path.join(out_dir, f"mix-{v}.wav")
     edit.run(mix_cmd(short, sf, source_mix, mix_path), out_dir)
-    probe = edit.run(["ffmpeg", "-hide_banner", "-i", mix_path, "-af",
-                      f"loudnorm={edit.loudnorm_target(sf)}:print_format=json", "-f", "null", "-"], out_dir)
-    measured = edit.parse_loudnorm(probe.stderr)
+    voiced = edit.narration(sf, v)
+    ass = os.path.join(out_dir, f"captions-{v}.ass")
+    with open(ass, "w", encoding="utf-8") as f:
+        f.write(captions._burned(cues, sf, v))
+    clean = os.path.join(out_dir, f"clean-{v}.mp4")
+    edit.run(clean_cmd(short, sf, source_clean, clean), out_dir)
+    measured, ln = edit.loudnorm_pass2(sf, voiced[0] if voiced else mix_path, out_dir)
     final = os.path.join(out_dir, f"sampan-river-{v}.mp4")
-    edit.run(edit.final_cmd(sf, clean, mix_path, os.path.basename(ass), edit.second_pass(sf, measured), final), out_dir)
-    print(json.dumps({"clean": os.path.relpath(clean, ROOT), "final": os.path.relpath(final, ROOT),
-                      "duration_s": total_s(short), "loudnorm_pass1": measured}))
+    edit.run(edit.final_cmd(sf, clean, voiced[0] if voiced else mix_path, os.path.basename(ass), ln, final), out_dir)
+    report = {"clean": os.path.relpath(clean, ROOT), "final": os.path.relpath(final, ROOT),
+              "duration_s": total_s(short), "loudnorm_pass1": measured}
+    if voiced:
+        report.update(edit.write_silent(sf, v, final, mix_path, voiced[1], out_dir))
+    print(json.dumps(report))
     return 0
 
 

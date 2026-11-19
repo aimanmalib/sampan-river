@@ -5,7 +5,7 @@ import os
 import re
 import unittest
 
-from tools import short
+from tools import captions, short
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -69,8 +69,41 @@ class ShortTest(unittest.TestCase):
         self.assertEqual(sf["output"]["short-9x16"], self.film["output"]["9x16"])
         self.assertEqual(sf["captions"]["margin_v"]["short-9x16"], self.film["captions"]["margin_v"]["9x16"])
         self.assertEqual(sf["measure"]["caption_band"]["short-9x16"], self.film["measure"]["caption_band"]["9x16"])
-        self.assertEqual(sf["duration_s"], {"min": 15, "max": 20, "target": 17.0})
+        self.assertEqual(sf["duration_s"], {"min": 15, "max": 20, "target": 17.0, "hook_max_s": 3.0})
+        self.assertEqual(sf["edit"]["layout"]["short-9x16"], self.film["edit"]["layout"]["9x16"])
+        self.assertEqual(sf["captions"]["bands"]["short-9x16"], self.film["captions"]["bands"]["9x16"])
         self.assertNotIn("short-9x16", self.film["output"])
+        self.assertNotIn("short-9x16", self.film["captions"]["bands"])
+
+    def test_film_seconds_map_to_short_seconds(self):
+        # segments [0, 4] [10, 16] [50, 58], crossfade 0.5: second segment starts at 3.5, third at 9.0
+        self.assertEqual(short.to_short(self.short, 2.0), 2.0)
+        self.assertEqual(short.to_short(self.short, 12.0), 5.5)
+        self.assertEqual(short.to_short(self.short, 50.0), 9.0)
+        self.assertEqual(short.to_short(self.short, 30.0), 9.0)  # in a gap: start of the next segment
+        self.assertEqual(short.to_short(self.short, 59.0), short.total_s(self.short))
+
+    def test_end_card_starts_in_short_seconds(self):
+        sf = short.short_film(self.film, self.short)
+        self.assertEqual(sf["end_card"]["start_s"], short.to_short(self.short, self.film["end_card"]["start_s"]))
+        self.assertEqual(self.film["end_card"]["start_s"], load("config/film.json")["end_card"]["start_s"])
+
+    def test_committed_short_bands_fit_and_are_sourced(self):
+        from tools import bands
+        sh, cues = load("config/short.json"), load("config/captions.short.en.json")["cues"]
+        sf, rows = short.short_film(self.film, sh), bands.rows_for(sh["version"])
+        with open(os.path.join(ROOT, "docs", "FACTS.md"), encoding="utf-8") as f:
+            facts = f.read()
+        self.assertEqual(bands.check_layout(sf, sh["version"], cues, rows), [])
+        self.assertEqual(bands.check_figures(rows, cues, facts, sf), [])
+        spans, card = bands.intervals(sf, sh["version"], cues, rows), sf["end_card"]["start_s"]
+        for band in ("top", "bottom"):
+            self.assertGreaterEqual(bands.cover(spans[band], card), sf["measure"]["band_cover_min"])
+        late = copy.deepcopy(rows)
+        late[-1]["end"] = card + 1.0
+        self.assertTrue(bands.check_figures(late, cues, facts, sf))
+        burned = captions._burned(cues, sf, sh["version"])
+        self.assertIn("BandFigure", burned)
 
     def test_committed_short_fits_the_plan(self):
         sh, cues = load("config/short.json"), load("config/captions.short.en.json")["cues"]

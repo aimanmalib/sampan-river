@@ -41,3 +41,11 @@ does not change; the bands are made to carry the story.
 ## Rollback
 Remove `9x16` from `captions.bands` in `config/film.json`: the 9:16 file goes back to the single caption line, then
 render again (same clips, no credits).
+
+## The short (added with the short render)
+
+The short reuses the 9:16 band style unchanged. Its bottom band rows are `config/bands.json` `short-9x16`, in short
+seconds. `tools/short.py` `short_film` maps the film's end card start into short seconds (`to_short`: the second at
+which that film second is shown after the crossfades), so the rule "no figure after the end card starts" and
+`band_cover` apply to the short's own end card. The narration is placed over the short's cut bed, never cut from the
+narrated film, and the silent copy is written in the same pass.

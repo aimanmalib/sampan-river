@@ -1,5 +1,5 @@
 {
-  "_note": "tools/bands.py, decision 0010. Bottom band of the native vertical versions: one large figure and a small label per span, in the version's seconds. A figure with a digit or currency sign names a fact id from docs/FACTS.md; the only exception is a figure taken from the unsourced hook cue. No figure after the end card starts.",
+  "_note": "tools/bands.py, decision 0010. Bottom band of the native vertical versions: one large figure and a small label per span, in the version's seconds (the short: short seconds, the end card starts where the film's end card is shown in the short). A figure with a digit or currency sign names a fact id from docs/FACTS.md; the only exception is a figure taken from the unsourced hook cue. No figure after the end card starts.",
   "9x16": [
     {
       "start": 0.2,
@@ -25,6 +25,36 @@
     {
       "start": 46.5,
       "end": 54.0,
+      "figure": "< $0.001",
+      "label": "less than a tenth of a cent",
+      "fact": "fee-usd"
+    }
+  ],
+  "short-9x16": [
+    {
+      "start": 0.2,
+      "end": 3.3,
+      "figure": "$5",
+      "label": "to send $5",
+      "fact": null
+    },
+    {
+      "start": 3.6,
+      "end": 7.0,
+      "figure": "$1",
+      "label": "one digital dollar",
+      "fact": "pusd-design"
+    },
+    {
+      "start": 7.4,
+      "end": 11.1,
+      "figure": "219 sats",
+      "label": "the real fare",
+      "fact": "fee-tx"
+    },
+    {
+      "start": 11.3,
+      "end": 12.6,
       "figure": "< $0.001",
       "label": "less than a tenth of a cent",
       "fact": "fee-usd"

@@ -57,9 +57,10 @@ drawn over the dimmed jetty picture in the middle of the frame.
 |---|---|---|---|---|---|---|---|---|---|---|
 | 16x9 | 1920 | 1080 | 60.0 | yes | -14.0 | -1.4 | 67 | 0.973 | 10/10 | cfff07f113d73e36b0dcf99c87288f5886f0de7b79de53ce26b2fdba0eadba85 |
 | 9x16 | 1080 | 1920 | 60.0 | yes | -14.0 | -1.4 | 67 | 0.973 | 14/14 | 1530a180ad7361cad01bdca7400b35fcf899e00d235625229e17e17f344fd3cc |
-| short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | - | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
+| short-9x16 | 1080 | 1920 | 18.6 | yes | -14.1 | -1.5 | 27 | 1.0 | 8/8 | 513802012c8fda9f594633827b25f42378691726a0808eec2ca683416c0a3f79 |
 | 16x9-tanpa-suara | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 53598d66b72a52e9fe4e4c554fa38df4faad54bfe54b777b7975b9b345b4a0e8 |
 | 9x16-tanpa-suara | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 14/14 | f990017876f5177cce948ad74d5269eda8e5a39e7fce9d47e817c4ee7252e2cf |
+| short-9x16-tanpa-suara | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | - | 8/8 | f21d1a56e3c58223626977bf7e137c9c5c7b40aa3a42a4ae2bda3c02d3792168 |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
@@ -178,18 +179,45 @@ Mean ratio to blur_fill: 4:5 0.103, 1:1 0.196. Limit: 0.55. Chosen: blur_fill (n
 <!-- detail:short-9x16 -->
 ### short-9x16 detail
 
-Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Silences over the limit in the opening seconds: 0. Failed limits: none. Heard: "Sending $5 should not cost $5. A digital dollar on Bitcoin Cash. The fare for a real transfer, 219 satoshis, less than a tenth of a cent."; speech match 1.0.
 
 | sample | t (s) | caption band diff | pass |
 |---|---|---|---|
-| cue 1 | 1.7 | 10.62 | yes |
-| cue 2 | 5.4 | 13.56 | yes |
-| cue 3 | 8.8 | 15.45 | yes |
-| cue 4 | 11.45 | 10.29 | yes |
-| gap 2 | 3.5 | 0.17 | yes |
-| gap 3 | 7.2 | 0.1 | yes |
-| gap 4 | 10.35 | 0.25 | yes |
-| gap 5 | 15.5 | 0.04 | yes |
+| top cue 1 | 1.875 | 7.45 | yes |
+| top cue 2 | 5.475 | 7.69 | yes |
+| top cue 3 | 9.45 | 11.38 | yes |
+| top cue 4 | 15.05 | 7.36 | yes |
+| bottom cue 1 | 1.75 | 5.88 | yes |
+| bottom cue 2 | 5.3 | 6.09 | yes |
+| bottom cue 3 | 9.25 | 15.3 | yes |
+| bottom cue 4 | 11.95 | 16.39 | yes |
+| bottom gap 2 | 3.45 | 0.03 | yes |
+| bottom gap 3 | 7.2 | 0.01 | yes |
+| bottom gap 5 | 15.6 | 0.0 | yes |
+
+Bands (decision 0010): share of 0..12.6 s with text, minimum 0.7.
+
+| version | band | cover | min |
+|---|---|---|---|
+| short-9x16 | top | 0.944 | 0.7 |
+| short-9x16 | bottom | 0.913 | 0.7 |
+
+Text contrast (WCAG, text #FFF8E7 over the clean master inside each text box), minimum 4.5.
+
+| band | t (s) | contrast |
+|---|---|---|
+| top | 1.875 | 13.72 |
+| top | 5.475 | 11.12 |
+| top | 9.45 | 19.83 |
+| top | 15.05 | 19.83 |
+| bottom | 1.75 | 19.81 |
+| bottom | 1.75 | 19.83 |
+| bottom | 5.3 | 19.83 |
+| bottom | 5.3 | 19.83 |
+| bottom | 9.25 | 19.51 |
+| bottom | 9.25 | 19.83 |
+| bottom | 11.95 | 19.31 |
+| bottom | 11.95 | 19.83 |
 <!-- /detail:short-9x16 -->
 
 ## Narration mix
@@ -199,6 +227,7 @@ Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Sil
 | preview-16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
 | 16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
 | 9x16 | -16.0 | -28.97 | 12.97 | 0.0 |
+| short-9x16 | -16.0 | -28.17 | 12.17 | 0.0 |
 
 <!-- detail:16x9-tanpa-suara -->
 ### 16x9-tanpa-suara detail
@@ -285,3 +314,47 @@ Text contrast (WCAG, text #FFF8E7 over the clean master inside each text box), m
 | bottom | 50.25 | 19.74 |
 | bottom | 50.25 | 19.83 |
 <!-- /detail:9x16-tanpa-suara -->
+
+<!-- detail:short-9x16-tanpa-suara -->
+### short-9x16-tanpa-suara detail
+
+Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+
+| sample | t (s) | caption band diff | pass |
+|---|---|---|---|
+| top cue 1 | 1.875 | 7.45 | yes |
+| top cue 2 | 5.475 | 7.69 | yes |
+| top cue 3 | 9.45 | 11.38 | yes |
+| top cue 4 | 15.05 | 7.36 | yes |
+| bottom cue 1 | 1.75 | 5.88 | yes |
+| bottom cue 2 | 5.3 | 6.09 | yes |
+| bottom cue 3 | 9.25 | 15.3 | yes |
+| bottom cue 4 | 11.95 | 16.39 | yes |
+| bottom gap 2 | 3.45 | 0.03 | yes |
+| bottom gap 3 | 7.2 | 0.01 | yes |
+| bottom gap 5 | 15.6 | 0.0 | yes |
+
+Bands (decision 0010): share of 0..12.6 s with text, minimum 0.7.
+
+| version | band | cover | min |
+|---|---|---|---|
+| short-9x16-tanpa-suara | top | 0.944 | 0.7 |
+| short-9x16-tanpa-suara | bottom | 0.913 | 0.7 |
+
+Text contrast (WCAG, text #FFF8E7 over the clean master inside each text box), minimum 4.5.
+
+| band | t (s) | contrast |
+|---|---|---|
+| top | 1.875 | 13.72 |
+| top | 5.475 | 11.12 |
+| top | 9.45 | 19.83 |
+| top | 15.05 | 19.83 |
+| bottom | 1.75 | 19.81 |
+| bottom | 1.75 | 19.83 |
+| bottom | 5.3 | 19.83 |
+| bottom | 5.3 | 19.83 |
+| bottom | 9.25 | 19.51 |
+| bottom | 9.25 | 19.83 |
+| bottom | 11.95 | 19.31 |
+| bottom | 11.95 | 19.83 |
+<!-- /detail:short-9x16-tanpa-suara -->

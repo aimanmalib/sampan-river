@@ -33,17 +33,17 @@ Measured by `tools/measure.py` on the final files (per-cue detail in [the measur
 |---|---|---|---|---|---|---|---|
 | 16:9 | 1920x1080, 24 fps | 60.0 | -14.0 LUFS | -1.4 dBTP | 67 | 10 of 10 cues | `cfff07f1...` |
 | 9:16 | 1080x1920, 24 fps | 60.0 | -14.0 LUFS | -1.4 dBTP | 67 | 14 of 14 cues | `1530a180...` |
-| 9:16 short | 1080x1920, 24 fps | 18.6 | -14.0 LUFS | -3.2 dBTP | 0 | 4 of 4 cues | `253a5ebd...` |
+| 9:16 short | 1080x1920, 24 fps | 18.6 | -14.1 LUFS | -1.5 dBTP | 27 | 8 of 8 cues | `51380201...` |
 
 The short is four segments of the 9:16 film joined with crossfades (decision 0008).
 
-The 9:16 film uses the bands above and below the picture (decision 0010): the captions large at the top, one
-sourced figure at the bottom. Its cue count is the 10 captions plus the 4 figures.
+The 9:16 film and the short use the bands above and below the picture (decision 0010): the captions large at the top,
+one sourced figure at the bottom. Their cue counts are the captions plus the 4 figures (10 + 4 and 4 + 4).
 
-All are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio. The
-16:9 and 9:16 files are narrated: the pass must hear the captions read in order (speech match 0.973 on each, at least
-0.85 required), and the same picture without the voice is measured as a separate file with zero words heard. Zero on
-the short means no voice and no stray speech from the video model. The captions are also exported as an SRT file
+All are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio. All
+three files are narrated: the pass must hear the captions read in order (speech match 0.973 on the 16:9 and 9:16
+files, 1.0 on the short, at least 0.85 required), and the same picture without the voice is measured as a separate file
+with zero words heard, which also shows no stray speech from the video model. The captions are also exported as an SRT file
 for closed captions.
 
 ## Credits spent
