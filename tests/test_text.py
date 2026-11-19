@@ -105,6 +105,26 @@ class TextTest(unittest.TestCase):
             domain = json.load(f)["domain"]
         self.assertIn(f"https://{domain}", read("README.md"))
 
+    def test_readme_matches_the_narration_setting(self):
+        with open(os.path.join(ROOT, "config", "voice.json"), encoding="utf-8") as f:
+            narrated = json.load(f)["enabled"]
+        readme = " ".join(read("README.md").split()).lower()
+        if narrated:
+            self.assertNotIn("no dialogue", readme)
+            self.assertNotIn("zero words allowed", readme)
+            self.assertIn("ai clone of the maker's own voice", readme)
+
+    def test_readme_names_the_end_card_wallets(self):
+        with open(os.path.join(ROOT, "config", "film.json"), encoding="utf-8") as f:
+            card = json.load(f)["end_card"]
+        readme = read("README.md")
+        for line, ids in card["line_facts"].items():
+            for fact_id in ids:
+                if fact_id.startswith("wallet-"):
+                    self.assertIn(f"`{fact_id}`", readme, line)
+                    name = fact_id.split("-", 1)[1]
+                    self.assertIn(name, readme.lower(), line)
+
     def test_helpers_detect_bad_text(self):
         self.assertEqual(fee_numbers("paid 2,190 satoshis and 5 satoshi"), [2190, 5])
         self.assertIn("grain of rice", "Pays a fare of one GRAIN OF RICE".lower())

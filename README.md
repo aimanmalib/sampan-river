@@ -1,8 +1,9 @@
 # The River Fare
 
-A 60 second animated film with no dialogue, made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
+A 60 second animated film made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
 every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
-of less than a tenth of a US cent. English captions are burned into the picture, so it works with the sound off.
+of less than a tenth of a US cent. English captions are burned into the picture, so it works with the sound off, and a
+narrator reads them: an AI clone of the maker's own voice (see the AI disclosure).
 
 ![Thumbnail: the paper rower and the dollar coin in a folded paper boat](docs/frames/thumbnail.jpg)
 
@@ -12,6 +13,9 @@ Every caption that states a fact is tied to a source in [the fact list](docs/FAC
 
 - A real Bitcoin Cash transfer on 15 Nov 2026 paid 219 satoshis, less than a tenth of a US cent at that day's price.
 - PUSD is a dollar stablecoin token on Bitcoin Cash, designed to hold one dollar.
+
+The end card reads "Get a wallet: Paytaca · Selene". It names two wallet apps for Bitcoin Cash, as each app's own
+page describes itself (`wallet-paytaca`, `wallet-selene`, decision 0011). It claims no sponsorship and no PUSD support.
 
 [Storyboard](docs/STORYBOARD.md). [Accepted clips and the seconds used](docs/SHOTS.md).
 [Decisions](docs/decisions/).
@@ -64,7 +68,8 @@ was too soft against the limit set before measuring, so the full-width picture s
 | Captions | burned in from one source file; SRT for closed captions | `config/captions.en.json` |
 | Music | `tools/music.py`, original theme synthesised in code (numpy, seeded, byte-identical on every run) | `config/music.json` |
 | Audio mix | `tools/mix.py`, music over the clips' own river sound inside the edit windows | `config/music.json` `mix`, `config/shots.json` |
-| Speech check | `tools/transcribe.py`, local faster-whisper with voice activity detection; zero words allowed | `config/film.json` `audio.speech_check` |
+| Narration | `tools/voice.py` reads each caption with the maker's cloned voice; `tools/narrate.py` places the lines | `config/voice.json` |
+| Speech check | `tools/transcribe.py`, local faster-whisper with voice activity detection; the narrated files must match the captions, the silent copies must have zero words | `config/film.json` `audio.speech_check` |
 | Edit | `tools/edit.py`, ffmpeg: clips scaled with lanczos, end card, burned captions, two-pass loudness | `config/film.json` `edit`, `end_card` |
 | Measurement | `tools/measure.py`, ffprobe, ebur128, silence and caption pixel checks | `config/film.json` `measure` |
 | 9:16 layout | `tools/layout.py` frame layouts, `tools/sharpness.py` compares a crop with the full-width picture | `config/film.json` `edit.layout`, `measure.sharpness` |
