@@ -81,6 +81,35 @@ class EditTest(unittest.TestCase):
             self.assertEqual(cmd[cmd.index(a) + 1], b)
         self.assertIn("[0:v]ass=captions-16x9.ass[v]", cmd[cmd.index("-filter_complex") + 1])
 
+    def test_silent_copy_keeps_the_picture_and_takes_the_bed(self):
+        cmd = edit.silent_cmd(self.film, "sampan-river-16x9.mp4", "bed.wav", "loudnorm=I=-14", "o.mp4")
+        self.assertEqual(cmd[cmd.index("-c:v") + 1], "copy")
+        self.assertEqual(cmd[cmd.index("-i") + 1], "sampan-river-16x9.mp4")
+        self.assertIn("[1:a]loudnorm=I=-14,aresample=48000[a]", cmd)
+        self.assertEqual(cmd[cmd.index("-map") + 1], "0:v")
+        self.assertNotIn("ass=", " ".join(cmd))
+        for a, b in (("-c:a", "aac"), ("-movflags", "+faststart"), ("-t", "60.000")):
+            self.assertEqual(cmd[cmd.index(a) + 1], b)
+        self.assertEqual(cmd[-1], "o.mp4")
+
+    def test_narrated_only_when_voice_enabled_and_script_expected(self):
+        sc = self.film["audio"]["speech_check"]
+        sc["expect"] = "script"
+        self.assertTrue(edit.narrated(self.film, {"enabled": True}))
+        self.assertFalse(edit.narrated(self.film, {"enabled": False}))
+        sc["expect"] = "none"
+        self.assertFalse(edit.narrated(self.film, {"enabled": True}))
+
+    def test_narration_needs_the_voice_id_before_any_work(self):
+        self.film["audio"]["speech_check"]["expect"] = "script"
+        old = os.environ.pop(load("config/voice.json")["voice_env"], None)
+        try:
+            with self.assertRaises(edit.EditError):
+                edit.narration(self.film, "16x9")
+        finally:
+            if old is not None:
+                os.environ[load("config/voice.json")["voice_env"]] = old
+
     def test_committed_shots_tile_the_landscape_film(self):
         segs = edit.plan(load("config/film.json"), load("config/shots.json"), "16x9")
         self.assertGreaterEqual(len(segs), 3)

@@ -8,6 +8,7 @@ gap between cues it does not. One frame per cue goes to `measure.frames_dir` for
 The vertical short (`short-9x16`, decision 0008) is measured the same way against config/short.json (tools/short.py).
 Narrated versions (decision 0012, `audio.speech_check.expect` = script) must instead be heard saying the script:
 `speech_match` >= match_min. `<version><silent_suffix>` is the same picture without the voice: checked as silent, no frames.
+With --write, a narrated version also writes its "Narration mix" row from narration-<version>.json (tools/edit.py).
 Usage: python3 tools/measure.py <16x9|9x16|short-9x16>[<silent_suffix>] [--write]
 """
 import json
@@ -21,7 +22,7 @@ import numpy as np
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
-from tools import captions, short, transcribe, ve, voice  # noqa: E402
+from tools import captions, narrate, short, transcribe, ve, voice  # noqa: E402
 
 MEASURED = os.path.join(ROOT, "docs", "MEASURED.md")
 COLUMNS = ("version", "width", "height", "duration_s", "audio", "lufs_i", "true_peak_db", "whisper_words",
@@ -250,6 +251,17 @@ def measure(version, film, cues):
     return result
 
 
+def mix_stats_of(version, film):
+    """Mix stats the render left for a narrated version; None for a silent one."""
+    if not split_version(version, film)[1]:
+        return None
+    path = os.path.join(ROOT, film["edit"]["out_dir"], f"narration-{version}.json")
+    if not os.path.exists(path):
+        raise SystemExit(f"{path} missing: render the narrated version with tools/edit.py first")
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
 def main(argv):
     film, sh = captions.load(captions.FILM), captions.load(short.SHORT)
     base = split_version(argv[0], film)[0] if argv else None
@@ -266,6 +278,9 @@ def main(argv):
             md = f.read()
         with open(MEASURED, "w", encoding="utf-8") as f:
             f.write(upsert(md, result))
+        stats = mix_stats_of(argv[0], film)
+        if stats:
+            narrate.write_mix_row(argv[0], stats)
     return 1 if result["fails"] else 0
 
 

@@ -60,6 +60,9 @@ viewer with sound on get the same film.
   the final file must hear the script, `speech_match` >= `audio.speech_check.match_min` (0.85).
 - Every narrated render also writes the same picture without the voice (`-c:v copy`, the undimmed bed through the
   same loudnorm), named with `audio.speech_check.silent_suffix`. It is measured as a silent film (0 words).
+- `tools/edit.py` builds the narrated mix (`tools/narrate.py`), renders the narrated file and the silent copy in one
+  pass and leaves the mix stats in `narration-<version>.json`; `tools/measure.py --write` puts them in the "Narration
+  mix" table under the version name.
 
 ## Not checked by code
 Pronunciation, tone and how natural the clone sounds. The maker listens before uploading and can use the file without
@@ -89,3 +92,8 @@ then render again; caption times before narration are in git history. Characters
 - Landscape preview mix (bed and voice, no picture): voice -16.0 dB, bed under the voice -28.97 dB, gap 12.97 dB,
   bed level change away from the voice 0.0 dB (docs/MEASURED.md "Narration mix").
 - Not checked by ear: pronunciation, tone and pacing. Only whisper and the measurements above were used.
+
+## 16:9 render (2026-11-19)
+- One pass wrote the narrated 16:9 file and the same picture without the voice. Narrated: -14.0 LUFS, -1.4 dBTP,
+  speech match 0.973 (67 words heard), captions 10 of 10; mix gap 12.97 dB, bed outside the voice unchanged (0.0 dB).
+  Without the voice: -13.9 LUFS, 0 words heard. Numbers and hashes are in docs/MEASURED.md.

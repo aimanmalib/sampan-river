@@ -31,14 +31,16 @@ Measured by `tools/measure.py` on the final files (per-cue detail in [the measur
 
 | version | size | seconds | loudness | true peak | words heard | captions burned in | sha256 |
 |---|---|---|---|---|---|---|---|
-| 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `aeda33e0...` |
+| 16:9 | 1920x1080, 24 fps | 60.0 | -14.0 LUFS | -1.4 dBTP | 67 | 10 of 10 cues | `cfff07f1...` |
 | 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `82198353...` |
 | 9:16 short | 1080x1920, 24 fps | 18.6 | -14.0 LUFS | -3.2 dBTP | 0 | 4 of 4 cues | `253a5ebd...` |
 
 The short is four segments of the 9:16 film joined with crossfades (decision 0008).
 
-Both are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio; zero
-means no voice and no stray speech from the video model. The captions are also exported as an SRT file for closed
+All are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio. The
+16:9 file is narrated: the pass must hear the captions read in order (speech match 0.973, at least 0.85 required), and
+the same picture without the voice is measured as a separate file with zero words heard. Zero on the other files means
+no voice and no stray speech from the video model. The captions are also exported as an SRT file for closed
 captions.
 
 ## Credits spent
@@ -97,7 +99,8 @@ Tests run offline: `python3 -m unittest discover -s tests`.
   `config/shots.json`. Every request, its cost and the file hash are in `log/generations.jsonl`.
 - The 1920x1080 file is upscaled from 1280x720 clips with ffmpeg (lanczos). The 1080x1920 file places the same clips
   at full width over a blurred copy of the same frame, also with ffmpeg. No AI upscaler.
-- The music is synthesised by code written with an AI coding agent. No samples, no AI music service. No voice.
+- The music is synthesised by code written with an AI coding agent. No samples, no AI music service.
+- Narration: an AI clone of the maker's own voice (ElevenLabs), reading the on-screen captions.
 - Captions, the end card and the thumbnail text are drawn by code from `config/captions.en.json` and `config/film.json`.
 - Direction and review: Muhammad Aiman. Tools: Claude Code.
 

@@ -1,6 +1,7 @@
 """Measurement parsing, caption pixel check logic, verdict and MEASURED.md table update (offline)."""
 import json
 import os
+import tempfile
 import unittest
 
 import numpy as np
@@ -105,6 +106,19 @@ class MeasureTest(unittest.TestCase):
         self.assertEqual(measure.verdict(result(version=silent, whisper_words=3), f), ["speech"])
         row = measure.table_row(dict(heard, fails=[]))
         self.assertIn("| 40 | 0.97 | 1/1 |", row)
+
+    def test_mix_stats_only_for_narrated_versions(self):
+        f = film()
+        f["audio"]["speech_check"]["expect"] = "script"
+        suffix = f["audio"]["speech_check"]["silent_suffix"]
+        self.assertIsNone(measure.mix_stats_of("16x9" + suffix, f))
+        with tempfile.TemporaryDirectory() as d:
+            f["edit"]["out_dir"] = d
+            with self.assertRaises(SystemExit):
+                measure.mix_stats_of("16x9", f)
+            with open(os.path.join(d, "narration-16x9.json"), "w", encoding="utf-8") as fh:
+                json.dump({"gap_db": 12.5}, fh)
+            self.assertEqual(measure.mix_stats_of("16x9", f), {"gap_db": 12.5})
 
     def test_old_table_gains_the_speech_match_column(self):
         old = ("# M\n\n| version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | "

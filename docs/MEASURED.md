@@ -55,37 +55,37 @@ drawn over the dimmed jetty picture in the middle of the frame.
 
 | version | width | height | duration_s | audio | lufs_i | true_peak_db | whisper_words | speech_match | caption_cues | sha256 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 16x9 | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | aeda33e02351f7d789df4431b3ded04eb64301f94ce4525003ea2001e14b2a73 |
+| 16x9 | 1920 | 1080 | 60.0 | yes | -14.0 | -1.4 | 67 | 0.973 | 10/10 | cfff07f113d73e36b0dcf99c87288f5886f0de7b79de53ce26b2fdba0eadba85 |
 | 9x16 | 1080 | 1920 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 821983538a99f5e48c44534903093f7c0f2f08a80268bc0901eca06fb1abb32a |
 | short-9x16 | 1080 | 1920 | 18.6 | yes | -14.0 | -3.2 | 0 | - | 4/4 | 253a5ebdf345118d5c62e0d38f5811b0a0848961496f1db2ababa374e827b8f1 |
+| 16x9-tanpa-suara | 1920 | 1080 | 60.0 | yes | -13.9 | -1.5 | 0 | - | 10/10 | 53598d66b72a52e9fe4e4c554fa38df4faad54bfe54b777b7975b9b345b4a0e8 |
 
 <!-- detail:16x9 -->
 ### 16x9 detail
 
-Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none. Heard: "Sending $5 should not cost $5. The old bridge takes a cut from everyone. One rower takes the river instead. She carries $1 across. A digital dollar on Bitcoin Cash. It is designed to hold $1. The coin does not shrink on the way. The fare for a real transfer, 219 satoshis. Less than a tenth of a cent. Bitcoin Cash. Money that crosses for almost nothing."; speech match 0.973.
 
 | sample | t (s) | caption band diff | pass |
 |---|---|---|---|
-| cue 1 | 1.7 | 7.74 | yes |
-| cue 2 | 5.8 | 9.81 | yes |
-| cue 3 | 13.25 | 8.29 | yes |
-| cue 4 | 18.5 | 7.2 | yes |
-| cue 5 | 25.75 | 8.4 | yes |
-| cue 6 | 31.75 | 7.9 | yes |
-| cue 7 | 37.25 | 8.52 | yes |
-| cue 8 | 43.5 | 10.29 | yes |
-| cue 9 | 49.5 | 6.58 | yes |
-| cue 10 | 57.0 | 15.76 | yes |
-| gap 2 | 3.4 | 0.69 | yes |
-| gap 3 | 9.5 | 0.58 | yes |
-| gap 4 | 15.75 | 0.81 | yes |
-| gap 5 | 22.0 | 0.45 | yes |
-| gap 6 | 28.75 | 0.6 | yes |
-| gap 7 | 34.75 | 0.65 | yes |
-| gap 8 | 40.25 | 0.58 | yes |
-| gap 9 | 46.25 | 0.65 | yes |
-| gap 10 | 53.5 | 0.64 | yes |
-| gap 11 | 59.75 | 0.12 | yes |
+| cue 1 | 1.81 | 7.78 | yes |
+| cue 2 | 5.09 | 9.89 | yes |
+| cue 3 | 12.25 | 8.23 | yes |
+| cue 4 | 17.21 | 7.27 | yes |
+| cue 5 | 24.33 | 9.2 | yes |
+| cue 6 | 30.25 | 7.94 | yes |
+| cue 7 | 36.13 | 8.53 | yes |
+| cue 8 | 43.09 | 10.28 | yes |
+| cue 9 | 47.75 | 6.87 | yes |
+| cue 10 | 56.75 | 15.77 | yes |
+| gap 3 | 8.79 | 0.64 | yes |
+| gap 4 | 14.75 | 0.89 | yes |
+| gap 5 | 20.71 | 0.79 | yes |
+| gap 6 | 27.33 | 0.48 | yes |
+| gap 7 | 33.25 | 0.66 | yes |
+| gap 8 | 39.13 | 0.68 | yes |
+| gap 9 | 45.84 | 0.64 | yes |
+| gap 10 | 51.75 | 0.6 | yes |
+| gap 11 | 59.5 | 0.13 | yes |
 <!-- /detail:16x9 -->
 
 <!-- detail:9x16 -->
@@ -167,3 +167,32 @@ Video h264 High yuv420p 24.0 fps, 18.583 s; audio aac 48000 Hz 2 ch, 18.6 s. Sil
 | version | voice_rms_db | bed_under_voice_db | gap_db | bed_outside_change_db |
 |---|---|---|---|---|
 | preview-16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
+| 16x9 | -16.0 | -28.97 | 12.97 | 0.0 |
+
+<!-- detail:16x9-tanpa-suara -->
+### 16x9-tanpa-suara detail
+
+Video h264 High yuv420p 24.0 fps, 60.0 s; audio aac 48000 Hz 2 ch, 60.0 s. Silences over the limit in the opening seconds: 0. Failed limits: none.
+
+| sample | t (s) | caption band diff | pass |
+|---|---|---|---|
+| cue 1 | 1.81 | 7.78 | yes |
+| cue 2 | 5.09 | 9.89 | yes |
+| cue 3 | 12.25 | 8.23 | yes |
+| cue 4 | 17.21 | 7.27 | yes |
+| cue 5 | 24.33 | 9.2 | yes |
+| cue 6 | 30.25 | 7.94 | yes |
+| cue 7 | 36.13 | 8.53 | yes |
+| cue 8 | 43.09 | 10.28 | yes |
+| cue 9 | 47.75 | 6.87 | yes |
+| cue 10 | 56.75 | 15.77 | yes |
+| gap 3 | 8.79 | 0.64 | yes |
+| gap 4 | 14.75 | 0.89 | yes |
+| gap 5 | 20.71 | 0.79 | yes |
+| gap 6 | 27.33 | 0.48 | yes |
+| gap 7 | 33.25 | 0.66 | yes |
+| gap 8 | 39.13 | 0.68 | yes |
+| gap 9 | 45.84 | 0.64 | yes |
+| gap 10 | 51.75 | 0.6 | yes |
+| gap 11 | 59.5 | 0.13 | yes |
+<!-- /detail:16x9-tanpa-suara -->

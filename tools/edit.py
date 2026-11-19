@@ -7,6 +7,11 @@
 2. Final: the clean master with the captions burned in, the audio mix (`edit.mix`) through two-pass loudnorm to
    `audio.lufs_target` with the true peak `edit.loudnorm.true_peak_margin_db` under `audio.true_peak_max_db`.
    H.264 High yuv420p, AAC 48 kHz stereo, faststart.
+3. Narrated (decision 0012, `audio.speech_check.expect` = script and config/voice.json `enabled`): the mix is the bed with
+   the cached voice takes placed and ducked (tools/narrate.py), before the same loudnorm. In the same pass the silent
+   copy `sampan-river-<v><silent_suffix>.mp4` is written: the narrated file's video stream copied unchanged, the bed
+   without duck through its own two-pass loudnorm to the same target. The mix stats go to narration-<v>.json for
+   tools/measure.py. The voice id (environment variable named in config/voice.json) names the cached takes.
 Usage: python3 tools/edit.py <16x9|9x16>   (writes clean-<v>.mp4 and sampan-river-<v>.mp4 to `edit.out_dir`)
 """
 import json
@@ -89,15 +94,38 @@ def second_pass(film, measured):
             f":offset={measured['target_offset']}:linear=true")
 
 
-def final_cmd(film, clean_path, mix_path, captions_name, audio_filter, out_path):
+def _audio_out(film, out_path):
     f, a = film["edit"]["final"], film["audio"]
     total = float(film["duration_s"]["target"])
+    return ["-c:a", f["audio_codec"], "-b:a", f["audio_bitrate"], "-ar", str(a["sample_rate"]), "-ac", "2",
+            "-t", f"{total:.3f}", "-movflags", "+faststart", "-metadata", f"title={film['title']}", out_path]
+
+
+def final_cmd(film, clean_path, mix_path, captions_name, audio_filter, out_path):
+    f, a = film["edit"]["final"], film["audio"]
     return ["ffmpeg", "-y", "-v", "error", "-i", clean_path, "-i", mix_path, "-filter_complex",
             f"[0:v]ass={captions_name}[v];[1:a]{audio_filter},aresample={a['sample_rate']}[a]",
             "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-profile:v", f["profile"], "-crf", str(f["crf"]),
-            "-preset", f["preset"], "-pix_fmt", f["pix_fmt"], "-c:a", f["audio_codec"], "-b:a", f["audio_bitrate"],
-            "-ar", str(a["sample_rate"]), "-ac", "2", "-t", f"{total:.3f}", "-movflags", "+faststart",
-            "-metadata", f"title={film['title']}", out_path]
+            "-preset", f["preset"], "-pix_fmt", f["pix_fmt"]] + _audio_out(film, out_path)
+
+
+def silent_cmd(film, narrated_path, bed_path, audio_filter, out_path):
+    """Same picture as the narrated file (video stream copied, not encoded again), the bed without the voice."""
+    return ["ffmpeg", "-y", "-v", "error", "-i", narrated_path, "-i", bed_path, "-filter_complex",
+            f"[1:a]{audio_filter},aresample={film['audio']['sample_rate']}[a]", "-map", "0:v", "-map", "[a]",
+            "-c:v", "copy"] + _audio_out(film, out_path)
+
+
+def narrated(film, voice_cfg):
+    return bool(voice_cfg.get("enabled")) and film["audio"]["speech_check"].get("expect") == "script"
+
+
+def loudnorm_pass2(film, wav, cwd):
+    """Pass 1 of loudnorm on `wav`; returns (measurement, pass-2 filter)."""
+    probe = run(["ffmpeg", "-hide_banner", "-i", wav, "-af", f"loudnorm={loudnorm_target(film)}:print_format=json",
+                 "-f", "null", "-"], cwd)
+    measured = parse_loudnorm(probe.stderr)
+    return measured, second_pass(film, measured)
 
 
 def run(cmd, cwd):
@@ -105,6 +133,22 @@ def run(cmd, cwd):
     if r.returncode:
         raise EditError(f"{cmd[0]} exit {r.returncode}: {r.stderr.strip()[-600:]}")
     return r
+
+
+def narration(film, version):
+    """(narrated wav, mix stats) for a narrated film, or None when the film is silent."""
+    from tools import narrate, voice  # narrate -> short -> edit: imported here to keep the import order simple
+    cfg = captions.load(voice.CONFIG)
+    if not narrated(film, cfg):
+        return None
+    voice_id = os.environ.get(cfg["voice_env"])
+    if not voice_id:
+        raise EditError(f"set {cfg['voice_env']} in the environment (it names the cached takes)")
+    res = narrate.build(version, voice_id, film)
+    held = [p["id"] for p in res["placed"] if not p["ok"]]
+    if held:
+        raise EditError(f"lines without a placed take: {', '.join(held)}")
+    return res["wav"], res["mix"]
 
 
 def main(argv):
@@ -115,21 +159,27 @@ def main(argv):
     film = captions.load(captions.FILM)
     segs = plan(film, captions.load(SHOTS), version)
     out_dir = os.path.join(ROOT, film["edit"]["out_dir"])
+    bed = os.path.join(ROOT, film["edit"]["mix"].format(orientation=film["edit"]["orientation"][version]))
+    if not os.path.exists(bed):
+        raise EditError(f"{bed} missing: run tools/mix.py first")
+    voiced = narration(film, version)
     subs = captions.write(out_dir, version, film)
     clips_dir = os.path.join(ROOT, captions.load(mix.music.CONFIG)["mix"]["clips_dir"])
     clean = os.path.join(out_dir, f"clean-{version}.mp4")
     run(clean_cmd(film, segs, version, clips_dir, clean, os.path.basename(subs["endcard"])), out_dir)
-    mix_path = os.path.join(ROOT, film["edit"]["mix"].format(orientation=film["edit"]["orientation"][version]))
-    if not os.path.exists(mix_path):
-        raise EditError(f"{mix_path} missing: run tools/mix.py first")
-    probe = run(["ffmpeg", "-hide_banner", "-i", mix_path, "-af", f"loudnorm={loudnorm_target(film)}:print_format=json",
-                 "-f", "null", "-"], out_dir)
-    measured = parse_loudnorm(probe.stderr)
+    measured, ln = loudnorm_pass2(film, voiced[0] if voiced else bed, out_dir)
     final = os.path.join(out_dir, f"sampan-river-{version}.mp4")
-    run(final_cmd(film, clean, mix_path, os.path.basename(subs["captions"]), second_pass(film, measured), final),
-        out_dir)
-    print(json.dumps({"clean": os.path.relpath(clean, ROOT), "final": os.path.relpath(final, ROOT),
-                      "srt": os.path.relpath(subs["srt"], ROOT), "loudnorm_pass1": measured}))
+    run(final_cmd(film, clean, voiced[0] if voiced else bed, os.path.basename(subs["captions"]), ln, final), out_dir)
+    report = {"clean": os.path.relpath(clean, ROOT), "final": os.path.relpath(final, ROOT),
+              "srt": os.path.relpath(subs["srt"], ROOT), "loudnorm_pass1": measured}
+    if voiced:
+        silent = os.path.join(out_dir, f"sampan-river-{version}{film['audio']['speech_check']['silent_suffix']}.mp4")
+        bed_measured, bed_ln = loudnorm_pass2(film, bed, out_dir)
+        run(silent_cmd(film, final, bed, bed_ln, silent), out_dir)
+        with open(os.path.join(out_dir, f"narration-{version}.json"), "w", encoding="utf-8") as f:
+            json.dump(voiced[1], f)
+        report.update(silent=os.path.relpath(silent, ROOT), mix=voiced[1], loudnorm_pass1_silent=bed_measured)
+    print(json.dumps(report))
     return 0
 
 

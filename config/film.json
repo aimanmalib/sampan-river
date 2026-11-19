@@ -4,9 +4,11 @@
   "event": "BCH BLAZE 2026 Media Track",
   "prize_address": "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q",
   "end_card": {
+    "_note": "Lines drawn by tools/captions.py over the held last frame: the first at size[0], the rest at size[1]. Every line after the first states a claim and names its fact ids in line_facts (docs/FACTS.md, decision 0011). Wallet names are joined with a middle dot (U+00B7).",
     "lines": [
       "Bitcoin Cash",
-      "Get a wallet: bitcoincash.org"
+      "Get a wallet:",
+      "Paytaca · Selene"
     ],
     "start_s": 54.0,
     "dim": -0.18,
@@ -28,7 +30,14 @@
     "fade_in_s": 0.6,
     "film_fade_out_s": 1.0,
     "line_facts": {
-      "Get a wallet: bitcoincash.org": "wallet-link"
+      "Get a wallet:": [
+        "wallet-paytaca",
+        "wallet-selene"
+      ],
+      "Paytaca · Selene": [
+        "wallet-paytaca",
+        "wallet-selene"
+      ]
     }
   },
   "duration_s": {

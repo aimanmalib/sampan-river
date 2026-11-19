@@ -170,15 +170,10 @@ def sources(version, film):
     return captions.CAPTIONS, bed, float(film["duration_s"]["target"])
 
 
-def main(argv):
-    film, cfg = captions.load(captions.FILM), ledger.load_json(voice.CONFIG)
-    if not argv or not re.fullmatch(r"16x9|9x16|short-9x16", argv[0]):
-        print(__doc__.strip().splitlines()[-1], file=sys.stderr)
-        return 2
-    version, voice_id = argv[0], os.environ.get(cfg["voice_env"])
-    if not voice_id:
-        print(f"set {cfg['voice_env']} in the environment (it names the cached takes)", file=sys.stderr)
-        return 2
+def build(version, voice_id, film=None):
+    """Place the cached takes of `version` over its bed and write media/voice/narrated-<version>.wav.
+    Returns {version, placed, mix, wav, doc, cap_path}; nothing is sent to the voice service here."""
+    film, cfg = film or captions.load(captions.FILM), ledger.load_json(voice.CONFIG)
     cap_path, bed_path, end_s = sources(version, film)
     doc = captions.load(cap_path)
     takes = chosen_takes(doc["cues"], cfg, voice_id)
@@ -199,17 +194,35 @@ def main(argv):
     y = narrate(bed, vt, gain, music_cfg["synth"]["peak_db"], sr, music_cfg["mix"]["limiter_block_s"])
     out = os.path.join(ROOT, cfg["cache_dir"], f"narrated-{version}.wav")
     mix.music.write_wav(out, y, sr)
-    stats = mix_stats(bed, vt, gain, sp, sr, cfg["ramp_s"])
-    print(json.dumps({"version": version, "placed": placed, "mix": stats, "wav": os.path.relpath(out, ROOT)}))
+    return {"version": version, "placed": placed, "mix": mix_stats(bed, vt, gain, sp, sr, cfg["ramp_s"]),
+            "wav": out, "doc": doc, "cap_path": cap_path}
+
+
+def write_mix_row(row_name, stats):
+    with open(MEASURED, encoding="utf-8") as f:
+        md = f.read()
+    with open(MEASURED, "w", encoding="utf-8") as f:
+        f.write(upsert_mix(md, row_name, stats))
+
+
+def main(argv):
+    cfg = ledger.load_json(voice.CONFIG)
+    if not argv or not re.fullmatch(r"16x9|9x16|short-9x16", argv[0]):
+        print(__doc__.strip().splitlines()[-1], file=sys.stderr)
+        return 2
+    version, voice_id = argv[0], os.environ.get(cfg["voice_env"])
+    if not voice_id:
+        print(f"set {cfg['voice_env']} in the environment (it names the cached takes)", file=sys.stderr)
+        return 2
+    res = build(version, voice_id)
+    placed, doc = res["placed"], res["doc"]
+    print(json.dumps({"version": version, "placed": placed, "mix": res["mix"], "wav": os.path.relpath(res["wav"], ROOT)}))
     if "--retime" in argv:
         doc["cues"] = retime(doc["cues"], placed, cfg)
-        with open(cap_path, "w", encoding="utf-8") as f:
+        with open(res["cap_path"], "w", encoding="utf-8") as f:
             f.write(captions.dump_cues(doc))
     if "--write" in argv:
-        with open(MEASURED, encoding="utf-8") as f:
-            md = f.read()
-        with open(MEASURED, "w", encoding="utf-8") as f:
-            f.write(upsert_mix(md, f"preview-{version}", stats))
+        write_mix_row(f"preview-{version}", res["mix"])
     return 1 if any(not p["ok"] for p in placed) else 0
 
 

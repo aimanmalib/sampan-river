@@ -51,12 +51,28 @@ class ConfigTest(unittest.TestCase):
     def test_end_card_claims_are_sourced(self):
         facts = load("docs/FACTS.md")
         e = self.film["end_card"]
-        for line, fact in e.get("line_facts", {}).items():
+        for line, ids in e.get("line_facts", {}).items():
             self.assertIn(line, e["lines"])
-            self.assertRegex(facts, r"\| `" + re.escape(fact) + r"` \|.*https://", line)
+            for fact in [ids] if isinstance(ids, str) else ids:
+                self.assertRegex(facts, r"\| `" + re.escape(fact) + r"` \|.*https://", line)
+        for line in e["lines"][1:]:
+            self.assertIn(line, e.get("line_facts", {}), f"end card claim without a fact: {line}")
+
+    def test_end_card_wallet_names_carry_their_fact(self):
+        """A line naming a wallet that has a `wallet-<name>` fact must cite that fact (decision 0011)."""
+        named = set(re.findall(r"\| `wallet-([a-z]+)` \|", load("docs/FACTS.md"))) - {"link"}
+        self.assertTrue(named)
+        e = self.film["end_card"]
         for line in e["lines"]:
-            if re.search(r"wallet|dollar|fee|cent", line, re.I):
-                self.assertIn(line, e.get("line_facts", {}), f"end card claim without a fact: {line}")
+            ids = e.get("line_facts", {}).get(line, [])
+            ids = [ids] if isinstance(ids, str) else ids
+            for name in named:
+                if re.search(r"\b" + name + r"\b", line, re.I):
+                    self.assertIn(f"wallet-{name}", ids, line)
+
+    def test_end_card_has_no_long_dash_or_exclamation(self):
+        for line in self.film["end_card"]["lines"]:
+            self.assertIsNone(re.search(r"[\u2013\u2014!]", line), line)
 
     def test_no_forbidden_words_in_captions(self):
         bad = re.compile(r"guarantee|risk.?free|always \$?1|trustless|revolutionary|financial advice|\u2014|!", re.I)
