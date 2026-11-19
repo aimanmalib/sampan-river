@@ -1,5 +1,6 @@
 """Public text checks: the fare wording and every fee number in the README must match the fact list."""
 import glob
+import json
 import os
 import re
 import unittest
@@ -37,6 +38,30 @@ def fee_numbers(text):
     return [int(n.replace(",", "")) for n in re.findall(r"([\d,]+)\s+satoshis?\b", text)]
 
 
+# README table label for each MEASURED version row.
+README_LABELS = {"16x9": "16:9", "9x16": "9:16", "short-9x16": "9:16 short"}
+
+
+def measured_rows():
+    """version -> (seconds, lufs, true peak, cues, sha256) from the final-file table in docs/MEASURED.md."""
+    out = {}
+    for line in read("docs/MEASURED.md").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) == 10 and cells[0] in README_LABELS:
+            out[cells[0]] = (cells[3], cells[5], cells[6], cells[8], cells[9])
+    return out
+
+
+def readme_rows():
+    """README label -> cells of the files table."""
+    out = {}
+    for line in read("README.md").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) == 8 and cells[0] in README_LABELS.values():
+            out[cells[0]] = cells
+    return out
+
+
 class TextTest(unittest.TestCase):
     def test_no_retired_phrases(self):
         for path, text in public_texts().items():
@@ -58,6 +83,24 @@ class TextTest(unittest.TestCase):
         readme = " ".join(read("README.md").split()).lower()
         self.assertIn("less than a tenth of a us cent", claim)
         self.assertIn("pays a fare of less than a tenth of a us cent", readme)
+
+    def test_readme_files_table_matches_measured(self):
+        measured, rows = measured_rows(), readme_rows()
+        self.assertEqual(set(measured), set(README_LABELS), "MEASURED is missing a final file")
+        for version, (seconds, lufs, peak, cues, sha) in measured.items():
+            row = rows.get(README_LABELS[version])
+            self.assertIsNotNone(row, f"README has no row for {version}")
+            self.assertEqual(row[2], seconds, version)
+            self.assertEqual(row[3], f"{lufs} LUFS", version)
+            self.assertEqual(row[4], f"{peak} dBTP", version)
+            done, total = cues.split("/")
+            self.assertEqual(row[6], f"{done} of {total} cues", version)
+            self.assertEqual(row[7], f"`{sha[:8]}...`", version)
+
+    def test_readme_names_the_film_page(self):
+        with open(os.path.join(ROOT, "config", "site.json"), encoding="utf-8") as f:
+            domain = json.load(f)["domain"]
+        self.assertIn(f"https://{domain}", read("README.md"))
 
     def test_helpers_detect_bad_text(self):
         self.assertEqual(fee_numbers("paid 2,190 satoshis and 5 satoshi"), [2190, 5])

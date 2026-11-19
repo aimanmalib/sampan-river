@@ -16,11 +16,16 @@ Every caption that states a fact is tied to a source in [the fact list](docs/FAC
 [Storyboard](docs/STORYBOARD.md). [Accepted clips and the seconds used](docs/SHOTS.md).
 [Decisions](docs/decisions/).
 
+## Film page
+
+https://riverfare.sasateguh.com plays both films in English and Malay, with the prize address and the AI
+disclosure. It is built by `tools/site.py` from the measured files only (decision 0009).
+
 ## Prize address
 
 bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q
 
-## The two files
+## The three files
 
 Measured by `tools/measure.py` on the final files (per-cue detail in [the measurement notes](docs/MEASURED.md)):
 
@@ -28,6 +33,9 @@ Measured by `tools/measure.py` on the final files (per-cue detail in [the measur
 |---|---|---|---|---|---|---|---|
 | 16:9 | 1920x1080, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `aeda33e0...` |
 | 9:16 | 1080x1920, 24 fps | 60.0 | -13.9 LUFS | -1.5 dBTP | 0 | 10 of 10 cues | `82198353...` |
+| 9:16 short | 1080x1920, 24 fps | 18.6 | -14.0 LUFS | -3.2 dBTP | 0 | 4 of 4 cues | `253a5ebd...` |
+
+The short is four segments of the 9:16 film joined with crossfades (decision 0008).
 
 Both are H.264 High with AAC 48 kHz stereo. "Words heard" is a local speech recognition pass over the final audio; zero
 means no voice and no stray speech from the video model. The captions are also exported as an SRT file for closed
