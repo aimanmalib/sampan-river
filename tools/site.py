@@ -127,15 +127,19 @@ def short_hash(data):
     return hashlib.sha256(data).hexdigest()[:10]
 
 
-def place(src, out_dir, sub, stem, expected=None):
-    """Copy src to out_dir/sub/stem.<sha8><ext> and return its URL path; refuse when the sha256 is not `expected`."""
+def place(src, out_dir, sub, stem=None, expected=None):
+    """Copy src to out_dir/sub/stem.<sha8><ext> (or out_dir/sub/<sha8>/<file name> when stem is None) and return its
+    URL path; refuse when the sha256 is not `expected`. The hash in the path lets the files be cached as immutable."""
     if not os.path.isfile(src):
         raise BuildError(f"missing file {src}")
     digest = sha256_file(src)
     if expected is not None and digest != expected:
         raise BuildError(f"{os.path.basename(src)} sha256 {digest[:8]} is not the measured {expected[:8]}")
-    name = f"{stem}.{digest[:8]}{os.path.splitext(src)[1]}"
-    os.makedirs(os.path.join(out_dir, sub), exist_ok=True)
+    if stem is None:
+        name = f"{digest[:8]}/{os.path.basename(src)}"
+    else:
+        name = f"{stem}.{digest[:8]}{os.path.splitext(src)[1]}"
+    os.makedirs(os.path.dirname(os.path.join(out_dir, sub, name)), exist_ok=True)
     dest = os.path.join(out_dir, sub, name)
     shutil.copyfile(src, dest)
     if expected is not None and sha256_file(dest) != expected:
@@ -182,8 +186,8 @@ def build(root, media_dir, out_dir):
             raise BuildError(f"video {name} is the silent copy {v['version']}; the page serves the narrated files")
         if v["version"] not in shas:
             raise BuildError(f"version {v['version']} has no sha256 in {cfg['measured']}")
-        values[name + "_src"] = place(os.path.join(media_dir, v["file"]), out_dir, "media", f"the-river-fare-{v['version']}",
-                                      shas[v["version"]])
+        # Served under its own file name so the page and a saved download carry the name in the submission.
+        values[name + "_src"] = place(os.path.join(media_dir, v["file"]), out_dir, "media", expected=shas[v["version"]])
         if v.get("poster"):
             values[name + "_poster"] = place(os.path.join(root, v["poster"]), out_dir, "img", f"poster-{name}")
         values[name + "_width"], values[name + "_height"] = v["width"], v["height"]

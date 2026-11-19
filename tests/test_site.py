@@ -77,7 +77,7 @@ class SiteBuildTest(unittest.TestCase):
             self.assertIn(ADDRESS, html)
             self.assertNotIn("{{", html)
             for version, data in VIDEOS.items():
-                path = f"/media/the-river-fare-{version}.{sha(data)[:8]}.mp4"
+                path = self.video_path(version)
                 self.assertIn(path, html)
                 with open(self.out + path, "rb") as f:
                     self.assertEqual(f.read(), data)
@@ -87,6 +87,18 @@ class SiteBuildTest(unittest.TestCase):
         self.assertIn('content="64"', en)
         for name in ("robots.txt", "healthz", "style.css", "copy.js"):
             self.assertTrue(os.path.isfile(os.path.join(self.out, name)), name)
+
+    def video_path(self, version):
+        file = next(v["file"] for v in self.cfg["videos"].values() if v["version"] == version)
+        return f"/media/{sha(VIDEOS[version])[:8]}/{file}"
+
+    def test_video_sources_keep_the_delivered_file_names(self):
+        self.write_cfg()
+        site.build(self.root, self.media, self.out)
+        for rel in ("index.html", "ms/index.html"):
+            html = self.page(rel)
+            for v in self.cfg["videos"].values():
+                self.assertRegex(html, r'(src|href)="/media/[0-9a-f]{8}/' + re.escape(v["file"]) + '"', rel)
 
     def test_video_with_a_different_sha_stops_the_build(self):
         self.write_cfg()
@@ -110,8 +122,8 @@ class SiteBuildTest(unittest.TestCase):
     def test_vertical_player_comes_first_and_alone_preloads(self):
         self.write_cfg()
         site.build(self.root, self.media, self.out)
-        vertical = f"/media/the-river-fare-9x16.{sha(VIDEOS['9x16'])[:8]}.mp4"
-        short = f"/media/the-river-fare-short-9x16.{sha(VIDEOS['short-9x16'])[:8]}.mp4"
+        vertical = self.video_path("9x16")
+        short = self.video_path("short-9x16")
         for rel in ("index.html", "ms/index.html"):
             html = self.page(rel)
             main = html.split("<main>", 1)[1]
