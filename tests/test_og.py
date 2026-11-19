@@ -57,6 +57,17 @@ class LayoutTest(unittest.TestCase):
         bad["hook"]["y"] = 100
         self.assertTrue(any("hook" in p for p in og.check_layout(bad, TEXT)))
 
+    def test_title_above_the_wide_crop_is_reported(self):
+        # The first K2 layout: title at y 168, only inside the 1:1 box, so a 1.91:1 preview lost it.
+        bad = copy.deepcopy(OG)
+        bad["title"] = {"y": 168, "size": 96}
+        self.assertTrue(any("title" in p for p in og.check_layout(bad, TEXT)))
+
+    def test_title_on_the_hook_is_reported(self):
+        bad = copy.deepcopy(OG)
+        bad["title"]["y"] = bad["hook"]["y"] - bad["title"]["size"] // 2
+        self.assertTrue(any("title" in p for p in og.check_layout(bad, TEXT)))
+
     def test_command_scales_with_lanczos_and_draws_text_with_ass(self):
         cmd = og.og_cmd(OG, "frame.jpg", "og.ass", "out.jpg")
         graph = cmd[cmd.index("-filter_complex") + 1]

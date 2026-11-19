@@ -48,18 +48,19 @@ def centre_box(og, height):
 
 
 def check_layout(og, text):
-    """Problems with the layout: the hook, the picture and the figure must sit where each preview crop keeps them."""
+    """Problems with the layout: title, hook and picture inside the 1.91:1 box (so also the 1:1 box), figure inside 1:1."""
     problems = []
     t191, b191 = centre_box(og, og["crops"]["191"]["height"])
     t11, b11 = centre_box(og, og["crops"]["1x1"]["height"])
     hook_bottom = og["hook"]["y"] + og["hook"]["line_px"] * len(text["hook"])
     pic_top, pic_bottom = og["picture"]["y"], og["picture"]["y"] + og["picture"]["height"]
+    title_bottom = og["title"]["y"] + og["title"]["size"]
+    if og["title"]["y"] < t191 or title_bottom > og["hook"]["y"]:
+        problems.append("title is not inside the 1.91:1 box above the hook")
     if og["hook"]["y"] < t191 or hook_bottom > pic_top:
         problems.append("hook caption is not inside the 1.91:1 box above the picture")
     if pic_top < t191 or pic_bottom > b191:
         problems.append("picture is not inside the 1.91:1 box")
-    if og["title"]["y"] < t11 or og["title"]["y"] + og["title"]["size"] > og["hook"]["y"]:
-        problems.append("title is not inside the 1:1 box above the hook")
     if og["figure"]["y"] < pic_bottom or og["label"]["y"] + og["label"]["size"] > b11:
         problems.append("figure is not inside the 1:1 box below the picture")
     if og["domain"]["y"] + og["domain"]["size"] > og["height"]:

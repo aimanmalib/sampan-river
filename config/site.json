@@ -139,7 +139,7 @@
   },
   "twitter_image": "docs/frames/thumbnail.jpg",
   "og_build": {
-    "_note": "tools/og.py (decision 0014). The vertical share image is composed from one committed 9:16 cue frame, scaled with lanczos; no new frame is generated. The hook caption, the rower and the coin sit inside the centre 1.91:1 box (Facebook, Telegram); the title and the fare figure are added inside the centre 1:1 box (WhatsApp). Text comes from the film: title from config/film.json, hook = caption id, figure = the 9:16 band with that fact.",
+    "_note": "tools/og.py (decision 0014). The vertical share image is composed from one committed 9:16 cue frame, scaled with lanczos; no new frame is generated. The title, the hook caption, the rower and the coin sit inside the centre 1.91:1 box (Facebook, Telegram), so also inside the centre 1:1 box (WhatsApp), which adds the domain and the fare figure. Text comes from the film: title from config/film.json, hook = caption id, figure = the 9:16 band with that fact.",
     "frame": "docs/frames/9x16-cue-05.jpg",
     "picture_crop": [
       0,
@@ -153,19 +153,19 @@
     "background_blur": 40,
     "background_brightness": -0.12,
     "picture": {
-      "y": 508,
-      "height": 446
+      "y": 594,
+      "height": 356
     },
     "hook_caption": "film-05",
     "hook_wrap_chars": 24,
     "hook": {
-      "y": 400,
-      "size": 48,
-      "line_px": 54
+      "y": 484,
+      "size": 44,
+      "line_px": 50
     },
     "title": {
-      "y": 168,
-      "size": 96
+      "y": 400,
+      "size": 72
     },
     "figure_fact": "fee-tx",
     "figure": {
@@ -177,7 +177,7 @@
       "size": 40
     },
     "domain": {
-      "y": 1262,
+      "y": 250,
       "size": 34
     },
     "outline_px": 5,
