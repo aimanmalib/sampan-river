@@ -1,7 +1,9 @@
 {
   "meta": {
     "title": "The River Fare: a 60 second film about a dollar crossing to Bitcoin Cash",
-    "description": "A paper rower carries one dollar coin across a river to the Bitcoin Cash bank and pays a fare of less than a tenth of a US cent. A 60 second animated film with English narration and captions."
+    "description": "A paper rower carries one dollar coin across a river to the Bitcoin Cash bank and pays a fare of less than a tenth of a US cent. A 60 second animated film with English narration and captions.",
+    "og_alt": "A paper rower in a folded paper boat carries a gold one dollar coin. Text: The River Fare. A digital dollar on Bitcoin Cash. 219 sats, the real fare.",
+    "twitter_alt": "A paper rower in a conical hat steers a folded paper boat carrying a gold coin. Text: The River Fare. A dollar crosses to Bitcoin Cash."
   },
   "banner": {
     "event": "Made for BCH BLAZE 2026 Media Track",

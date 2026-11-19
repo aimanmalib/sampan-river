@@ -25,7 +25,8 @@ page describes itself (`wallet-paytaca`, `wallet-selene`, decision 0011). It cla
 https://riverfare.sasateguh.com plays both films in English and Malay, with the prize address and the AI
 disclosure. It is built by `tools/site.py` from the measured files only (decision 0009).
 A Share button under the players opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
-Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013).
+Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013). A shared link
+shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014).
 
 ## Prize address
 
@@ -76,6 +77,7 @@ was too soft against the limit set before measuring, so the full-width picture s
 | Measurement | `tools/measure.py`, ffprobe, ebur128, silence and caption pixel checks | `config/film.json` `measure` |
 | 9:16 layout | `tools/layout.py` frame layouts, `tools/sharpness.py` compares a crop with the full-width picture | `config/film.json` `edit.layout`, `measure.sharpness` |
 | Thumbnail | `tools/thumb.py`, one film frame with the title drawn by code | `config/film.json` `thumbnail` |
+| Share image | `tools/og.py`, a 9:16 cue frame recomposed to 4:5 with the film's own words | `config/site.json` `og_build` |
 | Film page | `tools/site.py` builds the English and Malay page from measured files only; `deploy/` serves it | `config/site.json`, `site/` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
@@ -111,7 +113,8 @@ Tests run offline: `python3 -m unittest discover -s tests`.
   at full width over a blurred copy of the same frame, also with ffmpeg. No AI upscaler.
 - The music is synthesised by code written with an AI coding agent. No samples, no AI music service.
 - Narration: an AI clone of the maker's own voice (ElevenLabs), reading the on-screen captions.
-- Captions, the end card and the thumbnail text are drawn by code from `config/captions.en.json` and `config/film.json`.
+- Captions, the end card, the thumbnail text and the share image text are drawn by code from `config/captions.en.json`
+  and `config/film.json`.
 - Direction and review: Muhammad Aiman. Tools: Claude Code.
 
 ## License

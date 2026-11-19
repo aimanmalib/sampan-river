@@ -17,6 +17,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ADDRESS = "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q"
 # Smallest JPEG shape the size reader accepts: SOI, then a SOF0 segment for 64 x 36.
 FAKE_JPEG = b"\xff\xd8\xff\xc0\x00\x11\x08\x00\x24\x00\x40\x03" + b"\x00" * 9 + b"\xff\xd9"
+# The same shape for 36 x 64: the share image must be portrait (decision 0014).
+FAKE_PORTRAIT_JPEG = b"\xff\xd8\xff\xc0\x00\x11\x08\x00\x40\x00\x24\x03" + b"\x00" * 9 + b"\xff\xd9"
 VIDEOS = {"9x16": b"fixture vertical bytes", "16x9": b"fixture film bytes", "short-9x16": b"fixture short bytes"}
 
 
@@ -40,9 +42,11 @@ class SiteBuildTest(unittest.TestCase):
         shutil.copy(os.path.join(ROOT, "docs", "FACTS.md"), os.path.join(self.root, "docs", "FACTS.md"))
         with open(os.path.join(ROOT, "config", "site.json"), encoding="utf-8") as f:
             self.cfg = json.load(f)
-        for rel in {v["poster"] for v in self.cfg["videos"].values() if v.get("poster")} | {self.cfg["og_image"]}:
+        for rel in {v["poster"] for v in self.cfg["videos"].values() if v.get("poster")} | {self.cfg["twitter_image"]}:
             with open(os.path.join(self.root, rel), "wb") as f:
                 f.write(FAKE_JPEG)
+        with open(os.path.join(self.root, self.cfg["og_image"]), "wb") as f:
+            f.write(FAKE_PORTRAIT_JPEG)
         self.media = os.path.join(self.tmp, "media")
         os.makedirs(self.media)
         for v in self.cfg["videos"].values():

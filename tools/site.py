@@ -208,6 +208,10 @@ def build(root, media_dir, out_dir):
     base = f"https://{cfg['domain']}"
     values["og_image"] = base + place(og_src, out_dir, "img", "og")
     values["og_width"], values["og_height"] = jpeg_size(og_src)
+    if cfg.get("og_image_portrait", True) and values["og_height"] <= values["og_width"]:
+        raise BuildError(f"{cfg['og_image']} is not vertical; previews crop it from a portrait image (decision 0014)")
+    values["twitter_image"] = base + place(os.path.join(root, cfg["twitter_image"]), out_dir, "img", "twitter")
+    values["og_video"] = base + values["vertical_src"]
 
     for asset in ("style.css", "copy.js", "share.js"):
         with open(os.path.join(root, "site", asset), "rb") as f:

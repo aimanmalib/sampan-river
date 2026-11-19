@@ -38,8 +38,9 @@
     }
   },
   "measured": "docs/MEASURED.md",
-  "og_image": "docs/frames/thumbnail.jpg",
+  "og_image": "docs/frames/og-vertical.jpg",
   "og_image_max_bytes": 300000,
+  "og_image_portrait": true,
   "links": {
     "paytaca": "https://www.paytaca.com",
     "selene": "https://selene.cash",
@@ -78,6 +79,10 @@
     ],
     "share.text": [
       "fee-usd"
+    ],
+    "meta.og_alt": [
+      "pusd-token",
+      "fee-tx"
     ]
   },
   "banned_words": [
@@ -131,5 +136,66 @@
         "url": "https://t.me/share/url?url={url}&text={text}"
       }
     ]
+  },
+  "twitter_image": "docs/frames/thumbnail.jpg",
+  "og_build": {
+    "_note": "tools/og.py (decision 0014). The vertical share image is composed from one committed 9:16 cue frame, scaled with lanczos; no new frame is generated. The hook caption, the rower and the coin sit inside the centre 1.91:1 box (Facebook, Telegram); the title and the fare figure are added inside the centre 1:1 box (WhatsApp). Text comes from the film: title from config/film.json, hook = caption id, figure = the 9:16 band with that fact.",
+    "frame": "docs/frames/9x16-cue-05.jpg",
+    "picture_crop": [
+      0,
+      391,
+      640,
+      309
+    ],
+    "width": 1080,
+    "height": 1350,
+    "scale": "lanczos",
+    "background_blur": 40,
+    "background_brightness": -0.12,
+    "picture": {
+      "y": 508,
+      "height": 446
+    },
+    "hook_caption": "film-05",
+    "hook_wrap_chars": 24,
+    "hook": {
+      "y": 400,
+      "size": 48,
+      "line_px": 54
+    },
+    "title": {
+      "y": 168,
+      "size": 96
+    },
+    "figure_fact": "fee-tx",
+    "figure": {
+      "y": 984,
+      "size": 112
+    },
+    "label": {
+      "y": 1112,
+      "size": 40
+    },
+    "domain": {
+      "y": 1262,
+      "size": 34
+    },
+    "outline_px": 5,
+    "jpeg_qscale": 3,
+    "max_bytes": 280000,
+    "out": "docs/frames/og-vertical.jpg",
+    "crops": {
+      "1x1": {
+        "height": 1080,
+        "out": "docs/frames/og-crop-1x1.jpg",
+        "scale_width": 720
+      },
+      "191": {
+        "height": 565,
+        "out": "docs/frames/og-crop-191.jpg",
+        "scale_width": 1080
+      }
+    },
+    "crop_max_bytes": 150000
   }
 }
