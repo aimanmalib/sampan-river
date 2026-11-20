@@ -283,6 +283,48 @@ class FirstScreenTest(unittest.TestCase):
             self.assertGreater(json.load(f)["check"]["min_visible"], 0)
 
 
+class PageProblemsTest(unittest.TestCase):
+    """deploy/check_page.py Share, linked figure and banner note decisions, without a browser."""
+
+    CFG = {"share": {"enabled": True}, "links": {"fee_tx": "https://explorer.example/tx/abc"},
+           "link_marks": {"_note": "x", "fee": {"href": "fee_tx"}}}
+    CANON = "https://page.example/ms/"
+
+    def setUp(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("check_page", os.path.join(ROOT, "deploy", "check_page.py"))
+        self.cp = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.cp)
+
+    def probe(self, **kw):
+        p = {"shareBtn": {"top": 700, "bottom": 748, "h": 48, "w": 120}, "shareUrl": self.CANON,
+             "links": ["https://explorer.example/tx/abc"], "bannerNote": "New project."}
+        p.update(kw)
+        return p
+
+    def test_complete_page_passes(self):
+        self.assertEqual(self.cp.page_problems(self.probe(), self.CFG, self.CANON), [])
+
+    def test_each_missing_part_is_named(self):
+        cases = {"Share button is not shown": {"shareBtn": None},
+                 "not " + self.CANON: {"shareUrl": "https://page.example/"},
+                 "smaller than 44": {"shareBtn": {"top": 0, "bottom": 30, "h": 30, "w": 120}},
+                 "no link to https://explorer.example/tx/abc": {"links": []},
+                 "banner note": {"bannerNote": ""}}
+        for words, change in cases.items():
+            problems = self.cp.page_problems(self.probe(**change), self.CFG, self.CANON)
+            self.assertTrue(any(words in p for p in problems), (words, problems))
+
+    def test_share_off_in_config_needs_no_button(self):
+        cfg = dict(self.CFG, share={"enabled": False})
+        self.assertEqual(self.cp.page_problems(self.probe(shareBtn=None), cfg, self.CANON), [])
+
+    def test_the_live_config_names_the_fee_transaction(self):
+        with open(os.path.join(ROOT, "config", "site.json"), encoding="utf-8") as f:
+            cfg = json.load(f)
+        self.assertEqual(self.cp.expected_links(cfg), [cfg["links"]["fee_tx"]])
+
+
 class DeployFilesTest(unittest.TestCase):
     def read(self, rel):
         with open(os.path.join(ROOT, rel), encoding="utf-8") as f:

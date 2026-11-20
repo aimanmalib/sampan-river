@@ -6,7 +6,10 @@ Opens every language page in WebKit (iPhone 13) and Chromium (desktop and 320 px
 scrolls sideways, the prize address is not on the first screen of an iPhone, the first video on a phone (iPhone 13 and
 320 px) is not the 9:16 film with at least `check.min_visible` (config/site.json) of its height on the first screen, the 16:9 film is not on the
 first desktop screen, a video does not load its metadata (players set to preload="none" are asked to load after the
-first-screen check), the copy button does not report back, or the console shows an error. Screenshots go to --out.
+first-screen check), the copy button does not report back, the Share button is hidden or shares another address than
+the page's canonical one (checked with a stand-in navigator.share, then without one: the panel opens and Copy link
+reports back), the fee figure does not link to its transaction, the banner note is missing, or the console shows an
+error. Screenshots go to --out.
 """
 import argparse
 import json
@@ -34,7 +37,24 @@ PROBE = """() => {
     filmBox: film ? box(film) : null,
     videos: [...document.querySelectorAll('video')].map(v => ({ready: v.readyState, w: v.videoWidth, src: v.currentSrc})),
     lang: doc.lang,
+    shareBtn: (() => { const b = document.querySelector('[data-share] .share-btn');
+      return b && b.getClientRects().length ? Object.assign(box(b), {w: b.getBoundingClientRect().width}) : null; })(),
+    shareUrl: (document.querySelector('[data-share]') || {getAttribute: () => ''}).getAttribute('data-url') || '',
+    links: [...document.querySelectorAll('a[href]')].map(a => a.href),
+    bannerNote: (() => { const n = document.querySelector('.banner-note');
+      return n && n.getClientRects().length ? n.textContent.trim() : ''; })(),
   };
+}"""
+
+# Share with a stand-in navigator.share that records what the page asked to share.
+SHARE_WITH_SHEET = """() => {
+  window.__shared = null;
+  Object.defineProperty(navigator, 'share', {configurable: true, writable: true,
+    value: d => { window.__shared = d; return Promise.resolve(); }});
+}"""
+# No share sheet: the button must open the panel instead.
+SHARE_WITHOUT_SHEET = """() => {
+  Object.defineProperty(navigator, 'share', {configurable: true, writable: true, value: undefined});
 }"""
 
 
@@ -73,7 +93,58 @@ def first_screen_problems(p, mode, min_visible):
     return problems
 
 
-def check_page(page, url, name, cfg, out, mode):
+def expected_links(cfg):
+    """Links the page must carry: the fee transaction (decision 0013)."""
+    links = cfg.get("links", {})
+    return [links[m["href"]] for m in cfg.get("link_marks", {}).values() if isinstance(m, dict) and m.get("href") in links]
+
+
+def page_problems(p, cfg, canonical, touch_px=44):
+    """Problems with the Share button, linked figures and the banner note in a probe result."""
+    problems = []
+    share_on = cfg.get("share", {}).get("enabled")
+    if share_on and not p.get("shareBtn"):
+        problems.append("Share button is not shown")
+    elif share_on:
+        if min(p["shareBtn"]["h"], p["shareBtn"]["w"]) < touch_px:
+            problems.append(f"Share button is smaller than {touch_px} px")
+        if p.get("shareUrl") != canonical:
+            problems.append(f"Share address is {p.get('shareUrl') or 'missing'}, not {canonical}")
+    for href in expected_links(cfg):
+        if href not in p.get("links", []):
+            problems.append(f"no link to {href}")
+    if not p.get("bannerNote"):
+        problems.append("banner note is not shown")
+    return problems
+
+
+def share_problems(page, cfg, canonical):
+    """Click Share with and without a share sheet; returns problems."""
+    if not cfg.get("share", {}).get("enabled"):
+        return []
+    problems = []
+    try:
+        page.evaluate(SHARE_WITH_SHEET)
+        page.click("[data-share] .share-btn", timeout=5000)
+        page.wait_for_function("() => window.__shared !== null", timeout=5000)
+        shared = page.evaluate("() => window.__shared")
+        if shared.get("url") != canonical:
+            problems.append(f"share sheet got {shared.get('url')}, not {canonical}")
+    except Exception:
+        problems.append("Share button did not open the share sheet")
+    try:
+        page.evaluate(SHARE_WITHOUT_SHEET)
+        page.click("[data-share] .share-btn", timeout=5000)
+        page.wait_for_selector("[data-share] .share-panel:not([hidden])", timeout=5000)
+        page.click("[data-share] .share-copy", timeout=5000)
+        page.wait_for_function("() => document.querySelector('[data-share] .share-status').textContent.trim() !== ''",
+                               timeout=5000)
+    except Exception:
+        problems.append("without a share sheet the panel or Copy link gave no feedback")
+    return problems
+
+
+def check_page(page, url, name, cfg, out, mode, canonical):
     errors = []
     page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
     page.on("pageerror", lambda e: errors.append(str(e)))
@@ -108,6 +179,9 @@ def check_page(page, url, name, cfg, out, mode):
         page.wait_for_function("() => document.querySelector('.copy-status').textContent.trim() !== ''", timeout=5000)
     except Exception:
         problems.append("copy button gave no feedback")
+    problems += page_problems(p, cfg, canonical)
+    problems += share_problems(page, cfg, canonical)
+    page.screenshot(path=os.path.join(out, f"{name}-share.png"))
     problems += [f"console: {e}" for e in errors]
     return problems
 
@@ -136,7 +210,8 @@ def main(argv=None):
             for lang in cfg["languages"]:
                 name = f"{label}-{lang['code']}"
                 page = ctx.new_page()
-                problems = check_page(page, base + lang["path"], name, cfg, out, mode)
+                problems = check_page(page, base + lang["path"], name, cfg, out, mode,
+                                      "https://" + cfg["domain"] + lang["path"])
                 page.close()
                 print(f"{name}: {'ok' if not problems else '; '.join(problems)}")
                 if problems:
