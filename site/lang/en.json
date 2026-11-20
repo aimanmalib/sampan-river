@@ -80,5 +80,33 @@
       "whatsapp": "WhatsApp",
       "telegram": "Telegram"
     }
+  },
+  "deck": {
+    "doc_title": "The River Fare: slides",
+    "footer": "The River Fare. BCH BLAZE 2026 Media Track",
+    "intro": {
+      "kicker": "Animated short film, 60 seconds",
+      "line": "A paper rower carries one dollar coin across a river to the Bitcoin Cash bank, and the fare is almost nothing."
+    },
+    "story": {
+      "title": "The story",
+      "bridge_label": "The toll bridge",
+      "bridge": "The old bridge takes a cut from everyone who crosses.",
+      "boat_label": "The sampan",
+      "boat": "One rower takes the river instead and carries one dollar across. The coin does not shrink on the way."
+    },
+    "fare": {
+      "title": "The real numbers",
+      "figure": "219 sats",
+      "figure_label": "the fee of one real transfer",
+      "tx": "Transaction on Bitcoin Cash, 15 November 2026, block 977499:",
+      "price": "BCH price that day: 201.24 USD. 219 satoshis = 0.00000219 BCH = 0.000441 USD.",
+      "cents": "Less than a tenth of a US cent.",
+      "note": "One measured transfer, not a promise about every future fee. Nothing here is investment advice."
+    },
+    "watch": {
+      "title": "Watch and share",
+      "site": "The film, in English and Bahasa Melayu pages:"
+    }
   }
 }

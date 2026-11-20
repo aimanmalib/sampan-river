@@ -19,6 +19,8 @@ class BannerBuildTest(unittest.TestCase):
 
     def setUp(self):
         test_site.SiteBuildTest.setUp(self)
+        # The repository link tests start without a deck; the deck tests set one (the real deck: tests/test_deck.py).
+        self.cfg["banner"] = dict(self.cfg["banner"], deck={"en": "", "ms": ""})
         self.write_cfg()
 
     def set_banner(self, **changes):

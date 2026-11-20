@@ -80,5 +80,33 @@
       "whatsapp": "WhatsApp",
       "telegram": "Telegram"
     }
+  },
+  "deck": {
+    "doc_title": "The River Fare: slaid",
+    "footer": "The River Fare. BCH BLAZE 2026 Media Track",
+    "intro": {
+      "kicker": "Filem animasi pendek, 60 saat",
+      "line": "Seorang pendayung kertas membawa satu syiling dolar menyeberangi sungai ke tebing Bitcoin Cash, dan tambangnya hampir tiada."
+    },
+    "story": {
+      "title": "Ceritanya",
+      "bridge_label": "Jambatan tol",
+      "bridge": "Jambatan lama mengambil potongan daripada setiap orang yang menyeberang.",
+      "boat_label": "Sampan",
+      "boat": "Seorang pendayung memilih sungai dan membawa satu dolar ke seberang. Syiling itu tidak mengecil sepanjang jalan."
+    },
+    "fare": {
+      "title": "Angka sebenar",
+      "figure": "219 sats",
+      "figure_label": "yuran satu pemindahan sebenar",
+      "tx": "Transaksi di Bitcoin Cash, 15 November 2026, blok 977499:",
+      "price": "Harga BCH hari itu: 201.24 USD. 219 satoshi = 0.00000219 BCH = 0.000441 USD.",
+      "cents": "Kurang daripada sepersepuluh sen AS.",
+      "note": "Satu pemindahan yang diukur, bukan janji tentang setiap yuran akan datang. Tiada apa-apa di sini nasihat pelaburan."
+    },
+    "watch": {
+      "title": "Tonton dan kongsi",
+      "site": "Filem ini, dengan halaman bahasa Inggeris dan Bahasa Melayu:"
+    }
   }
 }

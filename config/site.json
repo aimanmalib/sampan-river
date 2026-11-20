@@ -86,6 +86,26 @@
     "banner.note": [
       "event-start",
       "first-commit"
+    ],
+    "deck.intro.line": [
+      "fee-usd"
+    ],
+    "deck.fare.figure": [
+      "fee-tx"
+    ],
+    "deck.fare.figure_label": [
+      "fee-tx"
+    ],
+    "deck.fare.tx": [
+      "fee-tx"
+    ],
+    "deck.fare.price": [
+      "fee-tx",
+      "bch-price",
+      "fee-usd"
+    ],
+    "deck.fare.cents": [
+      "fee-usd"
     ]
   },
   "banned_words": [
@@ -211,8 +231,25 @@
     "repo_check": "auto",
     "repo_api": "https://api.github.com/users/aimanmalib/repos?sort=created&per_page=100",
     "deck": {
-      "en": "",
-      "ms": ""
+      "en": "site/deck/the-river-fare-en.pdf",
+      "ms": "site/deck/the-river-fare-ms.pdf"
+    }
+  },
+  "deck": {
+    "_note": "tools/deck.py (decision 0016) prints site/deck/deck.html once per language with Chromium to `out` ({lang} filled), one 16:9 page per slide. Slide text is lang deck.*, ai.* and banner.* (the same sentences as the page); pictures are committed film frames. `stamp` holds, per language, the sha256 of the printed HTML and of the PDF, so a PDF printed from older text or replaced by hand fails the tests. `address_slide` is the slide that must show prize_address.",
+    "template": "site/deck/deck.html",
+    "out": "site/deck/the-river-fare-{lang}.pdf",
+    "stamp": "site/deck/deck.sha256",
+    "width": 1920,
+    "height": 1080,
+    "slides": 5,
+    "address_slide": 5,
+    "max_bytes": 4194304,
+    "frames": {
+      "intro": "docs/frames/thumbnail.jpg",
+      "bridge": "docs/frames/16x9-cue-02.jpg",
+      "boat": "docs/frames/16x9-cue-04.jpg",
+      "fare": "docs/frames/16x9-cue-08.jpg"
     }
   }
 }

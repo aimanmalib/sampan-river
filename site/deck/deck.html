@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="{{v:html_lang}}">
+<head>
+<meta charset="utf-8">
+<title>{{t:deck.doc_title}}</title>
+<style>
+{{r:tokens}}
+@page { size: 1920px 1080px; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+a { color: var(--brass-ink); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+.slide { position: relative; width: 1920px; height: 1080px; padding: 96px 128px 150px; overflow: hidden;
+  break-after: page; background: var(--paper) radial-gradient(120% 80% at 50% 0%, var(--cream) 0%, var(--paper) 55%, var(--paper-deep) 100%); }
+.slide:last-child { break-after: auto; }
+h1, h2 { font-family: var(--serif); font-weight: 700; margin: 0; line-height: 1.08; color: var(--ink); }
+h1 { font-size: 132px; }
+h2 { font-size: 80px; margin-bottom: 48px; }
+p { margin: 0; }
+.kicker { font-size: 34px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass-ink); font-weight: 600; margin-bottom: 28px; }
+.lead { font-family: var(--serif); font-size: 46px; line-height: 1.3; color: var(--ink-soft); margin-top: 36px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+.split > * { min-width: 0; }
+img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 2px solid var(--rule); }
+.intro { grid-template-columns: 0.9fr 1.1fr; align-items: center; height: 100%; }
+figure { margin: 0; }
+figcaption { margin-top: 24px; font-size: 34px; line-height: 1.35; color: var(--ink-soft); }
+figcaption b { display: block; font-family: var(--serif); font-size: 44px; color: var(--ink); margin-bottom: 8px; }
+.rows .figure { font-family: var(--serif); font-size: 168px; font-weight: 700; line-height: 1; color: var(--brass-ink); }
+.rows .figure-label { font-size: 36px; color: var(--ink-soft); margin: 12px 0 40px; }
+.rows p { font-size: 32px; line-height: 1.4; margin-bottom: 20px; }
+.mono { font-family: var(--mono); font-size: 26px; overflow-wrap: anywhere; }
+.rows .cents { font-family: var(--serif); font-size: 44px; color: var(--ink); }
+.rows .small { margin-top: 28px; font-size: 26px; color: var(--ink-soft); }
+ul { margin: 0; padding-left: 44px; font-size: 34px; line-height: 1.38; max-width: 1560px; }
+li { margin-bottom: 18px; padding-left: 8px; }
+li::marker { color: var(--brass); }
+.credit { margin-top: 28px; font-size: 30px; color: var(--ink-soft); }
+.site { font-family: var(--serif); font-size: 84px; font-weight: 700; margin: 12px 0 56px; }
+.label { font-size: 32px; color: var(--ink-soft); margin-bottom: 12px; }
+.address { font-family: var(--mono); font-size: 40px; padding: 24px 32px; background: var(--cream); border: 2px solid var(--rule);
+  border-radius: var(--radius); overflow-wrap: anywhere; margin-bottom: 48px; }
+.note { font-size: 34px; color: var(--ink); }
+footer { position: absolute; left: 128px; right: 128px; bottom: 56px; display: flex; justify-content: space-between;
+  font-size: 26px; color: var(--ink-soft); border-top: 2px solid var(--rule); padding-top: 20px; }
+</style>
+</head>
+<body>
+<section class="slide" data-slide="1">
+  <div class="split intro">
+    <div>
+      <p class="kicker">{{t:deck.intro.kicker}}</p>
+      <h1>{{t:hero.title}}</h1>
+      <p class="lead">{{t:deck.intro.line}}</p>
+    </div>
+    <img src="{{v:img_intro}}" alt="">
+  </div>
+  <footer><span>{{t:deck.footer}}</span><span>1 / 5</span></footer>
+</section>
+
+<section class="slide" data-slide="2">
+  <h2>{{t:deck.story.title}}</h2>
+  <div class="split">
+    <figure><img src="{{v:img_bridge}}" alt=""><figcaption><b>{{t:deck.story.bridge_label}}</b>{{t:deck.story.bridge}}</figcaption></figure>
+    <figure><img src="{{v:img_boat}}" alt=""><figcaption><b>{{t:deck.story.boat_label}}</b>{{t:deck.story.boat}}</figcaption></figure>
+  </div>
+  <footer><span>{{t:deck.footer}}</span><span>2 / 5</span></footer>
+</section>
+
+<section class="slide" data-slide="3">
+  <h2>{{t:deck.fare.title}}</h2>
+  <div class="split">
+    <div class="rows">
+      <p class="figure">{{t:deck.fare.figure}}</p>
+      <p class="figure-label">{{t:deck.fare.figure_label}}</p>
+      <p>{{t:deck.fare.tx}}<br><a class="mono" href="{{v:fee_url}}">{{v:txid}}</a></p>
+      <p>{{t:deck.fare.price}}</p>
+      <p class="cents">{{t:deck.fare.cents}}</p>
+    </div>
+    <div class="rows">
+      <img src="{{v:img_fare}}" alt="">
+      <p class="small">{{t:deck.fare.note}}</p>
+    </div>
+  </div>
+  <footer><span>{{t:deck.footer}}</span><span>3 / 5</span></footer>
+</section>
+
+<section class="slide" data-slide="4">
+  <h2>{{t:ai.title}}</h2>
+  <ul>
+    <li>{{t:ai.voice}}</li>
+    <li>{{t:ai.clips}}</li>
+    <li>{{t:ai.scale}}</li>
+    <li>{{t:ai.music}}</li>
+    <li>{{t:ai.text}}</li>
+  </ul>
+  <p class="credit">{{t:ai.credit}}</p>
+  <footer><span>{{t:deck.footer}}</span><span>4 / 5</span></footer>
+</section>
+
+<section class="slide" data-slide="5">
+  <h2>{{t:deck.watch.title}}</h2>
+  <p class="label">{{t:deck.watch.site}}</p>
+  <p class="site"><a href="{{v:site_url}}">{{v:domain}}</a></p>
+  <p class="label">{{t:banner.address_label}}</p>
+  <p class="address">{{v:address}}</p>
+  <p class="note">{{v:banner_note}}</p>
+  <footer><span>{{t:banner.event}}</span><span>5 / 5</span></footer>
+</section>
+</body>
+</html>

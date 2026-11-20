@@ -28,7 +28,8 @@ A Share button under the players opens the phone's share sheet, or a panel with 
 Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013). A shared link
 shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014). The banner notes that
 this is a new project, first committed after the event start; links to the source and its first commit appear
-once the repository is public (decision 0015).
+once the repository is public (decision 0015). The banner also links a five slide deck, one PDF per language
+(decision 0016).
 
 ## Prize address
 
@@ -80,6 +81,7 @@ was too soft against the limit set before measuring, so the full-width picture s
 | 9:16 layout | `tools/layout.py` frame layouts, `tools/sharpness.py` compares a crop with the full-width picture | `config/film.json` `edit.layout`, `measure.sharpness` |
 | Thumbnail | `tools/thumb.py`, one film frame with the title drawn by code | `config/film.json` `thumbnail` |
 | Share image | `tools/og.py`, a 9:16 cue frame recomposed to 4:5 with the film's own words | `config/site.json` `og_build` |
+| Slides | `tools/deck.py` prints `site/deck/deck.html` to one PDF per language with Chromium | `config/site.json` `deck`, lang `deck.*` |
 | Film page | `tools/site.py` builds the English and Malay page from measured files only; `deploy/` serves it | `config/site.json`, `site/` |
 
 To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
