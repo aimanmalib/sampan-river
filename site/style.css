@@ -43,7 +43,15 @@ a:hover { color: var(--ink); }
   align-items: center;
 }
 .banner p { margin: 0; }
+.banner-head { min-width: 0; }
 .banner-event { font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--paper-deep); }
+/* New project note and the deck / repository links (decision 0015). Small, under the event line. */
+.banner-note { font-size: 0.75rem; line-height: 1.35; color: var(--paper-deep); margin-top: 0.15rem; }
+.banner .banner-links { display: flex; flex-wrap: wrap; gap: 0 1rem; font-size: 0.8125rem; line-height: 1.35; }
+.banner-links[hidden], .banner-links a[hidden] { display: none; }
+.banner-links a { color: var(--cream); display: inline-block; padding: 0.3rem 0; }
+.banner-links a:hover { color: var(--paper-deep); }
+.banner-links a:focus-visible { outline-color: var(--cream); }
 .lang {
   color: var(--cream);
   font-size: 0.875rem;

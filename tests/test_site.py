@@ -157,7 +157,7 @@ class SiteBuildTest(unittest.TestCase):
             site.build(self.root, self.media, self.out)
 
     def test_no_youtube_or_repo_link_until_set(self):
-        self.write_cfg(youtube_url="", repo_public=False)
+        self.write_cfg(youtube_url="", banner=dict(self.cfg["banner"], repo_check="off"))
         site.build(self.root, self.media, self.out)
         for rel in ("index.html", "ms/index.html"):
             html = self.page(rel).lower()
@@ -166,7 +166,7 @@ class SiteBuildTest(unittest.TestCase):
             self.assertNotIn("github.com", html)
 
     def test_links_appear_when_set(self):
-        self.write_cfg(youtube_url="https://youtu.be/fixture", repo_public=True)
+        self.write_cfg(youtube_url="https://youtu.be/fixture", banner=dict(self.cfg["banner"], repo_check="on"))
         site.build(self.root, self.media, self.out)
         html = self.page("index.html")
         self.assertIn('href="https://youtu.be/fixture"', html)

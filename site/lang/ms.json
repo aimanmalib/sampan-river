@@ -10,7 +10,12 @@
     "address_label": "Alamat CashTokens untuk hadiah dan undian komuniti EMBER2026",
     "copy": "Salin",
     "copied": "Disalin",
-    "copy_failed": "Pilih alamat itu dan salin"
+    "copy_failed": "Pilih alamat itu dan salin",
+    "note": "Projek baharu. Komit pertama pada {first_commit}, selepas acara bermula {event_start}.",
+    "months": "Januari Februari Mac April Mei Jun Julai Ogos September Oktober November Disember",
+    "deck": "Slaid (PDF)",
+    "repo": "Kod sumber",
+    "first_commit": "Komit pertama {sha}"
   },
   "lang": {
     "switch": "English",

@@ -17,8 +17,9 @@ import sys
 from urllib.parse import urlparse
 
 try:
-    from tools import page_links
+    from tools import banner, page_links
 except ImportError:  # run as python3 tools/site.py
+    import banner
     import page_links
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -179,6 +180,7 @@ def build(root, media_dir, out_dir):
     langs = {l["code"]: load_json(os.path.join(root, "site", "lang", l["code"] + ".json")) for l in cfg["languages"]}
     with open(os.path.join(root, "docs", "FACTS.md"), encoding="utf-8") as f:
         problems = check_copy(langs, cfg, f.read())
+    problems += banner.problems(cfg)
     if problems:
         raise BuildError("; ".join(problems))
     if os.path.exists(out_dir) and os.listdir(out_dir):
@@ -213,7 +215,7 @@ def build(root, media_dir, out_dir):
     values["twitter_image"] = base + place(os.path.join(root, cfg["twitter_image"]), out_dir, "img", "twitter")
     values["og_video"] = base + values["vertical_src"]
 
-    for asset in ("style.css", "copy.js", "share.js"):
+    for asset in ("style.css", "copy.js", "share.js", "repo.js"):
         with open(os.path.join(root, "site", asset), "rb") as f:
             data = f.read()
         with open(os.path.join(out_dir, asset), "wb") as f:
@@ -222,8 +224,9 @@ def build(root, media_dir, out_dir):
 
     with open(os.path.join(root, "site", "index.html"), encoding="utf-8") as f:
         template = f.read()
-    flags = {"youtube": bool(cfg["youtube_url"]), "repo": bool(cfg["repo_public"] and cfg["repo_url"]),
-             "share": bool(cfg.get("share", {}).get("enabled"))}
+    flags = {"youtube": bool(cfg["youtube_url"]), "repo": banner.repo_shown(cfg),
+             "repo_check": bool(banner.api_attr(cfg)), "share": bool(cfg.get("share", {}).get("enabled"))}
+    values["repo_gate"], values["repo_api"] = banner.gate_attr(cfg), banner.api_attr(cfg)
     alternates = "\n".join(f'<link rel="alternate" hreflang="{l["html_lang"]}" href="{base}{l["path"]}">'
                            for l in cfg["languages"])
     default = next(l for l in cfg["languages"] if l["code"] == cfg["default_language"])
@@ -235,6 +238,13 @@ def build(root, media_dir, out_dir):
                            other_path=other["path"], other_lang=other["html_lang"],
                            og_locale=OG_LOCALES.get(lang["code"], lang["code"]))
         strings = flatten(langs[lang["code"]])
+        deck = cfg["banner"]["deck"].get(lang["code"], "")
+        deck_url = place(os.path.join(root, deck), out_dir, "deck") if deck else ""
+        try:
+            page_values["banner_note"] = banner.note(cfg, strings)
+        except banner.BannerError as e:
+            raise BuildError(str(e))
+        page_values["banner_links"] = banner.links(cfg, strings, deck_url)
         if flags["share"]:
             page_values["share_links"] = page_links.share_links(cfg, strings, page_values["canonical"])
             page_values["share_text"] = page_links.plain(strings["share.text"])

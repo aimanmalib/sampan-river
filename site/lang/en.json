@@ -10,7 +10,12 @@
     "address_label": "CashTokens address for prizes and EMBER2026 community votes",
     "copy": "Copy",
     "copied": "Copied",
-    "copy_failed": "Select the address and copy it"
+    "copy_failed": "Select the address and copy it",
+    "note": "New project. First commit on {first_commit}, after the {event_start} start.",
+    "months": "January February March April May June July August September October November December",
+    "deck": "Slides (PDF)",
+    "repo": "Source code",
+    "first_commit": "First commit {sha}"
   },
   "lang": {
     "switch": "Bahasa Melayu",

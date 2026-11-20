@@ -50,7 +50,6 @@
   },
   "youtube_url": "",
   "repo_url": "https://github.com/aimanmalib/sampan-river",
-  "repo_public": false,
   "copy_facts": {
     "meta.description": [
       "fee-usd"
@@ -83,6 +82,10 @@
     "meta.og_alt": [
       "pusd-token",
       "fee-tx"
+    ],
+    "banner.note": [
+      "event-start",
+      "first-commit"
     ]
   },
   "banned_words": [
@@ -197,5 +200,19 @@
       }
     },
     "crop_max_bytes": 150000
+  },
+  "banner": {
+    "_note": "tools/banner.py (decision 0015). The banner note dates come from here. repo_check: auto = repository links are written hidden and site/repo.js shows them when repo_api lists the repository as public; on = always shown; off = never. deck: language code to a PDF path in this repository, empty = no deck link.",
+    "event_start_utc": "2026-11-14T14:00:00Z",
+    "first_commit": {
+      "sha": "2fa129e4c0f61aac3a713878b0a66c69a07b5660",
+      "date_utc": "2026-11-16T09:04:48Z"
+    },
+    "repo_check": "auto",
+    "repo_api": "https://api.github.com/users/aimanmalib/repos?sort=created&per_page=100",
+    "deck": {
+      "en": "",
+      "ms": ""
+    }
   }
 }

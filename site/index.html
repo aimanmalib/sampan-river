@@ -31,11 +31,18 @@
 <!--if:share-->
 <script src="/share.js?v={{v:share_v}}" defer></script>
 <!--end:share-->
+<!--if:repo_check-->
+<script src="/repo.js?v={{v:repo_v}}" defer></script>
+<!--end:repo_check-->
 </head>
 <body>
-<header class="banner">
+<header class="banner"{{r:repo_api}}>
   <div class="wrap banner-in">
-    <p class="banner-event">{{t:banner.event}}</p>
+    <div class="banner-head">
+      <p class="banner-event">{{t:banner.event}}</p>
+      <p class="banner-note">{{v:banner_note}}</p>
+      {{r:banner_links}}
+    </div>
     <a class="lang" href="{{v:other_path}}" hreflang="{{v:other_lang}}" lang="{{v:other_lang}}"><span aria-hidden="true">{{t:lang.switch_short}}</span><span class="sr">{{t:lang.switch}}</span></a>
     <div class="addr">
       <p class="addr-label" id="addr-label">{{t:banner.address_label}}</p>
@@ -111,7 +118,7 @@
     </ul>
     <p>{{t:ai.credit}}</p>
 <!--if:repo-->
-    <p class="out"><a href="{{v:repo_url}}" rel="noopener">{{t:links.repo}}</a></p>
+    <p class="out"{{r:repo_gate}}><a href="{{v:repo_url}}" rel="noopener">{{t:links.repo}}</a></p>
 <!--end:repo-->
   </section>
 </main>

@@ -26,7 +26,9 @@ https://riverfare.sasateguh.com plays both films in English and Malay, with the 
 disclosure. It is built by `tools/site.py` from the measured files only (decision 0009).
 A Share button under the players opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
 Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013). A shared link
-shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014).
+shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014). The banner notes that
+this is a new project, first committed after the event start; links to the source and its first commit appear
+once the repository is public (decision 0015).
 
 ## Prize address
 
