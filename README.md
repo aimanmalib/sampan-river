@@ -28,6 +28,10 @@ page describes itself (`wallet-paytaca`, `wallet-selene`, decision 0011). It cla
 [Storyboard](docs/STORYBOARD.md). [Accepted clips and the seconds used](docs/SHOTS.md).
 [Decisions](docs/decisions/).
 
+## Watch
+
+The film on YouTube: https://youtu.be/iyD9a84Wdfw
+
 ## Try it: watch the film
 
 Open https://riverfare.sasateguh.com. The page, in English and Malay, plays both films: the 16:9 film and the 9:16 film
