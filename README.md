@@ -1,4 +1,12 @@
-# The River Fare
+<p align="center"><img src="brand/river-rower.jpg" width="112" height="112" alt="The River Fare: the rower, the paper boat and the dollar coin, a frame from the film"></p>
+
+<h1 align="center">The River Fare</h1>
+
+<p align="center"><a href="https://riverfare.sasateguh.com"><img src="https://img.shields.io/badge/film-watch%20online-7a5212" alt="Watch the film online"></a> <a href="#the-three-files"><img src="https://img.shields.io/badge/length-60%20s-7a5212" alt="Length: 60 seconds"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/code-MIT-7a5212" alt="Code licence: MIT"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/film-CC%20BY%204.0-7a5212" alt="Film licence: CC BY 4.0"></a></p>
+
+<p align="center"><b>A 60 second paper film: one dollar crosses a river to Bitcoin Cash, and the fare is less than a tenth of a US cent.</b> · <i>Filem kertas 60 saat: satu dolar menyeberang sungai ke Bitcoin Cash, dan tambangnya kurang daripada sepersepuluh sen AS.</i><br>
+<a href="https://riverfare.sasateguh.com"><b>watch the film</b></a> · <a href="#try-it-watch-the-film">Try it</a> · <a href="#run-it-rebuild-the-film">Run it</a> · <a href="#tests">Tests</a> · <a href="#limits">Limits</a> · <a href="README.ms.md">Bahasa Melayu</a><br>
+Built in Malaysia by <a href="https://aimanmalib.com">Aiman Malib</a> · <a href="https://sasateguh.com">Sasa Teguh</a></p>
 
 A 60 second animated film made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
 every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
@@ -20,16 +28,19 @@ page describes itself (`wallet-paytaca`, `wallet-selene`, decision 0011). It cla
 [Storyboard](docs/STORYBOARD.md). [Accepted clips and the seconds used](docs/SHOTS.md).
 [Decisions](docs/decisions/).
 
-## Film page
+## Try it: watch the film
 
-https://riverfare.sasateguh.com plays both films in English and Malay, with the prize address and the AI
-disclosure. It is built by `tools/site.py` from the measured files only (decision 0009).
+Open https://riverfare.sasateguh.com. The page, in English and Malay, plays both films: the 16:9 film and the 9:16 film
+for phones, with the prize address and the AI disclosure. The captions are in the picture, so the sound can stay off.
+
+![The film page: the 16:9 film and the 9:16 film for phones side by side, the prize address in the banner](docs/img/film-page.jpg)
+
+The page is built by `tools/site.py` from the measured files only (decision 0009).
 A Share button under the players opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
 Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013). A shared link
 shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014). The banner notes that
-this is a new project, first committed after the event start; links to the source and its first commit appear
-once the repository is public (decision 0015). The banner also links a five slide deck, one PDF per language
-(decision 0016).
+this is a new project, first committed after the event start, with links to the source and its first commit
+(decision 0015). The banner also links a five slide deck, one PDF per language (decision 0016).
 
 ## Prize address
 
@@ -84,7 +95,10 @@ was too soft against the limit set before measuring, so the full-width picture s
 | Slides | `tools/deck.py` prints `site/deck/deck.html` to one PDF per language with Chromium | `config/site.json` `deck`, lang `deck.*` |
 | Film page | `tools/site.py` builds the English and Malay page from measured files only; `deploy/` serves it | `config/site.json`, `site/` |
 
-To repeat a generation you need a VE Studio API key in `SEEDANCE_API_KEY` (see `.env.example`):
+## Run it: rebuild the film
+
+Python 3 with the packages in `requirements.txt`, and ffmpeg. To repeat a generation you need a VE Studio API key in
+`SEEDANCE_API_KEY` (see `.env.example`); every request costs credits and is written to the ledger first:
 
 ```
 python3 tools/ve.py me
@@ -107,7 +121,31 @@ python3 tools/thumb.py
 python3 tools/site.py --media media/edit --out public
 ```
 
-Tests run offline: `python3 -m unittest discover -s tests`.
+## Tests
+
+The tests run offline, with no API key:
+
+```
+python3 -m unittest discover -s tests
+```
+
+They cover the credit guard and the ledger, caption timing and the burned-in caption check, the edit and layout
+commands, the seeded music, the narration placement, the measurement parser, the film page build in both languages,
+the share image, the banner and the slide deck. `tests/test_text.py` holds this README to the fact list: the fare
+wording, every satoshi amount, the files table against `docs/MEASURED.md`, the film page address, the narration line
+and the end card wallets.
+
+## Limits
+
+- The picture comes from an AI video model; it is not filmed or drawn by hand. The accepted clips and the seconds used
+  are listed in [the shot list](docs/SHOTS.md).
+- The 16:9 file is 1280x720 clips upscaled to 1920x1080 with ffmpeg, so it is softer than footage made at that size.
+- There is no portrait generation: the 9:16 film places the landscape picture at full width with the captions and one
+  figure in the bands above and below it (decisions 0006, 0007, 0010).
+- The fare figure is one real transfer on 15 Nov 2026 at that day's price ([the fact list](docs/FACTS.md)). It shows
+  what that transfer cost, not a fee every transfer will pay.
+- The end card names two wallets as examples. Neither sponsors the film, and the film does not say that they support PUSD.
+- Rebuilding from the accepted clips is offline and needs only ffmpeg; making new clips needs a paid VE Studio key.
 
 ## AI disclosure
 
@@ -124,3 +162,9 @@ Tests run offline: `python3 -m unittest discover -s tests`.
 ## License
 
 Code: MIT. Film, music and stills: CC BY 4.0. See [LICENSE](LICENSE).
+
+## Work with Sasa Teguh
+
+I built this project. I run [Sasa Teguh](https://sasateguh.com), a studio in Malaysia that builds websites found on Google and in AI answers, and sets up systems like this one for businesses.
+
+[Book a call](https://sasateguh.com/book) · hello@sasateguh.com · [More from Sasa Teguh](https://github.com/sasateguh)
