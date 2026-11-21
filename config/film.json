@@ -2,7 +2,7 @@
   "_note": "Every value the tools read. Credit limits are hard rules (decision 0001): a submit needs balance - cost >= reserve_ai_film AND Media credits spent + cost <= media_cap.",
   "title": "The River Fare",
   "event": "BCH BLAZE 2026 Media Track",
-  "prize_address": "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q",
+  "prize_address": "bitcoincash:zqee6wqz7ylptytkdx622vphcupdzwcga5cjgmu7wl",
   "end_card": {
     "_note": "Lines drawn by tools/captions.py over the held last frame: the first at size[0], the rest at size[1]. Every line after the first states a claim and names its fact ids in line_facts (docs/FACTS.md, decision 0011). Wallet names are joined with a middle dot (U+00B7).",
     "lines": [

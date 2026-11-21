@@ -14,7 +14,7 @@ import unittest
 from tools import site
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ADDRESS = "bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q"
+ADDRESS = "bitcoincash:zqee6wqz7ylptytkdx622vphcupdzwcga5cjgmu7wl"
 # Smallest JPEG shape the size reader accepts: SOI, then a SOF0 segment for 64 x 36.
 FAKE_JPEG = b"\xff\xd8\xff\xc0\x00\x11\x08\x00\x24\x00\x40\x03" + b"\x00" * 9 + b"\xff\xd9"
 # The same shape for 36 x 64: the share image must be portrait (decision 0014).

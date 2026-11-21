@@ -33,7 +33,7 @@ once the repository is public (decision 0015). The banner also links a five slid
 
 ## Prize address
 
-bitcoincash:zplrydnf2z4pj4z9rv7uhmwsuxyrm8hj7uken87e7q
+bitcoincash:zqee6wqz7ylptytkdx622vphcupdzwcga5cjgmu7wl
 
 ## The three files
 
