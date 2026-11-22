@@ -5,8 +5,10 @@
 <p align="center"><a href="https://riverfare.sasateguh.com"><img src="https://img.shields.io/badge/filem-tonton%20dalam%20talian-7a5212" alt="Tonton filem dalam talian"></a> <a href="README.md#the-three-files"><img src="https://img.shields.io/badge/panjang-60%20s-7a5212" alt="Panjang: 60 saat"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/kod-MIT-7a5212" alt="Lesen kod: MIT"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/filem-CC%20BY%204.0-7a5212" alt="Lesen filem: CC BY 4.0"></a></p>
 
 <p align="center"><b>Filem kertas 60 saat: satu dolar menyeberang sungai ke Bitcoin Cash, dan tambangnya kurang daripada sepersepuluh sen AS.</b> · <i>A 60 second paper film: one dollar crosses a river to Bitcoin Cash, and the fare is less than a tenth of a US cent.</i><br>
-<a href="https://riverfare.sasateguh.com"><b>tonton filem</b></a> · <a href="#cuba-tonton-filem">Cuba</a> · <a href="#jalankan-bina-semula-filem">Jalankan</a> · <a href="#ujian">Ujian</a> · <a href="#had">Had</a> · <a href="README.md">English</a><br>
+<a href="https://youtu.be/iyD9a84Wdfw"><b>&#9654;&#xFE0E; filem di YouTube, 60 s</b></a> · <a href="https://riverfare.sasateguh.com">tonton filem</a> · <a href="site/deck/the-river-fare-en.pdf">slaid (PDF Inggeris)</a> · <a href="site/deck/the-river-fare-ms.pdf">slaid (PDF Melayu)</a> · <a href="#untuk-juri"><b>Menilai? Mula di sini</b></a> · <a href="#cuba-tonton-filem">Cuba</a> · <a href="#jalankan-bina-semula-filem">Jalankan</a> · <a href="#ujian">Ujian</a> · <a href="#had">Had</a> · <a href="README.md">English</a><br>
 Dibina di Malaysia oleh <a href="https://aimanmalib.com">Aiman Malib</a> · <a href="https://sasateguh.com">Sasa Teguh</a></p>
+
+<p align="center"><img src="docs/frames/thumbnail.jpg" width="838" alt="Gambar kecil: pendayung kertas dan syiling dolar dalam perahu kertas berlipat"></p>
 
 ## Untuk juri
 
@@ -28,8 +30,6 @@ Filem animasi 60 saat untuk BCH BLAZE 2026 Media Track. Sebuah jambatan tol meng
 pengembara. Seorang pendayung kecil membawa satu syiling dolar menyeberang sungai ke tebing Bitcoin Cash, dan membayar
 tambang kurang daripada sepersepuluh sen AS. Sari kata Inggeris dibakar dalam gambar, jadi filem boleh ditonton tanpa
 bunyi, dan seorang pencerita membacanya: suara klon AI pembuatnya sendiri (lihat Pendedahan AI).
-
-![Gambar kecil: pendayung kertas dan syiling dolar dalam perahu kertas berlipat](docs/frames/thumbnail.jpg)
 
 ## Apa yang filem katakan
 

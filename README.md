@@ -5,8 +5,10 @@
 <p align="center"><a href="https://riverfare.sasateguh.com"><img src="https://img.shields.io/badge/film-watch%20online-7a5212" alt="Watch the film online"></a> <a href="#the-three-files"><img src="https://img.shields.io/badge/length-60%20s-7a5212" alt="Length: 60 seconds"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/code-MIT-7a5212" alt="Code licence: MIT"></a> <a href="LICENSE"><img src="https://img.shields.io/badge/film-CC%20BY%204.0-7a5212" alt="Film licence: CC BY 4.0"></a></p>
 
 <p align="center"><b>A 60 second paper film: one dollar crosses a river to Bitcoin Cash, and the fare is less than a tenth of a US cent.</b> · <i>Filem kertas 60 saat: satu dolar menyeberang sungai ke Bitcoin Cash, dan tambangnya kurang daripada sepersepuluh sen AS.</i><br>
-<a href="https://riverfare.sasateguh.com"><b>watch the film</b></a> · <a href="#try-it-watch-the-film">Try it</a> · <a href="#run-it-rebuild-the-film">Run it</a> · <a href="#tests">Tests</a> · <a href="#limits">Limits</a> · <a href="README.ms.md">Bahasa Melayu</a><br>
+<a href="https://youtu.be/iyD9a84Wdfw"><b>&#9654;&#xFE0E; the film on YouTube, 60 s</b></a> · <a href="https://riverfare.sasateguh.com">watch the film</a> · <a href="site/deck/the-river-fare-en.pdf">slides (EN PDF)</a> · <a href="site/deck/the-river-fare-ms.pdf">slides (Malay PDF)</a> · <a href="#for-judges"><b>Judging? Start here</b></a> · <a href="#try-it-watch-the-film">Try it</a> · <a href="#run-it-rebuild-the-film">Run it</a> · <a href="#tests">Tests</a> · <a href="#limits">Limits</a> · <a href="README.ms.md">Bahasa Melayu</a><br>
 Built in Malaysia by <a href="https://aimanmalib.com">Aiman Malib</a> · <a href="https://sasateguh.com">Sasa Teguh</a></p>
+
+<p align="center"><img src="docs/frames/thumbnail.jpg" width="838" alt="Thumbnail: the paper rower and the dollar coin in a folded paper boat"></p>
 
 ## For judges
 
@@ -25,8 +27,6 @@ A 60 second animated film made for the BCH BLAZE 2026 Media Track. A toll bridge
 every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
 of less than a tenth of a US cent. English captions are burned into the picture, so it works with the sound off, and a
 narrator reads them: an AI clone of the maker's own voice (see the AI disclosure).
-
-![Thumbnail: the paper rower and the dollar coin in a folded paper boat](docs/frames/thumbnail.jpg)
 
 ## What the film says
 
