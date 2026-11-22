@@ -8,6 +8,19 @@
 <a href="https://riverfare.sasateguh.com"><b>tonton filem</b></a> · <a href="#cuba-tonton-filem">Cuba</a> · <a href="#jalankan-bina-semula-filem">Jalankan</a> · <a href="#ujian">Ujian</a> · <a href="#had">Had</a> · <a href="README.md">English</a><br>
 Dibina di Malaysia oleh <a href="https://aimanmalib.com">Aiman Malib</a> · <a href="https://sasateguh.com">Sasa Teguh</a></p>
 
+## Untuk juri
+
+| Semak | Di mana |
+|---|---|
+| Tonton filem | [Di YouTube](https://youtu.be/iyD9a84Wdfw) · [halaman filem](https://riverfare.sasateguh.com), dalam Bahasa Inggeris dan Bahasa Melayu |
+| Tambangnya benar | 219 satoshi: [transaksi itu di penjelajah blok](https://bchexplorer.info/tx/9b9586cbd567b0560c3a7d2f2137c244c425582f1ecd378154184eb6186ee588) |
+| Alamat hadiah | `bitcoincash:zqee6wqz7ylptytkdx622vphcupdzwcga5cjgmu7wl` |
+| Projek baharu | Komit pertama [`2fa129e`](https://github.com/aimanmalib/sampan-river/commit/2fa129e4c0f61aac3a713878b0a66c69a07b5660) pada 16 November 2026, selepas acara bermula 14 November |
+| Sumber setiap fakta | [Senarai fakta](docs/FACTS.md) |
+| Apa yang dibuat AI | [Pendedahan AI](#pendedahan-ai) |
+| Slaid | [PDF Inggeris](site/deck/the-river-fare-en.pdf) · [PDF Melayu](site/deck/the-river-fare-ms.pdf) |
+| Ujian | [Luar talian, tanpa kunci API](#ujian) |
+
 Ini ringkasan Bahasa Melayu bagi [README.md](README.md). Jadual penuh, alat dan konfigurasi ada dalam versi Inggeris;
 jika kedua-duanya berbeza, versi Inggeris yang terpakai.
 
@@ -28,6 +41,10 @@ Setiap sari kata yang menyatakan fakta dipautkan kepada sumber dalam [senarai fa
 
 Kad penutup berbunyi "Get a wallet: Paytaca · Selene": dua aplikasi dompet Bitcoin Cash, seperti yang diterangkan oleh
 halaman setiap aplikasi itu sendiri (keputusan 0011). Filem ini tidak mendakwa ada tajaan atau sokongan PUSD.
+
+## Tonton
+
+Filem di YouTube: https://youtu.be/iyD9a84Wdfw
 
 ## Cuba: tonton filem
 
@@ -91,7 +108,8 @@ python3 -m unittest discover -s tests
 
 Ujian merangkumi pengawal kredit dan lejar, masa sari kata dan semakan sari kata dibakar, arahan suntingan dan susun
 atur, muzik bersemai, penempatan suara, penghurai ukuran, binaan halaman filem dalam dua bahasa, imej kongsi, sepanduk
-dan dek slaid. `tests/test_text.py` memastikan README Inggeris sepadan dengan senarai fakta.
+dan dek slaid. `tests/test_text.py` memastikan README Inggeris sepadan dengan senarai fakta. `tests/test_readme.py` memastikan
+jadual juri dalam kedua-dua README sepadan dengan `config/site.json`.
 
 ## Had
 

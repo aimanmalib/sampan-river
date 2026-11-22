@@ -8,6 +8,19 @@
 <a href="https://riverfare.sasateguh.com"><b>watch the film</b></a> · <a href="#try-it-watch-the-film">Try it</a> · <a href="#run-it-rebuild-the-film">Run it</a> · <a href="#tests">Tests</a> · <a href="#limits">Limits</a> · <a href="README.ms.md">Bahasa Melayu</a><br>
 Built in Malaysia by <a href="https://aimanmalib.com">Aiman Malib</a> · <a href="https://sasateguh.com">Sasa Teguh</a></p>
 
+## For judges
+
+| Check | Where |
+|---|---|
+| Watch the film | [On YouTube](https://youtu.be/iyD9a84Wdfw) · [the film page](https://riverfare.sasateguh.com), in English and Malay |
+| The fare is real | 219 satoshis: [the transaction on a block explorer](https://bchexplorer.info/tx/9b9586cbd567b0560c3a7d2f2137c244c425582f1ecd378154184eb6186ee588) |
+| Prize address | `bitcoincash:zqee6wqz7ylptytkdx622vphcupdzwcga5cjgmu7wl` |
+| New project | First commit [`2fa129e`](https://github.com/aimanmalib/sampan-river/commit/2fa129e4c0f61aac3a713878b0a66c69a07b5660) on 16 November 2026, after the 14 November start |
+| Where each fact comes from | [The fact list](docs/FACTS.md) |
+| What AI made | [AI disclosure](#ai-disclosure) |
+| Slides | [English PDF](site/deck/the-river-fare-en.pdf) · [Malay PDF](site/deck/the-river-fare-ms.pdf) |
+| Tests | [Offline, no API key](#tests) |
+
 A 60 second animated film made for the BCH BLAZE 2026 Media Track. A toll bridge takes a big coin from
 every traveller. A small rower carries one dollar coin across a river to the Bitcoin Cash bank instead, and pays a fare
 of less than a tenth of a US cent. English captions are burned into the picture, so it works with the sound off, and a
@@ -137,7 +150,8 @@ They cover the credit guard and the ledger, caption timing and the burned-in cap
 commands, the seeded music, the narration placement, the measurement parser, the film page build in both languages,
 the share image, the banner and the slide deck. `tests/test_text.py` holds this README to the fact list: the fare
 wording, every satoshi amount, the files table against `docs/MEASURED.md`, the film page address, the narration line
-and the end card wallets.
+and the end card wallets. `tests/test_readme.py` holds the judge table in both READMEs to `config/site.json`:
+the YouTube link, the transaction, the prize address, the first commit and the slide PDFs.
 
 ## Limits
 
