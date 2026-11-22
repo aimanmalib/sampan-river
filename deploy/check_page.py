@@ -8,7 +8,9 @@ scrolls sideways, the prize address is not on the first screen of an iPhone, the
 first desktop screen, a video does not load its metadata (players set to preload="none" are asked to load after the
 first-screen check), the copy button does not report back, the Share button is hidden or shares another address than
 the page's canonical one (checked with a stand-in navigator.share, then without one: the panel opens and Copy link
-reports back), the fee figure does not link to its transaction, the banner note is missing, or the console shows an
+reports back), the Watch on YouTube link (decision 0017) is not the only YouTube link, points elsewhere than youtube_url,
+is under 44 px, has text contrast under 4.5:1 or is below the first iPhone screen, the repository link is hidden while
+banner.repo_check is "on", the fee figure does not link to its transaction, the banner note is missing, or the console shows an
 error. Screenshots go to --out.
 """
 import argparse
@@ -18,6 +20,8 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+from tools.bands import contrast  # noqa: E402  (WCAG ratio, shared with the film's caption check)
 
 PROBE = """() => {
   const doc = document.documentElement;
@@ -41,6 +45,13 @@ PROBE = """() => {
       return b && b.getClientRects().length ? Object.assign(box(b), {w: b.getBoundingClientRect().width}) : null; })(),
     shareUrl: (document.querySelector('[data-share]') || {getAttribute: () => ''}).getAttribute('data-url') || '',
     links: [...document.querySelectorAll('a[href]')].map(a => a.href),
+    shownLinks: [...document.querySelectorAll('a[href]')].filter(a => a.getClientRects().length).map(a => a.href),
+    youtubeLinks: [...document.querySelectorAll('a[href]')].filter(a => a.hostname === 'youtu.be' || a.hostname === 'youtube.com' || a.hostname.endsWith('.youtube.com')).length,
+    watch: (() => { const a = document.querySelector('a[data-watch]');
+      if (!a || !a.getClientRects().length) return null;
+      const s = getComputedStyle(a);
+      return Object.assign(box(a), {w: a.getBoundingClientRect().width, href: a.getAttribute('href'),
+                                    color: s.color, bg: s.backgroundColor}); })(),
     bannerNote: (() => { const n = document.querySelector('.banner-note');
       return n && n.getClientRects().length ? n.textContent.trim() : ''; })(),
   };
@@ -118,6 +129,41 @@ def page_problems(p, cfg, canonical, touch_px=44):
     return problems
 
 
+def rgb(css):
+    """'rgb(1, 2, 3)' or 'rgba(1, 2, 3, a)' to ((r, g, b), alpha)."""
+    parts = [float(x) for x in css[css.index("(") + 1:css.index(")")].replace("/", ",").replace(" ", ",").split(",") if x]
+    return tuple(int(round(v)) for v in parts[:3]), (parts[3] if len(parts) > 3 else 1.0)
+
+
+def watch_problems(p, cfg, mode, touch_px=44, contrast_min=4.5):
+    """Problems with the Watch on YouTube link and the repository link (decision 0017)."""
+    problems = []
+    url = cfg.get("youtube_url", "")
+    w = p.get("watch")
+    if url and not w:
+        problems.append("Watch on YouTube link is not shown")
+    elif url:
+        if p.get("youtubeLinks") != 1:
+            problems.append(f"{p.get('youtubeLinks')} YouTube links, not one")
+        if w["href"] != url:
+            problems.append(f"Watch on YouTube points to {w['href']}, not {url}")
+        if min(w["h"], w["w"]) < touch_px:
+            problems.append(f"Watch on YouTube link is smaller than {touch_px} px")
+        (fg, _), (bg, alpha) = rgb(w["color"]), rgb(w["bg"])
+        ratio = contrast("#%02x%02x%02x" % fg, [bg]) if alpha == 1 else 0.0
+        if ratio < contrast_min:
+            problems.append(f"Watch on YouTube text contrast {ratio} is under {contrast_min}")
+        if mode == "iphone" and w["bottom"] > p["viewport"]:
+            problems.append("Watch on YouTube link is below the first screen")
+    elif p.get("youtubeLinks"):
+        problems.append("a YouTube link is shown while youtube_url is empty")
+    repo = cfg.get("repo_url", "").rstrip("/")
+    if repo and cfg.get("banner", {}).get("repo_check") == "on" and not any(
+            h.rstrip("/") == repo for h in p.get("shownLinks", [])):
+        problems.append("repository link is not shown although repo_check is on")
+    return problems
+
+
 def share_problems(page, cfg, canonical):
     """Click Share with and without a share sheet; returns problems."""
     if not cfg.get("share", {}).get("enabled"):
@@ -141,6 +187,8 @@ def share_problems(page, cfg, canonical):
                                timeout=5000)
     except Exception:
         problems.append("without a share sheet the panel or Copy link gave no feedback")
+    if page.evaluate("() => document.documentElement.scrollWidth - document.documentElement.clientWidth") > 0:
+        problems.append("page scrolls sideways with the Share panel open")
     return problems
 
 
@@ -180,6 +228,7 @@ def check_page(page, url, name, cfg, out, mode, canonical):
     except Exception:
         problems.append("copy button gave no feedback")
     problems += page_problems(p, cfg, canonical)
+    problems += watch_problems(p, cfg, mode)
     problems += share_problems(page, cfg, canonical)
     page.screenshot(path=os.path.join(out, f"{name}-share.png"))
     problems += [f"console: {e}" for e in errors]

@@ -53,7 +53,8 @@ Buka https://riverfare.sasateguh.com. Halaman itu, dalam bahasa Inggeris dan Mel
 
 ![Halaman filem: filem 16:9 dan filem 9:16 untuk telefon bersebelahan, alamat hadiah di sepanduk](docs/img/film-page.jpg)
 
-Butang Share di bawah pemain membuka helaian kongsi telefon, dan yuran 219 satoshi dipautkan kepada transaksinya di
+Tonton di YouTube dan Kongsi berada dalam satu baris, di atas pemain 9:16 pada telefon dan di bawah pemain pada
+skrin lebar (keputusan 0017). Kongsi membuka helaian kongsi telefon, dan yuran 219 satoshi dipautkan kepada transaksinya di
 penjelajah blok (keputusan 0013). Sepanduk memaut kod sumber, komit pertama dan dek lima slaid, satu PDF bagi setiap
 bahasa (keputusan 0015, 0016).
 

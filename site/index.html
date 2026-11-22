@@ -74,6 +74,11 @@
         <figcaption>{{t:film.label}}</figcaption>
       </figure>
     </div>
+<!--if:actions-->
+    <div class="actions">
+<!--if:youtube-->
+    <a class="watch" data-watch href="{{v:youtube_url}}" rel="noopener">{{t:links.youtube}}</a>
+<!--end:youtube-->
 <!--if:share-->
     <div class="share" data-share data-url="{{v:canonical}}" data-title="{{t:hero.title}}" data-text="{{v:share_text}}">
       <button type="button" class="share-btn" aria-expanded="false" aria-controls="share-panel">{{t:share.button}}</button>
@@ -89,12 +94,11 @@
       <p class="share-status" role="status" aria-live="polite"></p>
     </div>
 <!--end:share-->
+    </div>
+<!--end:actions-->
     <p class="lede">{{t:hero.lede}}</p>
     <p class="wallet">{{t:wallet.label}} <a href="{{v:paytaca_url}}" rel="noopener">{{t:wallet.paytaca}}</a> <span aria-hidden="true">&middot;</span> <a href="{{v:selene_url}}" rel="noopener">{{t:wallet.selene}}</a></p>
     <p class="short-link">{{t:short.text}} <a href="{{v:short_src}}" download>{{t:short.download}}</a></p>
-<!--if:youtube-->
-    <p class="out"><a href="{{v:youtube_url}}" rel="noopener">{{t:links.youtube}}</a></p>
-<!--end:youtube-->
   </section>
 
   <section class="wrap facts" aria-labelledby="facts-title">

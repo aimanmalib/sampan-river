@@ -115,7 +115,9 @@ def render(template, strings, values, flags, link=None):
         if name not in flags:
             raise BuildError(f"unknown block {name}")
         return m.group(2) if flags[name] else ""
-    out = re.sub(r"<!--if:(\w+)-->\n?(.*?)<!--end:\1-->\n?", block, template, flags=re.S)
+    out, prev = template, None
+    while out != prev:  # blocks may nest: an outer block keeps inner ones for the next pass
+        prev, out = out, re.sub(r"<!--if:(\w+)-->\n?(.*?)<!--end:\1-->\n?", block, out, flags=re.S)
 
     def field(m):
         kind, key = m.group(1), m.group(2)
@@ -226,6 +228,7 @@ def build(root, media_dir, out_dir):
         template = f.read()
     flags = {"youtube": bool(cfg["youtube_url"]), "repo": banner.repo_shown(cfg),
              "repo_check": bool(banner.api_attr(cfg)), "share": bool(cfg.get("share", {}).get("enabled"))}
+    flags["actions"] = flags["youtube"] or flags["share"]
     values["repo_gate"], values["repo_api"] = banner.gate_attr(cfg), banner.api_attr(cfg)
     alternates = "\n".join(f'<link rel="alternate" hreflang="{l["html_lang"]}" href="{base}{l["path"]}">'
                            for l in cfg["languages"])

@@ -53,7 +53,8 @@ for phones, with the prize address and the AI disclosure. The captions are in th
 ![The film page: the 16:9 film and the 9:16 film for phones side by side, the prize address in the banner](docs/img/film-page.jpg)
 
 The page is built by `tools/site.py` from the measured files only (decision 0009).
-A Share button under the players opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
+Watch on YouTube and Share sit in one row, above the 9:16 player on a phone and under the players on a wide
+screen (decision 0017). Share opens the phone's share sheet, or a panel with copy link, X, WhatsApp and
 Telegram, and the 219 satoshi fee links to its transaction on a block explorer (decision 0013). A shared link
 shows a vertical preview image made from a film frame by `tools/og.py` (decision 0014). The banner notes that
 this is a new project, first committed after the event start, with links to the source and its first commit

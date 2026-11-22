@@ -228,7 +228,7 @@
       "sha": "2fa129e4c0f61aac3a713878b0a66c69a07b5660",
       "date_utc": "2026-11-16T09:04:48Z"
     },
-    "repo_check": "auto",
+    "repo_check": "on",
     "repo_api": "https://api.github.com/users/aimanmalib/repos?sort=created&per_page=100",
     "deck": {
       "en": "site/deck/the-river-fare-en.pdf",
